@@ -1,11 +1,8 @@
-version: '3.8'
-
 services:
-  aracom:
+  sadrafars:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: aracom
     restart: unless-stopped
     networks:
       - external-net
