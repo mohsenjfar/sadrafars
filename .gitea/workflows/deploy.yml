@@ -1,0 +1,31 @@
+name: Deploy sadrafars (Direct Clone)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: sadrafars
+    steps:
+      - name: Checkout and Deploy
+        shell: bash
+        env:
+          ACCESS_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          set -e
+          
+          REPO_URL="https://oauth2:${ACCESS_TOKEN}@git.aracom.ir/ARACOM/sadrafars.ir.git"
+          BRANCH="${{ gitea.ref_name }}"
+          
+          echo "Cloning branch: $BRANCH"
+          git clone --depth 1 --branch "$BRANCH" "$REPO_URL" .
+
+          export COMPOSE_PROJECT_NAME="sadrafars"
+          
+          echo "Deploying..."
+          docker compose down -v || true
+          docker compose up -d --build
+
+          git clean -fdx || true

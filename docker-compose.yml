@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  aracom:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: aracom
+    restart: unless-stopped
+    networks:
+      - external-net
+    dns:
+      - 217.218.127.127
+      - 1.1.1.1
+
+networks:
+  external-net:
+    external: true
