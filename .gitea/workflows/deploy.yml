@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - development
 
 jobs:
   deploy:
@@ -25,9 +26,26 @@ jobs:
         run: |
           set -e
           cd repo
-          
-          echo "Deploying..."
-          docker compose down -v || true
-          docker compose up -d --build
 
-          git clean -fdx || true
+          if [ "$BRANCH" = "development" ]; then
+            export COMPOSE_PROJECT_NAME="sadrafars-dev"
+            
+            echo "Deploying development app..."
+            docker compose down || true
+            docker compose up -d --build
+
+            git clean -fdx || true
+
+          elif [ "$BRANCH" = "main" ]; then
+            export COMPOSE_PROJECT_NAME="sadrafars-prod"
+
+            echo "Deploying production app..."
+            docker compose down || true
+            docker compose up -d --build
+
+            git clean -fdx || true
+
+          else
+            echo "Unsupported branch: $BRANCH"
+            exit 1
+          fi
