@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sadrafars:${IMAGE_TAG}
+    image: sadrafars:dev
     container_name: sadrafars-dev
     restart: unless-stopped
     networks:
@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sadrafars:${IMAGE_TAG}
+    image: sadrafars:prod
     container_name: sadrafars-prod
     restart: unless-stopped
     networks:
