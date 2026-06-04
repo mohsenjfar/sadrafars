@@ -25,6 +25,9 @@ jobs:
         shell: bash
         run: |
           set -e
+
+          BRANCH="${{ gitea.ref_name }}"
+          
           cd repo
 
           if [ "$BRANCH" = "development" ]; then
