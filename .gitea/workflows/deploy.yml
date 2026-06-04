@@ -32,11 +32,13 @@ jobs:
 
           if [ "$BRANCH" = "development" ]; then
             echo "Deploying development..."
+            export IMAGE_TAG="dev"
 
             docker compose up -d --build sadrafars-dev
 
           elif [ "$BRANCH" = "main" ]; then
             echo "Deploying production..."
+            export IMAGE_TAG="prod"
 
             docker compose up -d --build sadrafars-prod
 
