@@ -9,6 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: sadrafars
+
     steps:
       - name: Checkout repository
         shell: bash
@@ -27,28 +28,21 @@ jobs:
           set -e
 
           BRANCH="${{ gitea.ref_name }}"
-          
           cd repo
 
           if [ "$BRANCH" = "development" ]; then
-            export COMPOSE_PROJECT_NAME="sadrafars-dev"
-            
-            echo "Deploying development app..."
-            docker compose down || true
-            docker compose up -d --build
+            echo "Deploying development..."
 
-            git clean -fdx || true
+            docker compose up -d --build sadrafars-dev
 
           elif [ "$BRANCH" = "main" ]; then
-            export COMPOSE_PROJECT_NAME="sadrafars-prod"
+            echo "Deploying production..."
 
-            echo "Deploying production app..."
-            docker compose down || true
-            docker compose up -d --build
-
-            git clean -fdx || true
+            docker compose up -d --build sadrafars-prod
 
           else
             echo "Unsupported branch: $BRANCH"
             exit 1
           fi
+
+          git clean -fdx || true

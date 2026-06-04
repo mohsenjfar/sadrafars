@@ -1,6 +1,17 @@
 services:
-  sadrafars:
-    build: 
+  sadrafars-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - external-net
+    dns:
+      - 217.218.127.127
+      - 1.1.1.1
+
+  sadrafars-prod:
+    build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
