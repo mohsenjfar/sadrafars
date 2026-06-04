@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: sadrafars-dev
     restart: unless-stopped
     networks:
       - external-net
@@ -14,6 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: sadrafars-prod
     restart: unless-stopped
     networks:
       - external-net
