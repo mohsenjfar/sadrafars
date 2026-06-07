@@ -5,8 +5,6 @@ from pathlib import Path
 
 from app.api.routes_tariff import router as tariff_router
 
-print("Tariff routes loaded")
-
 app = FastAPI(
     title="Tariff 1405 API",
     version="1.0",
