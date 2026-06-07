@@ -177,7 +177,10 @@ body: JSON.stringify(payload)
 const data = await response.json()
 
 result.innerHTML =
-"هزینه خدمات: " + data.amount.toLocaleString() + " ریال"
+`<div class="result-box">
+هزینه خدمات: ${data.amount.toLocaleString()} ریال
+</div>`
+
 
 })
 
