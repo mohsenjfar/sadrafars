@@ -10,6 +10,7 @@ modalTitle.innerText = tools[tool].title
 
 modalBody.innerHTML = tools[tool].html
 
+initToolLogic(tool)
 }
 
 function closeModal(){

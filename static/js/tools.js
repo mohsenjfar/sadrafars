@@ -53,17 +53,22 @@ html:`
 
 }
 
-setTimeout(() => {
+function initToolLogic(tool){
+
+if(tool === "tariff"){
 
 const form = document.getElementById("tariffForm")
-
-if(form){
 
 form.addEventListener("submit", async function(e){
 
 e.preventDefault()
 
 const area = document.getElementById("area").value
+const resultBox = document.getElementById("result")
+
+resultBox.innerHTML = "در حال محاسبه..."
+
+try{
 
 const response = await fetch("/tariff/row/1-1",{
 method:"POST",
@@ -77,11 +82,17 @@ area_m2: Number(area)
 
 const data = await response.json()
 
-document.getElementById("result").innerHTML =
+resultBox.innerHTML =
 "هزینه خدمات: " + data.amount.toLocaleString() + " ریال"
+
+}catch(error){
+
+resultBox.innerHTML = "خطا در ارتباط با سرور"
+
+}
 
 })
 
 }
 
-},100)
+}
