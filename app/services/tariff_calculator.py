@@ -1,8 +1,5 @@
 # app/services/tariff_calculator.py
 
-from . import tariff_formulas as f
-
-
 class TariffCalculator:
     """Calculator for Tariff 1405"""
 
