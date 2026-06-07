@@ -19,7 +19,7 @@ html:`
 
 </form>
 
-<div id="result"></div>
+<div id="result"></div  >
 
 `
 },
@@ -52,3 +52,36 @@ html:`
 }
 
 }
+
+setTimeout(() => {
+
+const form = document.getElementById("tariffForm")
+
+if(form){
+
+form.addEventListener("submit", async function(e){
+
+e.preventDefault()
+
+const area = document.getElementById("area").value
+
+const response = await fetch("/tariff/row/1-1",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body: JSON.stringify({
+area_m2: Number(area)
+})
+})
+
+const data = await response.json()
+
+document.getElementById("result").innerHTML =
+"هزینه خدمات: " + data.amount.toLocaleString() + " ریال"
+
+})
+
+}
+
+},100)
