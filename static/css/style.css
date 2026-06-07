@@ -5,6 +5,13 @@
 --glass: rgba(255, 255, 255, 0.8);
 }
 
+button,
+input,
+select,
+textarea{
+font-family:inherit;
+}
+
 body {
 margin: 0;
 font-family: 'Vazirmatn', sans-serif;
@@ -227,7 +234,6 @@ color:white;
 font-size:15px;
 cursor:pointer;
 transition:.2s;
-
 }
 
 .tool-form button:hover{
