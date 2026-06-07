@@ -23,27 +23,39 @@ color: var(--dark);
 
 /* --- Header --- */
 .header {
-position: fixed;
-top: 0;
-width: 100%;
-z-index: 1000;
-background: var(--glass);
-backdrop-filter: blur(12px);
-border-bottom: 1px solid rgba(0,0,0,0.05);
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 0 5%;
-height: 70px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center; /* تمام محتوا را در مرکز افقی قرار می‌دهد */
+    height: 70px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center; /* لینک‌ها را در مرکز قرار می‌دهد */
+    gap: 10px; /* فاصله بین لینک‌ها */
 }
 
 .nav-links a {
-text-decoration: none; color: var(--dark);
-margin: 0 15px; font-weight: 500; font-size: 14px;
-transition: 0.3s;
+    text-decoration: none; 
+    color: var(--dark);
+    padding: 10px 20px; /* افزایش فضای کلیک برای تجربه کاربری بهتر */
+    font-weight: 500; 
+    font-size: 15px;
+    transition: 0.3s;
+    border-radius: 8px;
 }
 
-.nav-links a:hover { color: var(--primary); }
+.nav-links a:hover { 
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.05); /* یک پس‌زمینه بسیار ملایم هنگام هاور */
+}
 
 /* --- Hero Section --- */
 .hero {
