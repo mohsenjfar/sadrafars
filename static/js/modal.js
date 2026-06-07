@@ -1,14 +1,11 @@
 const modal = document.getElementById("toolModal")
 const modalBody = document.getElementById("modalBody")
-const modalTitle = document.getElementById("modalTitle")
 
 function openTool(tool){
 
 modal.style.display = "flex"
 
-modalTitle.innerText = tools[tool].title
-
-modalBody.innerHTML = tools[tool].html
+modalBody.innerHTML = tools[tool]
 
 }
 

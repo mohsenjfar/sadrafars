@@ -1,15 +1,11 @@
 const tools = {
 
-tariff:{
-title:"محاسبه تعرفه نقشه‌برداری",
-
-html:`
+tariff: `
+<h2>محاسبه تعرفه نقشه برداری</h2>
 
 <form id="tariffForm">
 
-<label>متراژ ملک</label>
-
-<input type="number" id="area" placeholder="مثلا 250">
+<input type="number" placeholder="متراژ" id="area">
 
 <br><br>
 
@@ -20,35 +16,22 @@ html:`
 </form>
 
 <div id="result"></div>
+`,
 
-`
-},
+engineering: `
+<h2>محاسبه خدمات مهندسی</h2>
 
-engineering:{
-title:"محاسبه خدمات مهندسی",
-
-html:`
-
-<label>متراژ</label>
-<input type="number">
-
-<br><br>
+<input type="number" placeholder="متراژ">
 
 <button>
 محاسبه
 </button>
+`,
 
+map: `
+<h2>مشاهده قطعه و ناحیه</h2>
+
+<p>در آینده به نقشه متصل می‌شود</p>
 `
-},
-
-map:{
-title:"مشاهده قطعه و ناحیه",
-
-html:`
-
-<p>در نسخه بعدی به نقشه متصل می‌شود.</p>
-
-`
-}
 
 }
