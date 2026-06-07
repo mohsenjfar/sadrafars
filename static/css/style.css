@@ -109,3 +109,63 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 .hero { flex-direction: column; text-align: center; }
 .nav-links { display: none; }
 }
+
+.modal{
+
+display:none;
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(6px);
+
+z-index:2000;
+
+justify-content:center;
+align-items:center;
+
+}
+
+.modal-content{
+
+background:white;
+
+width:520px;
+max-width:90%;
+
+border-radius:14px;
+
+padding:30px;
+
+box-shadow:0 30px 80px rgba(0,0,0,0.25);
+
+animation:modalFade .25s ease;
+
+}
+
+.close-modal{
+
+float:left;
+font-size:22px;
+cursor:pointer;
+
+}
+
+@keyframes modalFade{
+
+from{
+transform:translateY(30px);
+opacity:0;
+}
+
+to{
+transform:translateY(0);
+opacity:1;
+}
+
+}

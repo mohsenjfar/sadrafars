@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>صدرافارس | پورتال تخصصی مهندسی و ساختمان</title>
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
 <link rel="icon" type="image/png" href="/static/images/favicon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"/>
 <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -45,17 +45,17 @@
 <p>دقیق، سریع و بر اساس آخرین بخشنامه‌ها</p>
 </div>
 <div class="tools-grid">
-<div class="tool-card">
+<div class="tool-card" onclick="openTool('tariff')">
 <div class="tool-icon">📐</div>
 <h3>محاسبه تعرفه نقشه‌برداری</h3>
 <p>محاسبه آنلاین ردیف‌های ۱۰ گانه تعرفه سال ۱۴۰۵ با دقت بالا.</p>
 </div>
-<div class="tool-card">
+<div class="tool-card" onclick="openTool('engineering')">
 <div class="tool-icon">🏗️</div>
 <h3>محاسبه خدمات مهندسی</h3>
 <p>برآورد هزینه‌های نظارت، طراحی و اجرا بر اساس متراژ و گروه ساختمانی.</p>
 </div>
-<div class="tool-card">
+<div class="tool-card" onclick="openTool('map')">
 <div class="tool-icon">📍</div>
 <h3>مشاهده قطعه و ناحیه</h3>
 <p>استعلام موقعیت روی نقشه و انطباق با حریم‌های قانونی.</p>
@@ -90,6 +90,23 @@
 <footer style="background:var(--dark); color:white; padding:40px; text-align:center;">
 <p>© تمام حقوق برای مجموعه صدرافارس محفوظ است</p>
 </footer>
+
+<div id="toolModal" class="modal">
+
+<div class="modal-content">
+
+<span class="close-modal" onclick="closeModal()">✕</span>
+
+<div id="modalBody">
+<!-- فرم ابزار اینجا قرار می‌گیرد -->
+</div>
+
+</div>
+
+</div>
+
+<script src="/static/js/tools.js"></script>
+<script src="/static/js/modal.js"></script>
 
 </body>
 </html>
