@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sadrafars | سامانه خدمات مهندسی</title>
     
-    <!-- تنظیم فاویکان -->
     <link rel="icon" type="image/png" href="/static/favicon.png">
 
-    <!-- اضافه کردن فونت فارسی وزیر -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     
     <style>
@@ -20,87 +18,161 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                         url("/static/bg.png") center/cover no-repeat fixed;
             color: white;
-            overflow: hidden;
         }
 
-        /* استایل لوگو در گوشه بالا سمت چپ */
         .header-logo {
             position: absolute;
             top: -40px;
-            left: 20px; /* قرارگیری در سمت چپ طبق درخواست شما */
+            left: 20px;
         }
 
         .header-logo img {
-            height: 240px; /* اندازه لوگو را می‌توانید اینجا تغییر دهید */
-            width: auto;
-            display: block;
+            height: 240px;
         }
 
-        /* کادر شیشه‌ای مرکزی */
         .content-box {
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 50px 70px;
+            backdrop-filter: blur(12px);
+            padding: 50px 60px;
             border-radius: 24px;
             text-align: center;
-            max-width: 90%;
             width: 600px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
         h1 {
-            font-size: 32px;
-            margin: 0 0 35px 0;
-            font-weight: 700;
-            line-height: 1.8;
-            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 30px;
         }
 
-        .cta {
-            display: inline-block;
-            padding: 14px 45px;
-            background: #37c20d; /* رنگ سبز هماهنگ با لوگوی جدید شما */
-            color: #ffffff;
+        input {
+            width: 100%;
+            padding: 14px;
             border-radius: 12px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #37c20d;
+            color: white;
+            border: none;
+            border-radius: 12px;
             font-size: 18px;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .cta:hover {
+        button:hover {
             background: #218838;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            transform: translateY(-2px);
         }
 
-        /* بهینه‌سازی برای موبایل */
+        .result-box {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            font-size: 18px;
+            display: none;
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
         @media (max-width: 600px) {
-            .content-box { padding: 30px; }
-            h1 { font-size: 24px; }
-            .header-logo img { height: 45px; }
+            .content-box { padding: 30px; width: 90%; }
+            .header-logo img { height: 60px; top: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- لوگو در گوشه صفحه -->
-    <div class="header-logo">
-        <img src="/static/logo.png" alt="SadraFars Logo">
-    </div>
+<div class="header-logo">
+    <img src="/static/logo.png" alt="SadraFars Logo">
+</div>
 
-    <!-- محتوای مرکزی -->
-    <div class="content-box">
-        <h1>سامانه جامع خدمات مهندسی شهر صدرا</h1>
-        <a href="mailto:contact@sadrafars.ir" class="cta">تماس با ما</a>
-    </div>
+<div class="content-box">
+    <h1>محاسبه تعرفه مساحی (ردیف ۱-۱)</h1>
 
-</body>
-</html>
+    <form id="calcForm">
+        <input 
+            type="number" 
+            id="area" 
+            placeholder="متراژ ملک (متر مربع)" 
+            required
+            min="1"
+        >
+        <button type="submit">محاسبه تعرفه</button>
+    </form>
+
+    <div id="result" class="result-box"></div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    
+        const form = document.getElementById("calcForm");
+        const resultBox = document.getElementById("result");
+        const button = form.querySelector("button");
+    
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+    
+            const area = document.getElementById("area").value;
+    
+            resultBox.style.display = "none";
+            button.classList.add("loading");
+            button.innerText = "در حال محاسبه...";
+    
+            try {
+                const response = await fetch("/tariff/row/1-1", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        area_m2: parseFloat(area)
+                    })
+                });
+    
+                if (!response.ok) {
+                    throw new Error("خطا در محاسبه");
+                }
+    
+                const data = await response.json();
+    
+                resultBox.classList.remove("error");
+                resultBox.innerHTML = `
+                    مبلغ قابل پرداخت:<br>
+                    <strong style="font-size:22px;">
+                        ${Number(data.amount).toLocaleString()} ریال
+                    </strong>
+                `;
+                resultBox.style.display = "block";
+    
+            } catch (err) {
+                resultBox.classList.add("error");
+                resultBox.innerText = "خطا در ارتباط با سرور یا مقدار نامعتبر.";
+                resultBox.style.display = "block";
+            }
+    
+            button.classList.remove("loading");
+            button.innerText = "محاسبه تعرفه";
+        });
+    
+    });
+    </script>    
