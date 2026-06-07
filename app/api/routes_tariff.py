@@ -6,6 +6,7 @@ router = APIRouter(prefix="/tariff", tags=["Tariff 1405"])
 
 calc = TariffCalculator()
 
+print("Tariff routes loaded")
 
 @router.post("/row/1-1", response_model=TariffResponse)
 def calc_row_1_1(payload: Row11Request):
