@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>صدرافارس | پورتال تخصصی مهندسی و ساختمان</title>
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
+<link rel="icon" type="image/png" href="/static/favicon.png">
 <style>
 :root {
 --primary: #2563eb;
@@ -23,12 +24,25 @@ color: var(--dark);
 /* --- Header --- */
 .header {
 position: fixed;
-top: 0; width: 100%; z-index: 1000;
+top: 0;
+width: 100%;
+z-index: 1000;
 background: var(--glass);
 backdrop-filter: blur(12px);
 border-bottom: 1px solid rgba(0,0,0,0.05);
-display: flex; justify-content: space-between; align-items: center;
-padding: 0 5%; height: 70px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 5%;
+height: 70px;
+}
+
+.logo {
+order: -1;
+}
+
+.logo img {
+height: 60px;
 }
 
 .nav-links a {
@@ -38,8 +52,6 @@ transition: 0.3s;
 }
 
 .nav-links a:hover { color: var(--primary); }
-
-.logo img { height: 40px; }
 
 /* --- Hero Section --- */
 .hero {
@@ -114,16 +126,21 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 <a href="#news">اخبار ساختمان</a>
 <a href="#">درباره ما</a>
 </nav>
-<button style="background:var(--primary); color:white; border:none; padding:10px 25px; border-radius:10px; cursor:pointer; font-family:inherit;">ورود مهندسین</button>
 </header>
 
 <section class="hero">
 <div class="hero-text">
-<h1>هوشمندترین پورتال<br><span style="color:var(--primary)">خدمات مهندسی</span> جنوب کشور</h1>
-<p>دسترسی سریع به محاسبات تعرفه ۱۴۰۵، نقشه‌های ثبتی و آخرین اخبار نظام مهندسی و مسکن در یک قاب.</p>
+<h1>پورتال جامع<br><span style="color:var(--primary)">خدمات مهندسی</span> شهر صدرا</h1>
+<p>دسترسی سریع به محاسبات تعرفه ۱۴۰۵، نقشه‌های ثبتی و آخرین اخبار شهر صدرا در یک قاب.</p>
 <div style="display:flex; gap:15px;">
-<button style="background:var(--dark); color:white; padding:15px 30px; border-radius:12px; border:none; cursor:pointer; font-family:inherit;">مشاهده ابزارها</button>
-<button style="background:white; color:var(--dark); padding:15px 30px; border-radius:12px; border:1px solid #ddd; cursor:pointer; font-family:inherit;">آخرین اخبار</button>
+<a href="#tools" style="background:var(--dark); color:white; padding:15px 30px; border-radius:12px; text-decoration:none; display:inline-block;">
+مشاهده ابزارها
+</a>
+
+<a href="#news" style="background:white; color:var(--dark); padding:15px 30px; border-radius:12px; border:1px solid #ddd; text-decoration:none; display:inline-block;">
+آخرین اخبار
+</a>
+
 </div>
 </div>
 <div class="hero-image">
