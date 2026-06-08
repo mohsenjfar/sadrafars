@@ -12,11 +12,11 @@ html:`
 <div class="service-selector">
 
 <div class="service-card active" data-row="1-1">
-ردیف 1‑1<br><span>تفکیک / افراز</span>
+مساحی و برداشت مسطحاتی<br><span>مساحی عرصه</span>
 </div>
 
 <div class="service-card" data-row="2">
-ردیف 2<br><span>پیاده سازی</span>
+UTM و جانمایی<br><span>پیاده سازی</span>
 </div>
 
 <div class="service-card" data-row="6">
