@@ -19,5 +19,6 @@ class ColumnControlRequest(BaseModel):
 
 
 class TariffResponse(BaseModel):
-    amount: float
-    description: str = "Tariff 1405 calculation"
+    base_amount: float
+    vat: float
+    total_amount: float

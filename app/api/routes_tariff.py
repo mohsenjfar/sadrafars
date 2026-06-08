@@ -8,10 +8,8 @@ calc = TariffCalculator()
 
 
 @router.post("/land_survey", response_model=TariffResponse)
-def calculate_land_survey(payload: AreaRequest):
-    amount = calc.calculate_land_survey(payload.area_m2)
-    return TariffResponse(amount=amount)
-
+def calculate_land_survey(data: AreaRequest):
+    return calc.calculate_land_survey(data.area_m2)
 
 @router.post("/utm", response_model=TariffResponse)
 def calculate_utm(payload: AreaRequest):
