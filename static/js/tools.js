@@ -236,8 +236,11 @@ const data = await response.json()
 
 result.innerHTML =
 `<div class="result-box">
-هزینه خدمات: ${data.amount.toLocaleString()} ریال
+مبلغ پایه: ${data.base_amount.toLocaleString()} ریال<br>
+مالیات (۱۰٪): ${data.vat.toLocaleString()} ریال<br>
+<strong>مبلغ نهایی: ${data.total_amount.toLocaleString()} ریال</strong>
 </div>`
+
 
 })
 
