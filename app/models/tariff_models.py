@@ -1,29 +1,21 @@
 from pydantic import BaseModel, Field
 
 
-class Row11Request(BaseModel):
+class AreaRequest(BaseModel):
     area_m2: float = Field(..., gt=0)
 
 
-class Row2Request(BaseModel):
+class PointsRequest(BaseModel):
     num_points: int = Field(..., gt=0)
 
 
-class Row6Request(BaseModel):
-    area_m2: float = Field(..., gt=0)
-
-
-class Row7Request(BaseModel):
+class LengthRequest(BaseModel):
     length_km: float = Field(..., gt=0)
 
 
-class Row8Request(BaseModel):
-    length_km: float = Field(..., gt=0)
-
-
-class Row10Request(BaseModel):
+class ColumnControlRequest(BaseModel):
     height_m: float = Field(..., gt=0)
-    area_m2: float | None = None
+    columns: int = Field(..., gt=0)
 
 
 class TariffResponse(BaseModel):

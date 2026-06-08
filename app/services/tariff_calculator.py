@@ -1,104 +1,224 @@
-# app/services/tariff_calculator.py
-
 class TariffCalculator:
-    """Calculator for Tariff 1405"""
+    """Tariff 1405 Calculator"""
 
+    VAT_RATE = 0.10
     BASE_POINT_PRICE = 7_580_374
 
-    def row_1_1(self, area_m2: float) -> float:
-        """
-        محاسبه تعرفه مساحی و برداشت مسطحاتی
-        :param area_m2: مساحت به متر مربع
-        :return: مبلغ نهایی (ریال)
-        """
+    def apply_vat(self, base_amount: float):
+        vat = base_amount * self.VAT_RATE
+        total = base_amount + vat
+        return {
+            "base_amount": round(base_amount, 2),
+            "vat": round(vat, 2),
+            "total_amount": round(total, 2)
+        }
+
+    # -------------------------------
+    # 1-1 مساحی و برداشت مسطحاتی
+    # -------------------------------
+
+    def calculate_land_survey(self, area_m2: float):
 
         if area_m2 <= 500:
-            return 55_031_259
+            base = 55_031_259
+            return self.apply_vat(base)
 
         total = 55_031_259
         remaining = area_m2 - 500
 
         brackets = [
-            (500, 38_378),    # 501-1000
-            (1000, 23_901),   # 1001-2000
-            (3000, 14_120),   # 2001-5000
-            (45000, 7_628),   # 5001-50000
+            (500, 38_378),
+            (1000, 23_901),
+            (3000, 14_120),
+            (45000, 7_628),
         ]
 
         for limit, rate in brackets:
             used = min(remaining, limit)
             total += used * rate
             remaining -= used
+
             if remaining <= 0:
-                return total
+                return self.apply_vat(total)
 
         if remaining > 0:
-            raise ValueError(
-                "برای بیش از 50001 متر مربع باید به تعرفه سازمان مدیریت ارجاع شود."
-            )
+            raise ValueError("برای بیش از 50001 متر مربع باید به تعرفه سازمان مدیریت ارجاع شود.")
 
-        return total
+        return self.apply_vat(total)
 
-    def row_2(self, num_points: int) -> float:
-        """
-        محاسبه تعرفه پیاده کردن نقشه
-        :param num_points: تعداد نقاط (N)
-        """
+    # -------------------------------
+    # UTM
+    # -------------------------------
+
+    def calculate_utm(self, area_m2: float):
+
+        if area_m2 <= 500:
+            base = 34_914_000
+        elif area_m2 <= 2000:
+            base = 52_371_000
+        elif area_m2 <= 5000:
+            base = 69_828_000
+        else:
+            base = 87_285_000
+
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # میخکوبی
+    # -------------------------------
+
+    def calculate_staking(self, num_points: int):
 
         if 1 <= num_points <= 8:
-            return 60_642_992
+            base = 60_642_992
+        elif 9 <= num_points <= 50:
+            base = 0.8 * num_points * self.BASE_POINT_PRICE
+        elif 51 <= num_points <= 100:
+            base = 0.5 * num_points * self.BASE_POINT_PRICE
+        elif 101 <= num_points <= 500:
+            base = 0.4 * num_points * self.BASE_POINT_PRICE
+        else:
+            raise ValueError("تعداد نقاط خارج از بازه تعرفه است.")
 
-        if 9 <= num_points <= 50:
-            return 0.8 * num_points * self.BASE_POINT_PRICE
+        return self.apply_vat(base)
 
-        if 51 <= num_points <= 100:
-            return 0.5 * num_points * self.BASE_POINT_PRICE
+    # -------------------------------
+    # برداشت تک خطی
+    # -------------------------------
 
-        if 101 <= num_points <= 500:
-            return 0.4 * num_points * self.BASE_POINT_PRICE
+    def calculate_single_line_survey(self, area_m2: float):
 
-        raise ValueError("تعداد نقاط خارج از بازه تعرفه است.")
+        if area_m2 <= 500:
+            base = 27_000_000
+        elif area_m2 <= 2000:
+            base = 35_000_000
+        elif area_m2 <= 5000:
+            base = 45_000_000
+        else:
+            base = 60_000_000
 
-    def row_6(self, area_m2: float) -> float:
-        """
-        تهیه نقشه مسطحاتی بلوکی
-        """
+        return self.apply_vat(base)
 
-        if area_m2 <= 200:
-            return 68_909_749
+    # -------------------------------
+    # ترسیم UTM ساختمان
+    # -------------------------------
 
-        extra = area_m2 - 200
-        return 68_909_749 + (extra * 17_958)
+    def calculate_building_utm_drawing(self, area_m2: float):
 
-    def row_7(self, length_km: float) -> float:
-        """
-        محاسبه بر اساس کیلومتر طول
-        """
-        return length_km * 62_855_510
+        if area_m2 <= 500:
+            base = 20_000_000
+        elif area_m2 <= 2000:
+            base = 28_000_000
+        elif area_m2 <= 5000:
+            base = 36_000_000
+        else:
+            base = 45_000_000
 
-    def row_8(self, length_km: float) -> float:
-        """
-        حداقل 1 کیلومتر محاسبه می‌شود
-        """
-        effective_length = max(length_km, 1)
-        return effective_length * 53_876_150
+        return self.apply_vat(base)
 
-    def row_10(self, height_m: float, area_m2: float = None) -> float:
-        """
-        اگر ارتفاع <= 15 متر → مقطوع
-        اگر بیشتر از 15 متر → نیاز به مساحت دارد
-        """
+    # -------------------------------
+    # دریافتی تک خطی
+    # -------------------------------
 
-        if height_m <= 15:
-            return 6_285_555
+    def calculate_single_line_receivable(self, area_m2: float):
 
-        if area_m2 is None:
-            raise ValueError("برای ستون بالای 15 متر باید مساحت ارائه شود.")
+        survey = self.calculate_single_line_survey(area_m2)["base_amount"]
+        utm = self.calculate_building_utm_drawing(area_m2)["base_amount"]
 
-        return area_m2 * 269_380
-    
-    def apply_coefficient(self, amount: float, coefficient: float = 1.0) -> float:
-        """
-        اعمال ضریب (مثلاً شرایط سخت 1.4)
-        """
-        return amount * coefficient
+        base = survey + utm
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # تفکیکی دارای سابقه
+    # -------------------------------
+
+    def calculate_subdivision_with_history(self, area_m2: float):
+
+        if area_m2 <= 500:
+            base = 40_000_000
+        elif area_m2 <= 2000:
+            base = 55_000_000
+        elif area_m2 <= 5000:
+            base = 70_000_000
+        else:
+            base = 90_000_000
+
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # تفکیکی فاقد سابقه
+    # -------------------------------
+
+    def calculate_subdivision_without_history(self, area_m2: float):
+
+        survey = self.calculate_single_line_survey(area_m2)["base_amount"]
+        subdivision = self.calculate_subdivision_with_history(area_m2)["base_amount"]
+
+        base = survey + subdivision
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # توپوگرافی
+    # -------------------------------
+
+    def calculate_topography(self, area_m2: float):
+
+        rate = 12000
+        base = area_m2 * rate
+
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # نقشه بلوک شهری
+    # -------------------------------
+
+    def calculate_urban_block_map(self, area_m2: float):
+
+        rate = 9000
+        base = area_m2 * rate
+
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # پروفیل طولی و عرضی
+    # -------------------------------
+
+    def calculate_profile(self, length_km: float):
+
+        rate = 25_000_000
+        base = length_km * rate
+
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # مقاطع طولی
+    # -------------------------------
+
+    def calculate_longitudinal_section(self, length_km: float):
+
+        rate = 18_000_000
+        base = length_km * rate
+
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # نقشه وضع موجود مناطق خاص
+    # -------------------------------
+
+    def calculate_special_zone_map(self, area_m2: float):
+
+        rate = 15000
+        base = area_m2 * rate
+
+        return self.apply_vat(base)
+
+    # -------------------------------
+    # کنترل قائم ستون
+    # -------------------------------
+
+    def calculate_column_vertical_control(self, height_m: float, columns: int):
+
+        rate = 250_000
+        base = height_m * columns * rate
+
+        return self.apply_vat(base)

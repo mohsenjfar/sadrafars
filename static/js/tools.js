@@ -11,28 +11,60 @@ html:`
 
 <div class="service-selector">
 
-<div class="service-card active" data-row="1-1">
-مساحی و برداشت مسطحاتی<br><span>مساحی عرصه</span>
+<div class="service-card active" data-service="land_survey">
+مساحی عرصه
 </div>
 
-<div class="service-card" data-row="2">
-UTM و جانمایی<br><span>پیاده سازی</span>
+<div class="service-card" data-service="utm">
+نقشه UTM
 </div>
 
-<div class="service-card" data-row="6">
-ردیف 6<br><span>نقشه UTM</span>
+<div class="service-card" data-service="staking">
+پیاده سازی (میخکوبی)
 </div>
 
-<div class="service-card" data-row="7">
-ردیف 7<br><span>مسیر</span>
+<div class="service-card" data-service="single_line_survey">
+برداشت تک خطی
 </div>
 
-<div class="service-card" data-row="8">
-ردیف 8<br><span>شبکه</span>
+<div class="service-card" data-service="building_utm_drawing">
+ترسیم UTM ساختمان
 </div>
 
-<div class="service-card" data-row="10">
-ردیف 10<br><span>ارتفاعی</span>
+<div class="service-card" data-service="single_line_receivable">
+تک خطی قابل دریافت
+</div>
+
+<div class="service-card" data-service="subdivision_with_history">
+تفکیکی دارای سابقه
+</div>
+
+<div class="service-card" data-service="subdivision_without_history">
+تفکیکی فاقد سابقه
+</div>
+
+<div class="service-card" data-service="topography">
+توپوگرافی
+</div>
+
+<div class="service-card" data-service="urban_block_map">
+نقشه مسطحاتی بلوکی
+</div>
+
+<div class="service-card" data-service="profile">
+پروفیل طولی و عرضی
+</div>
+
+<div class="service-card" data-service="longitudinal_section">
+مقاطع طولی
+</div>
+
+<div class="service-card" data-service="special_zone_map">
+مناطق خاص
+</div>
+
+<div class="service-card" data-service="column_vertical_control">
+کنترل قائم ستون
 </div>
 
 </div>
@@ -52,32 +84,21 @@ UTM و جانمایی<br><span>پیاده سازی</span>
 
 engineering:{
 title:"محاسبه خدمات مهندسی",
-
 html:`
-
 <label>متراژ</label>
 <input type="number">
-
 <br><br>
-
-<button>
-محاسبه
-</button>
-
+<button>محاسبه</button>
 `
 },
 
 map:{
 title:"مشاهده قطعه و ناحیه",
-
-html:`
-
-<p>در نسخه بعدی به نقشه متصل می‌شود.</p>
-
-`
+html:`<p>در نسخه بعدی به نقشه متصل می‌شود.</p>`
 }
 
 }
+
 
 function initToolLogic(tool){
 
@@ -88,44 +109,61 @@ const fields = document.getElementById("dynamicFields")
 const form = document.getElementById("tariffForm")
 const result = document.getElementById("result")
 
-let selectedRow = "1-1"
+let selectedService = "land_survey"
 
-function renderFields(row){
 
-if(row === "1-1" || row === "6"){
+function renderFields(service){
+
+if([
+"land_survey",
+"single_line_survey",
+"building_utm_drawing",
+"single_line_receivable",
+"subdivision_with_history",
+"subdivision_without_history",
+"topography",
+"urban_block_map",
+"special_zone_map",
+"utm"
+].includes(service)){
+
 fields.innerHTML = `
 <label>متراژ (متر مربع)</label>
 <input type="number" id="area_m2">
 `
 }
 
-else if(row === "2"){
+else if(service === "staking"){
+
 fields.innerHTML = `
 <label>تعداد نقاط</label>
 <input type="number" id="num_points">
 `
 }
 
-else if(row === "7" || row === "8"){
+else if(service === "profile" || service === "longitudinal_section"){
+
 fields.innerHTML = `
 <label>طول مسیر (کیلومتر)</label>
 <input type="number" id="length_km">
 `
 }
 
-else if(row === "10"){
+else if(service === "column_vertical_control"){
+
 fields.innerHTML = `
 <label>ارتفاع (متر)</label>
 <input type="number" id="height_m">
 
-<label>متراژ</label>
-<input type="number" id="area_m2">
+<label>تعداد ستون</label>
+<input type="number" id="columns">
 `
 }
 
 }
 
-renderFields(selectedRow)
+renderFields(selectedService)
+
 
 cards.forEach(card => {
 
@@ -134,12 +172,13 @@ card.addEventListener("click", function(){
 cards.forEach(c => c.classList.remove("active"))
 this.classList.add("active")
 
-selectedRow = this.dataset.row
-renderFields(selectedRow)
+selectedService = this.dataset.service
+renderFields(selectedService)
 
 })
 
 })
+
 
 form.addEventListener("submit", async function(e){
 
@@ -147,26 +186,45 @@ e.preventDefault()
 
 let payload = {}
 
-if(selectedRow === "1-1" || selectedRow === "6"){
+if([
+"land_survey",
+"single_line_survey",
+"building_utm_drawing",
+"single_line_receivable",
+"subdivision_with_history",
+"subdivision_without_history",
+"topography",
+"urban_block_map",
+"special_zone_map",
+"utm"
+].includes(selectedService)){
+
 payload.area_m2 = Number(document.getElementById("area_m2").value)
+
 }
 
-if(selectedRow === "2"){
+if(selectedService === "staking"){
+
 payload.num_points = Number(document.getElementById("num_points").value)
+
 }
 
-if(selectedRow === "7" || selectedRow === "8"){
+if(selectedService === "profile" || selectedService === "longitudinal_section"){
+
 payload.length_km = Number(document.getElementById("length_km").value)
+
 }
 
-if(selectedRow === "10"){
+if(selectedService === "column_vertical_control"){
+
 payload.height_m = Number(document.getElementById("height_m").value)
-payload.area_m2 = Number(document.getElementById("area_m2").value)
+payload.columns = Number(document.getElementById("columns").value)
+
 }
 
 result.innerHTML = "در حال محاسبه..."
 
-const response = await fetch("/tariff/row/"+selectedRow,{
+const response = await fetch("/tariff/" + selectedService,{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -181,8 +239,6 @@ result.innerHTML =
 هزینه خدمات: ${data.amount.toLocaleString()} ریال
 </div>`
 
-
 })
 
 }
-
