@@ -84,83 +84,83 @@ const SERVICE_CONFIG = {
         infoClass: "info-box",
         api_url: "/tariff/utm"
     },
-    single_line_survey: {
-        label: "نقشه تک خطی",
-        fields: ["area_m2"],
-        info: `
-            <ul>
-                <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/single_line_survey"
-    },
-    building_utm_drawing: {
-        label: "نقشه UTM ساختمانی",
-        fields: ["area_m2"],
-        info: `
-            <ul>
-                <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/building_utm_drawing"
-    },
-    urban_block_map: {
-        label: "نقشه بلوک شهری",
-        fields: ["area_m2"],
-        info: `
-            <ul>
-                <li>محاسبه نقشه بلوک شهری بر اساس متراژ</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/urban_block_map"
-    },
-    profile: {
-        label: "پروفیل طولی",
-        fields: ["length_km"],
-        info: `
-            <ul>
-                <li>محاسبه پروفیل طولی بر اساس طول مسیر (کیلومتر)</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/profile"
-    },
-    longitudinal_section: {
-        label: "برش طولی",
-        fields: ["length_km"],
-        info: `
-            <ul>
-                <li>محاسبه برش طولی بر اساس طول مسیر (کیلومتر)</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/longitudinal_section"
-    },
-    special_zone_map: {
-        label: "نقشه مناطق ویژه",
-        fields: ["area_m2"],
-        info: `
-            <ul>
-                <li>محاسبه نقشه مناطق ویژه بر اساس متراژ</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/special_zone_map"
-    },
-    column_vertical_control: {
-        label: "کنترل قائم ستون‌ها",
-        fields: ["column_vertical_control"],
-        info: `
-            <ul>
-                <li>محاسبه هزینه کنترل قائم ستون‌ها بر اساس ارتفاع و تعداد ستون</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/column_vertical_control"
-    }
+    // single_line_survey: {
+    //     label: "نقشه تک خطی",
+    //     fields: ["area_m2"],
+    //     info: `
+    //         <ul>
+    //             <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
+    //         </ul>
+    //     `,
+    //     infoClass: "info-box",
+    //     api_url: "/tariff/single_line_survey"
+    // },
+    // building_utm_drawing: {
+    //     label: "نقشه UTM ساختمانی",
+    //     fields: ["area_m2"],
+    //     info: `
+    //         <ul>
+    //             <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
+    //         </ul>
+    //     `,
+    //     infoClass: "info-box",
+    //     api_url: "/tariff/building_utm_drawing"
+    // },
+    // urban_block_map: {
+    //     label: "نقشه بلوک شهری",
+    //     fields: ["area_m2"],
+    //     info: `
+    //         <ul>
+    //             <li>محاسبه نقشه بلوک شهری بر اساس متراژ</li>
+    //         </ul>
+    //     `,
+    //     infoClass: "info-box",
+    //     api_url: "/tariff/urban_block_map"
+    // },
+    // profile: {
+    //     label: "پروفیل طولی",
+    //     fields: ["length_km"],
+    //     info: `
+    //         <ul>
+    //             <li>محاسبه پروفیل طولی بر اساس طول مسیر (کیلومتر)</li>
+    //         </ul>
+    //     `,
+    //     infoClass: "info-box",
+    //     api_url: "/tariff/profile"
+    // },
+    // longitudinal_section: {
+    //     label: "برش طولی",
+    //     fields: ["length_km"],
+    //     info: `
+    //         <ul>
+    //             <li>محاسبه برش طولی بر اساس طول مسیر (کیلومتر)</li>
+    //         </ul>
+    //     `,
+    //     infoClass: "info-box",
+    //     api_url: "/tariff/longitudinal_section"
+    // },
+    // special_zone_map: {
+    //     label: "نقشه مناطق ویژه",
+    //     fields: ["area_m2"],
+    //     info: `
+    //         <ul>
+    //             <li>محاسبه نقشه مناطق ویژه بر اساس متراژ</li>
+    //         </ul>
+    //     `,
+    //     infoClass: "info-box",
+    //     api_url: "/tariff/special_zone_map"
+    // },
+    // column_vertical_control: {
+    //     label: "کنترل قائم ستون‌ها",
+    //     fields: ["column_vertical_control"],
+    //     info: `
+    //         <ul>
+    //             <li>محاسبه هزینه کنترل قائم ستون‌ها بر اساس ارتفاع و تعداد ستون</li>
+    //         </ul>
+    //     `,
+    //     infoClass: "info-box",
+    //     api_url: "/tariff/column_vertical_control"
+    // }
 }
 
 
