@@ -1,8 +1,84 @@
+const SERVICE_CONFIG = {
+
+single_line_receivable:{
+label:"تک خطی",
+fields:["area_m2"],
+info:`
+<ul>
+<li>مبنای محاسبه مجموع متراژ واحدها طبق پروانه یا عدم خلاف یا پایانکار می باشد بعلاوه پیش آمدگی های ملک.</li>
+<li>در صورتی که عرصه ملک بزرگ باشد، تعرفه مساحی عرصه نیز اضافه میگردد (به عنوان مثال باغشهر).</li>
+</ul>
+`,
+infoClass:"info-box"
+},
+
+subdivision_with_history:{
+label:"تفکیکی دارای سابقه",
+fields:["area_m2"],
+info:`منظور از تفکیکی دارای سابقه، درخواست های تفکیکی می باشد که قبلاً نقشه تک خطی پایانکار توسط سازمان نظام مهندسی ساختمان انجام شده است.`,
+infoClass:"info-box info-box-blue"
+},
+
+subdivision_without_history:{
+label:"تفکیکی فاقد سابقه",
+fields:["area_m2"]
+},
+
+staking:{
+label:"میخکوبی",
+fields:["num_points"],
+info:`در صورتی که درخواست صرفاً از نوع میخکوبی باشد، هزینه جانمایی نیز به خدمات اضافه می‌گردد.`,
+infoClass:"info-box info-box-warning"
+},
+
+topography:{
+label:"توپوگرافی",
+fields:["area_m2"]
+},
+
+land_survey:{
+label:"مساحی عرصه",
+fields:["area_m2"]
+},
+
+utm:{
+label:"جانمایی",
+fields:["area_m2"]
+}
+
+}
+
+
+const FIELD_TEMPLATES = {
+
+area_m2:`
+<label>متراژ (متر مربع)</label>
+<input type="number" id="area_m2">
+`,
+
+num_points:`
+<label>تعداد نقاط</label>
+<input type="number" id="num_points">
+`,
+
+length_km:`
+<label>طول مسیر (کیلومتر)</label>
+<input type="number" id="length_km">
+`,
+
+column_vertical_control:`
+<label>ارتفاع (متر)</label>
+<input type="number" id="height_m">
+<label>تعداد ستون</label>
+<input type="number" id="columns">
+`
+}
+
+
 const tools = {
 
 tariff:{
 title:"محاسبه تعرفه نقشه‌برداری",
-
 html:`
 
 <form id="tariffForm" class="tool-form">
@@ -11,33 +87,11 @@ html:`
 
 <div class="service-selector">
 
-<div class="service-card" data-service="single_line_receivable">
-تک خطی
+${Object.entries(SERVICE_CONFIG).map(([key,val],i)=>`
+<div class="service-card ${i===0?'active':''}" data-service="${key}">
+${val.label}
 </div>
-
-<div class="service-card" data-service="subdivision_with_history">
-تفکیکی دارای سابقه
-</div>
-
-<div class="service-card" data-service="subdivision_without_history">
-تفکیکی فاقد سابقه
-</div>
-
-<div class="service-card" data-service="staking">
-میخکوبی
-</div>
-
-<div class="service-card" data-service="topography">
-توپوگرافی
-</div>
-
-<div class="service-card active" data-service="land_survey">
-مساحی عرصه
-</div>
-
-<div class="service-card" data-service="utm">
-جانمایی
-</div>
+`).join("")}
 
 </div>
 
@@ -51,21 +105,6 @@ html:`
 
 <div id="result"></div>
 `
-},
-
-engineering:{
-title:"محاسبه خدمات مهندسی",
-html:`
-<label>متراژ</label>
-<input type="number">
-<br><br>
-<button>محاسبه</button>
-`
-},
-
-map:{
-title:"مشاهده قطعه و ناحیه",
-html:`<p>در نسخه بعدی به نقشه متصل می‌شود.</p>`
 }
 
 }
@@ -80,86 +119,41 @@ const fields = document.getElementById("dynamicFields")
 const form = document.getElementById("tariffForm")
 const result = document.getElementById("result")
 
-let selectedService = "land_survey"
+let selectedService = Object.keys(SERVICE_CONFIG)[0]
 
 
 function renderFields(service){
 
-// تک خطی با توضیح
-if(service === "single_line_receivable"){
+const config = SERVICE_CONFIG[service]
 
-fields.innerHTML = `
+let html=""
 
-<div class="info-box">
-<ul>
-<li>مبنای محاسبه مجموع متراژ واحدها طبق پروانه یا عدم خلاف یا پایانکار می باشد بعلاوه پیش آمدگی های ملک.</li>
-<li>در صورتی که عرصه ملک بزرگ باشد، تعرفه مساحی عرصه نیز اضافه میگردد (به عنوان مثال باغشهر).</li>
-</ul>
+if(config.info){
+
+html += `
+<div class="${config.infoClass || 'info-box'}">
+${config.info}
 </div>
-
-<label>متراژ (متر مربع)</label>
-<input type="number" id="area_m2">
 `
+
 }
 
-// سرویس های متراژی
-else if([
-"land_survey",
-"building_utm_drawing",
-"subdivision_with_history",
-"subdivision_without_history",
-"topography",
-"urban_block_map",
-"special_zone_map",
-"utm"
-].includes(service)){
+config.fields.forEach(f=>{
+html += FIELD_TEMPLATES[f]
+})
 
-fields.innerHTML = `
-<label>متراژ (متر مربع)</label>
-<input type="number" id="area_m2">
-`
-}
-
-// میخکوبی
-else if(service === "staking"){
-
-fields.innerHTML = `
-<label>تعداد نقاط</label>
-<input type="number" id="num_points">
-`
-}
-
-// پروفیل
-else if(service === "profile" || service === "longitudinal_section"){
-
-fields.innerHTML = `
-<label>طول مسیر (کیلومتر)</label>
-<input type="number" id="length_km">
-`
-}
-
-// کنترل شاقولی ستون
-else if(service === "column_vertical_control"){
-
-fields.innerHTML = `
-<label>ارتفاع (متر)</label>
-<input type="number" id="height_m">
-
-<label>تعداد ستون</label>
-<input type="number" id="columns">
-`
-}
+fields.innerHTML = html
 
 }
 
 renderFields(selectedService)
 
 
-cards.forEach(card => {
+cards.forEach(card=>{
 
-card.addEventListener("click", function(){
+card.addEventListener("click",function(){
 
-cards.forEach(c => c.classList.remove("active"))
+cards.forEach(c=>c.classList.remove("active"))
 this.classList.add("active")
 
 selectedService = this.dataset.service
@@ -175,70 +169,40 @@ form.addEventListener("submit", async function(e){
 
 e.preventDefault()
 
-let payload = {}
+const config = SERVICE_CONFIG[selectedService]
 
-if([
-"land_survey",
-"single_line_survey",
-"building_utm_drawing",
-"single_line_receivable",
-"subdivision_with_history",
-"subdivision_without_history",
-"topography",
-"urban_block_map",
-"special_zone_map",
-"utm"
-].includes(selectedService)){
+let payload={}
 
-payload.area_m2 = Number(document.getElementById("area_m2").value)
+config.fields.forEach(f=>{
 
-}
+const el = document.getElementById(f)
+if(el) payload[f] = Number(el.value)
 
-if(selectedService === "staking"){
+})
 
-payload.num_points = Number(document.getElementById("num_points").value)
-
-}
-
-if(selectedService === "profile" || selectedService === "longitudinal_section"){
-
-payload.length_km = Number(document.getElementById("length_km").value)
-
-}
-
-if(selectedService === "column_vertical_control"){
-
-payload.height_m = Number(document.getElementById("height_m").value)
-payload.columns = Number(document.getElementById("columns").value)
-
-}
-
-result.innerHTML = "در حال محاسبه..."
+result.innerHTML="در حال محاسبه..."
 
 try{
 
-const response = await fetch("/tariff/" + selectedService,{
+const response = await fetch("/tariff/"+selectedService,{
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
+headers:{ "Content-Type":"application/json" },
 body: JSON.stringify(payload)
 })
 
-if(!response.ok){
-throw new Error("API Error")
-}
+if(!response.ok) throw new Error()
 
 const data = await response.json()
 
-result.innerHTML =
-`<div class="result-box">
+result.innerHTML = `
+<div class="result-box">
 مبلغ پایه: ${data.base_amount.toLocaleString()} ریال<br>
 مالیات (۱۰٪): ${data.vat.toLocaleString()} ریال<br>
 <strong>مبلغ نهایی: ${data.total_amount.toLocaleString()} ریال</strong>
-</div>`
+</div>
+`
 
-}catch(err){
+}catch{
 
 result.innerHTML = `
 <div class="error-box">
