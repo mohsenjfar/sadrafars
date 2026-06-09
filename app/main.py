@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
-from fastapi.staticfiles import StaticFiles, HTMLResponse
-from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from pathlib import Path
 from datetime import datetime
 from fastapi.templating import Jinja2Templates
