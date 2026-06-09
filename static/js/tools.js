@@ -16,23 +16,15 @@ html:`
 </div>
 
 <div class="service-card" data-service="utm">
-نقشه UTM
+جانمایی
 </div>
 
 <div class="service-card" data-service="staking">
-پیاده سازی (میخکوبی)
-</div>
-
-<div class="service-card" data-service="single_line_survey">
-برداشت تک خطی
-</div>
-
-<div class="service-card" data-service="building_utm_drawing">
-ترسیم UTM ساختمان
+میخکوبی
 </div>
 
 <div class="service-card" data-service="single_line_receivable">
-تک خطی قابل دریافت
+تک خطی
 </div>
 
 <div class="service-card" data-service="subdivision_with_history">
@@ -57,10 +49,6 @@ html:`
 
 <div class="service-card" data-service="longitudinal_section">
 مقاطع طولی
-</div>
-
-<div class="service-card" data-service="special_zone_map">
-مناطق خاص
 </div>
 
 <div class="service-card" data-service="column_vertical_control">
