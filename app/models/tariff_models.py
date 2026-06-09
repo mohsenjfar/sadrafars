@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 
 
 class AreaRequest(BaseModel):
@@ -18,7 +19,15 @@ class ColumnControlRequest(BaseModel):
     columns: int = Field(..., gt=0)
 
 
+# مدل‌های جدید برای خدمات مهندسی ساختمان
+class EngineeringRequest(BaseModel):
+    area_m2: float = Field(..., gt=0, description="مساحت زیربنا به مترمربع")
+    floors: int = Field(..., gt=0, description="تعداد طبقات")
+    include_surveying: Optional[bool] = Field(False, description="آیا نقشه‌برداری محاسبه شود؟")
+
+
 class TariffResponse(BaseModel):
     base_amount: float
     vat: float
     total_amount: float
+    details: Optional[dict] = None  # برای نمایش جزئیات بیشتر
