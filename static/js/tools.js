@@ -11,18 +11,6 @@ html:`
 
 <div class="service-selector">
 
-<div class="service-card active" data-service="land_survey">
-مساحی عرصه
-</div>
-
-<div class="service-card" data-service="utm">
-UTM و جانمایی
-</div>
-
-<div class="service-card" data-service="staking">
-میخکوبی
-</div>
-
 <div class="service-card" data-service="single_line_receivable">
 تک خطی
 </div>
@@ -35,24 +23,20 @@ UTM و جانمایی
 تفکیکی فاقد سابقه
 </div>
 
+<div class="service-card" data-service="staking">
+میخکوبی
+</div>
+
 <div class="service-card" data-service="topography">
 توپوگرافی
 </div>
 
-<div class="service-card" data-service="urban_block_map">
-نقشه مسطحاتی بلوکی
+<div class="service-card active" data-service="land_survey">
+مساحی عرصه
 </div>
 
-<div class="service-card" data-service="profile">
-پروفیل طولی و عرضی
-</div>
-
-<div class="service-card" data-service="longitudinal_section">
-مقاطع طولی
-</div>
-
-<div class="service-card" data-service="column_vertical_control">
-کنترل قائم ستون (سازه های فلزی)
+<div class="service-card" data-service="utm">
+جانمایی
 </div>
 
 </div>
@@ -65,7 +49,8 @@ UTM و جانمایی
 
 </form>
 
-<div id="result"></div>`
+<div id="result"></div>
+`
 },
 
 engineering:{
@@ -100,11 +85,27 @@ let selectedService = "land_survey"
 
 function renderFields(service){
 
-if([
+// تک خطی با توضیح
+if(service === "single_line_receivable"){
+
+fields.innerHTML = `
+
+<div class="info-box">
+<ul>
+<li>مبنای محاسبه مجموع متراژ واحدها طبق پروانه یا عدم خلاف یا پایانکار می باشد بعلاوه پیش آمدگی های ملک.</li>
+<li>در صورتی که عرصه ملک بزرگ باشد، تعرفه مساحی عرصه نیز اضافه میگردد (به عنوان مثال باغشهر).</li>
+</ul>
+</div>
+
+<label>متراژ (متر مربع)</label>
+<input type="number" id="area_m2">
+`
+}
+
+// سرویس های متراژی
+else if([
 "land_survey",
-"single_line_survey",
 "building_utm_drawing",
-"single_line_receivable",
 "subdivision_with_history",
 "subdivision_without_history",
 "topography",
@@ -119,6 +120,7 @@ fields.innerHTML = `
 `
 }
 
+// میخکوبی
 else if(service === "staking"){
 
 fields.innerHTML = `
@@ -127,6 +129,7 @@ fields.innerHTML = `
 `
 }
 
+// پروفیل
 else if(service === "profile" || service === "longitudinal_section"){
 
 fields.innerHTML = `
@@ -135,6 +138,7 @@ fields.innerHTML = `
 `
 }
 
+// کنترل شاقولی ستون
 else if(service === "column_vertical_control"){
 
 fields.innerHTML = `
@@ -159,6 +163,7 @@ cards.forEach(c => c.classList.remove("active"))
 this.classList.add("active")
 
 selectedService = this.dataset.service
+
 renderFields(selectedService)
 
 })
@@ -210,6 +215,8 @@ payload.columns = Number(document.getElementById("columns").value)
 
 result.innerHTML = "در حال محاسبه..."
 
+try{
+
 const response = await fetch("/tariff/" + selectedService,{
 method:"POST",
 headers:{
@@ -217,6 +224,10 @@ headers:{
 },
 body: JSON.stringify(payload)
 })
+
+if(!response.ok){
+throw new Error("API Error")
+}
 
 const data = await response.json()
 
@@ -227,6 +238,15 @@ result.innerHTML =
 <strong>مبلغ نهایی: ${data.total_amount.toLocaleString()} ریال</strong>
 </div>`
 
+}catch(err){
+
+result.innerHTML = `
+<div class="error-box">
+خطا در محاسبه. لطفاً دوباره تلاش کنید.
+</div>
+`
+
+}
 
 })
 
