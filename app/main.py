@@ -5,8 +5,6 @@ from pathlib import Path
 from datetime import datetime
 from fastapi.templating import Jinja2Templates
 
-templates = Jinja2Templates(directory="templates")
-
 from app.api.routes_tariff import router as tariff_router
 
 app = FastAPI(
@@ -17,6 +15,8 @@ app = FastAPI(
 # مسیر پوشه static
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = BASE_DIR / "static"
+
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # سرو کردن فایل‌های استاتیک
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
