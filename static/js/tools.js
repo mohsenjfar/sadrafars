@@ -83,8 +83,6 @@ html:`
 
 <form id="tariffForm" class="tool-form">
 
-<label>نوع خدمت</label>
-
 <div class="service-selector">
 
 ${Object.entries(SERVICE_CONFIG).map(([key,val],i)=>`

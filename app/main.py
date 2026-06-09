@@ -1,7 +1,11 @@
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles, HTMLResponse
 from fastapi.responses import FileResponse
 from pathlib import Path
+from datetime import datetime
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="templates")
 
 from app.api.routes_tariff import router as tariff_router
 
@@ -18,9 +22,15 @@ STATIC_DIR = BASE_DIR / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # صفحه اصلی
-@app.get("/")
-def serve_index():
-    return FileResponse(STATIC_DIR / "index.html")
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "timestamp": int(datetime.now().timestamp())
+        }
+    )
 
 # اضافه کردن API
 app.include_router(tariff_router)
