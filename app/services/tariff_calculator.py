@@ -2,7 +2,6 @@ class TariffCalculator:
     """Tariff 1405 Calculator"""
 
     VAT_RATE = 0.10
-    BASE_POINT_PRICE = 7_580_374
 
     def apply_vat(self, base_amount: float):
         vat = base_amount * self.VAT_RATE
@@ -69,52 +68,81 @@ class TariffCalculator:
 
     def calculate_staking(self, num_points: int):
 
-        if 1 <= num_points <= 8:
-            base = 60_642_992
-        elif 9 <= num_points <= 50:
-            base = 0.8 * num_points * self.BASE_POINT_PRICE
-        elif 51 <= num_points <= 100:
-            base = 0.5 * num_points * self.BASE_POINT_PRICE
-        elif 101 <= num_points <= 500:
-            base = 0.4 * num_points * self.BASE_POINT_PRICE
+        BASE_FIXED = 60_642_992
+        BASE_POINT_PRICE = 7_580_374
+
+        if num_points <= 8:
+            base = BASE_FIXED
         else:
-            raise ValueError("تعداد نقاط خارج از بازه تعرفه است.")
+            base = BASE_FIXED
+            remaining = num_points - 8
+
+            # 9 تا 50
+            tier = min(remaining, 42)  # 50-8
+            base += tier * BASE_POINT_PRICE * 0.8
+            remaining -= tier
+
+            if remaining > 0:
+                # 51 تا 100
+                tier = min(remaining, 50)
+                base += tier * BASE_POINT_PRICE * 0.5
+                remaining -= tier
+
+            if remaining > 0:
+                # 101 تا 500
+                tier = min(remaining, 400)
+                base += tier * BASE_POINT_PRICE * 0.4
 
         return self.apply_vat(base)
+
 
     # -------------------------------
     # برداشت تک خطی
     # -------------------------------
 
-    def calculate_single_line_survey(self, area_m2: float):
+    def calculate_single_line_survey(
+        self,
+        area_m2: float,
+        commercial_under_50: bool = False
+    ):
 
-        if area_m2 <= 500:
-            base = 27_000_000
-        elif area_m2 <= 2000:
-            base = 35_000_000
-        elif area_m2 <= 5000:
-            base = 45_000_000
-        else:
-            base = 60_000_000
+        RATE_PER_M2 = 125_713
+
+        # حداقل متراژ 500 متر
+        effective_area = max(area_m2, 500)
+
+        base = effective_area * RATE_PER_M2
+
+        # اعمال ضریب 1.3 در صورت تجاری زیر 50 متر
+        if commercial_under_50:
+            base *= 1.3
 
         return self.apply_vat(base)
+
 
     # -------------------------------
     # ترسیم UTM ساختمان
     # -------------------------------
 
-    def calculate_building_utm_drawing(self, area_m2: float):
+    def calculate_building_utm_drawing(
+        self,
+        area_m2: float,
+        commercial_under_50: bool = False
+    ):
 
-        if area_m2 <= 500:
-            base = 20_000_000
-        elif area_m2 <= 2000:
-            base = 28_000_000
-        elif area_m2 <= 5000:
-            base = 36_000_000
-        else:
-            base = 45_000_000
+        RATE_PER_M2 = 98_774
+
+        # حداقل متراژ 500 متر
+        effective_area = max(area_m2, 500)
+
+        base = effective_area * RATE_PER_M2
+
+        # ضریب مجتمع تجاری با واحد زیر 50 متر
+        if commercial_under_50:
+            base *= 1.6
 
         return self.apply_vat(base)
+
 
     # -------------------------------
     # دریافتی تک خطی
@@ -132,18 +160,25 @@ class TariffCalculator:
     # تفکیکی دارای سابقه
     # -------------------------------
 
-    def calculate_subdivision_with_history(self, area_m2: float):
+    def calculate_subdivision_with_history(
+        self,
+        area_m2: float,
+        commercial_under_50: bool = False
+    ):
 
-        if area_m2 <= 500:
-            base = 40_000_000
-        elif area_m2 <= 2000:
-            base = 55_000_000
-        elif area_m2 <= 5000:
-            base = 70_000_000
-        else:
-            base = 90_000_000
+        RATE_PER_M2 = 53_871
+
+        # حداقل متراژ 500 متر
+        effective_area = max(area_m2, 500)
+
+        base = effective_area * RATE_PER_M2
+
+        # ضریب مجتمع تجاری با واحد زیر 50 متر
+        if commercial_under_50:
+            base *= 1.8
 
         return self.apply_vat(base)
+
 
     # -------------------------------
     # تفکیکی فاقد سابقه

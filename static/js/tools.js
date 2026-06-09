@@ -16,7 +16,7 @@ html:`
 </div>
 
 <div class="service-card" data-service="utm">
-جانمایی
+UTM و جانمایی
 </div>
 
 <div class="service-card" data-service="staking">
@@ -52,7 +52,7 @@ html:`
 </div>
 
 <div class="service-card" data-service="column_vertical_control">
-کنترل قائم ستون
+کنترل قائم ستون (سازه های فلزی)
 </div>
 
 </div>
@@ -65,9 +65,7 @@ html:`
 
 </form>
 
-<div id="result"></div>
-
-`
+<div id="result"></div>`
 },
 
 engineering:{
