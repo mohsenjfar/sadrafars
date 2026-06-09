@@ -198,8 +198,31 @@ class TariffCalculator:
 
     def calculate_topography(self, area_m2: float):
 
-        rate = 12000
-        base = area_m2 * rate
+        FIXED_UP_TO_500 = 68_243_120
+        RATE_501_TO_5000 = 26_933
+        RATE_5001_TO_10000 = 19_747
+        RATE_ABOVE_10000 = 13_467
+
+        if area_m2 <= 500:
+            base = FIXED_UP_TO_500
+        else:
+            base = FIXED_UP_TO_500
+            remaining = area_m2 - 500
+
+            # مازاد 501 تا 5000
+            tier = min(remaining, 4500)
+            base += tier * RATE_501_TO_5000
+            remaining -= tier
+
+            # مازاد 5001 تا 10000
+            if remaining > 0:
+                tier = min(remaining, 5000)
+                base += tier * RATE_5001_TO_10000
+                remaining -= tier
+
+            # بیش از 10000
+            if remaining > 0:
+                base += remaining * RATE_ABOVE_10000
 
         return self.apply_vat(base)
 
