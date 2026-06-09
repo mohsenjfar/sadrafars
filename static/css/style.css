@@ -252,26 +252,6 @@ justify-content:center;
 
 }
 
-.result-box{
-
-background:var(--accent);
-color:white;
-
-padding:18px 28px;
-
-border-radius:14px;
-
-font-size:18px;
-font-weight:600;
-
-text-align:center;
-
-box-shadow:0 10px 25px rgba(5,150,105,0.25);
-
-animation:resultPop .35s ease;
-
-}
-
 @keyframes resultPop{
 
 from{
@@ -355,6 +335,7 @@ padding:15px;
 margin-top:15px;
 border-radius:8px;
 font-size:16px;
+color:rgb(0, 0, 0);
 }
 
 .error-box{
