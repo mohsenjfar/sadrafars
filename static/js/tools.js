@@ -103,6 +103,50 @@ ${val.label}
 
 <div id="result"></div>
 `
+},
+
+engineering:{
+title:"محاسبه تعرفه خدمات مهندسی",
+html:`
+
+<form id="engineeringForm" class="tool-form">
+
+<div class="service-selector">
+
+</div>
+
+<div id="dynamicFields"></div>
+
+<button type="submit">
+محاسبه
+</button>
+
+</form>
+
+<div id="result"></div>
+`
+},
+
+map:{
+title:"مشاهده قطعه و ناحیه بر روی نقشه",
+html:`
+
+<form id="mapForm" class="tool-form">
+
+<div class="service-selector">
+
+</div>
+
+<div id="dynamicFields"></div>
+
+<button type="submit">
+محاسبه
+</button>
+
+</form>
+
+<div id="result"></div>
+`
 }
 
 }
