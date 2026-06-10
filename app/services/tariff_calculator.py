@@ -64,24 +64,31 @@ class TariffCalculator:
         )
 
     def calculate_staking(self, num_points: int) -> TariffResponse:
-        """میخکوبی (ردیف 2) - پلکانی بر اساس تعداد نقاط"""
+        """میخکوبی (ردیف 2) - پلکانی تجمعی"""
         num_points = max(num_points, 8)
 
         if num_points <= 8:
             base = 60_642_992
         elif num_points <= 50:
-            base = int(num_points * 0.8 * 7_580_374)
+            # مبلغ 8 نقطه اول + مابه‌التفاوت نقاط 9 تا 50
+            extra_points = num_points - 8
+            base = 60_642_992 + int(extra_points * 0.8 * 7_580_374)
         elif num_points <= 100:
-            base = int(num_points * 0.5 * 7_580_374)
-        else:
-            base = int(num_points * 0.4 * 7_580_374)
+            # مبلغ 50 نقطه اول + مابه‌التفاوت نقاط 51 تا 100
+            extra_points = num_points - 50
+            base = 60_642_992 + int(42 * 0.8 * 7_580_374) + int(extra_points * 0.5 * 7_580_374)
+        else:  # 101 تا 500
+            # مبلغ 100 نقطه اول + مابه‌التفاوت نقاط 101 تا 500
+            extra_points = num_points - 100
+            base = 60_642_992 + int(42 * 0.8 * 7_580_374) + int(50 * 0.5 * 7_580_374) + int(extra_points * 0.4 * 7_580_374)
 
+        base = int(base)
         vat, total = self._add_vat(base)
         return TariffResponse(
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"تعداد نقاط": num_points, "نوع محاسبه": "پلکانی"}
+            details={"تعداد نقاط": num_points, "نوع محاسبه": "پلکانی تجمعی"}
         )
 
     def calculate_single_line_receivable(self, area_m2: float) -> TariffResponse:
@@ -124,17 +131,23 @@ class TariffCalculator:
         )
 
     def calculate_topography(self, area_m2: float) -> TariffResponse:
-        """توپوگرافی (ردیف 5) - پلکانی"""
+        """توپوگرافی (ردیف 5) - پلکانی تجمعی"""
         area_m2 = max(area_m2, 500)
 
         if area_m2 <= 500:
             base = 68_243_120
         elif area_m2 <= 5000:
-            base = 68_243_120 + (area_m2 - 500) * 26_933
+            # مبلغ 500 متر اول + مابه‌التفاوت 501 تا 5000
+            extra = area_m2 - 500
+            base = 68_243_120 + int(extra * 26_933)
         elif area_m2 <= 10000:
-            base = 68_243_120 + (4500 * 26_933) + (area_m2 - 5000) * 19_747
+            # مبلغ 5000 متر اول + مابه‌التفاوت 5001 تا 10000
+            extra = area_m2 - 5000
+            base = 68_243_120 + int(4500 * 26_933) + int(extra * 19_747)
         else:
-            base = 68_243_120 + (4500 * 26_933) + (5000 * 19_747) + (area_m2 - 10000) * 13_467
+            # مبلغ 10000 متر اول + مابه‌التفاوت بیشتر از 10000
+            extra = area_m2 - 10000
+            base = 68_243_120 + int(4500 * 26_933) + int(5000 * 19_747) + int(extra * 13_467)
 
         base = int(base)
         vat, total = self._add_vat(base)
@@ -142,17 +155,19 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"مساحت": area_m2, "نوع محاسبه": "پلکانی"}
+            details={"مساحت": area_m2, "نوع محاسبه": "پلکانی تجمعی"}
         )
 
     def calculate_urban_block_map(self, area_m2: float) -> TariffResponse:
-        """نقشه مسطحاتی املاک شهری (ردیف 6)"""
+        """نقشه مسطحاتی املاک شهری (ردیف 6) - پلکانی تجمعی"""
         area_m2 = max(area_m2, 1)
 
         if area_m2 <= 200:
             base = 68_909_749
         else:
-            base = 68_909_749 + (area_m2 - 200) * 17_958
+            # مبلغ 200 متر اول + مابه‌التفاوت مازاد
+            extra = area_m2 - 200
+            base = 68_909_749 + int(extra * 17_958)
 
         base = int(base)
         vat, total = self._add_vat(base)
@@ -160,7 +175,7 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"مساحت": area_m2}
+            details={"مساحت": area_m2, "نوع محاسبه": "پلکانی تجمعی"}
         )
 
     def calculate_profile(self, length_km: float) -> TariffResponse:
