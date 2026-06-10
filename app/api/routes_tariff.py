@@ -128,3 +128,11 @@ def calculate_staking_plus_topography(payload: StakingPlusTopographyRequest):
         payload.num_points,
         payload.area_m2
     )
+
+@router.post("/single_line_plus_land_survey", response_model=TariffResponse)
+def calculate_single_line_plus_land_survey(payload: SingleLinePlusLandSurveyRequest):
+    """محاسبه مجموع هزینه تک خطی قابل دریافت و مساحی عرصه"""
+    return calc.calculate_single_line_plus_land_survey(
+        payload.built_up_area,
+        payload.land_area
+    )

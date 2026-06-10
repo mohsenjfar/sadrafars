@@ -599,3 +599,43 @@ class TariffCalculator:
                 }
             }
         )
+
+    def calculate_single_line_plus_land_survey(self, built_up_area: float, land_area: float) -> TariffResponse:
+        """
+        محاسبه مجموع هزینه تک خطی قابل دریافت و مساحی عرصه
+        """
+        # محاسبه تک خطی قابل دریافت (بر اساس زیربنا)
+        single_line_result = self.calculate_single_line_receivable(built_up_area)
+        
+        # محاسبه مساحی عرصه (بر اساس مساحت زمین)
+        land_survey_result = self.calculate_land_survey(land_area)
+        
+        # جمع کل
+        base_amount = single_line_result.base_amount + land_survey_result.base_amount
+        vat = single_line_result.vat + land_survey_result.vat
+        total_amount = single_line_result.total_amount + land_survey_result.total_amount
+        
+        return TariffResponse(
+            base_amount=base_amount,
+            vat=vat,
+            total_amount=total_amount,
+            details={
+                "تک خطی قابل دریافت": {
+                    "مساحت زیربنا": built_up_area,
+                    "مبلغ پایه": single_line_result.base_amount,
+                    "مالیات": single_line_result.vat,
+                    "مبلغ نهایی": single_line_result.total_amount
+                },
+                "مساحی عرصه": {
+                    "مساحت زمین": land_area,
+                    "مبلغ پایه": land_survey_result.base_amount,
+                    "مالیات": land_survey_result.vat,
+                    "مبلغ نهایی": land_survey_result.total_amount
+                },
+                "جمع کل": {
+                    "مبلغ پایه": base_amount,
+                    "مالیات": vat,
+                    "مبلغ نهایی": total_amount
+                }
+            }
+        )
