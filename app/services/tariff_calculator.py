@@ -438,7 +438,7 @@ class TariffCalculator:
 
     def _jalali_to_gregorian(self, jalali_date: str) -> str:
         """تبدیل تاریخ شمسی به میلادی (فرمت ورودی: YYYY/MM/DD)"""
-        from jalali import Jalali
+        import jdatetime
         
         parts = jalali_date.split('/')
         if len(parts) != 3:
@@ -447,9 +447,9 @@ class TariffCalculator:
         year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
         
         # تبدیل شمسی به میلادی
-        gregorian = Jalali.to_gregorian(year, month, day)
+        gregorian = jdatetime.date(year, month, day).togregorian()
         
-        return f"{gregorian[0]}-{gregorian[1]:02d}-{gregorian[2]:02d}"
+        return f"{gregorian.year}-{gregorian.month:02d}-{gregorian.day:02d}"
     
     def calculate_delay_penalty(self, area_m2: float, floors: int, license_date: str) -> TariffResponse:
         """
@@ -457,10 +457,18 @@ class TariffCalculator:
         هر 6 ماه (یا کسری) بعد از 18 ماه = 20% هزینه نظارت پایه
         """
         from datetime import datetime
+        import jdatetime
         
         # تبدیل تاریخ شمسی به میلادی
         try:
-            gregorian_date = self._jalali_to_gregorian(license_date)
+            parts = license_date.split('/')
+            if len(parts) != 3:
+                raise ValueError("فرمت تاریخ باید YYYY/MM/DD باشد")
+            
+            year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
+            gregorian = jdatetime.date(year, month, day).togregorian()
+            gregorian_date = f"{gregorian.year}-{gregorian.month:02d}-{gregorian.day:02d}"
+            
         except Exception as e:
             return TariffResponse(
                 base_amount=0,
@@ -492,8 +500,7 @@ class TariffCalculator:
         penalty_amount = int(base_supervision_cost * 0.2 * units)
         
         # محاسبه تاریخ امروز شمسی برای نمایش
-        from jalali import Jalali
-        today_jalali = Jalali(today.year, today.month, today.day)
+        today_jalali = jdatetime.date.today()
         today_str = f"{today_jalali.year}/{today_jalali.month:02d}/{today_jalali.day:02d}"
         
         return TariffResponse(
