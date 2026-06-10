@@ -120,3 +120,11 @@ def calculate_staking_plus_utm(payload: StakingPlusUtmRequest):
         payload.num_points,
         payload.area_m2
     )
+
+@router.post("/staking_plus_topography", response_model=TariffResponse)
+def calculate_staking_plus_topography(payload: StakingPlusTopographyRequest):
+    """محاسبه مجموع هزینه میخکوبی و توپوگرافی"""
+    return calc.calculate_staking_plus_topography(
+        payload.num_points,
+        payload.area_m2
+    )

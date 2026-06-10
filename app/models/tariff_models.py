@@ -42,3 +42,7 @@ class DelayPenaltyRequest(BaseModel):
 class StakingPlusUtmRequest(BaseModel):
     num_points: int = Field(..., gt=0, description="تعداد نقاط میخکوبی")
     area_m2: float = Field(..., gt=0, description="متراژ برای جانمایی")
+
+class StakingPlusTopographyRequest(BaseModel):
+    num_points: int = Field(..., gt=0, description="تعداد نقاط میخکوبی")
+    area_m2: float = Field(..., gt=0, description="متراژ برای توپوگرافی")

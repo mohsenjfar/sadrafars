@@ -561,3 +561,43 @@ class TariffCalculator:
                 }
             }
         )
+
+    def calculate_staking_plus_topography(self, num_points: int, area_m2: float) -> TariffResponse:
+        """
+        محاسبه مجموع هزینه میخکوبی و توپوگرافی
+        """
+        # محاسبه میخکوبی
+        staking_result = self.calculate_staking(num_points)
+        
+        # محاسبه توپوگرافی
+        topography_result = self.calculate_topography(area_m2)
+        
+        # جمع کل
+        base_amount = staking_result.base_amount + topography_result.base_amount
+        vat = staking_result.vat + topography_result.vat
+        total_amount = staking_result.total_amount + topography_result.total_amount
+        
+        return TariffResponse(
+            base_amount=base_amount,
+            vat=vat,
+            total_amount=total_amount,
+            details={
+                "میخکوبی": {
+                    "تعداد نقاط": num_points,
+                    "مبلغ پایه": staking_result.base_amount,
+                    "مالیات": staking_result.vat,
+                    "مبلغ نهایی": staking_result.total_amount
+                },
+                "توپوگرافی": {
+                    "متراژ": area_m2,
+                    "مبلغ پایه": topography_result.base_amount,
+                    "مالیات": topography_result.vat,
+                    "مبلغ نهایی": topography_result.total_amount
+                },
+                "جمع کل": {
+                    "مبلغ پایه": base_amount,
+                    "مالیات": vat,
+                    "مبلغ نهایی": total_amount
+                }
+            }
+        )
