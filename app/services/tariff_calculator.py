@@ -435,3 +435,51 @@ class TariffCalculator:
             total_amount=total_amount,
             details=details
         )
+
+    def calculate_delay_penalty(self, area_m2: float, floors: int, license_date: str) -> TariffResponse:
+        """
+        محاسبه هزینه مابه‌التفاوت تاخیر نظارت
+        هر 6 ماه (یا کسری) بعد از 18 ماه = 20% هزینه نظارت پایه
+        """
+        from datetime import datetime
+        
+        # محاسبه تعداد ماه‌های گذشته از تاریخ صدور پروانه
+        license_datetime = datetime.strptime(license_date, "%Y-%m-%d")
+        today = datetime.now()
+        
+        months_passed = (today.year - license_datetime.year) * 12 + (today.month - license_datetime.month)
+        
+        # محاسبه مازاد بر 18 ماه
+        excess_months = max(0, months_passed - 18)
+        
+        # محاسبه تعداد واحدهای 6 ماهه (با سقف)
+        units = (excess_months + 5) // 6  # ceil division
+        
+        # محاسبه هزینه نظارت پایه (بدون مالیات)
+        group_name, group_key = self._get_group(floors)
+        supervision_rate = self._get_supervision_rate(group_key)
+        surveying_rate = self._get_surveying_rate(group_key)
+        
+        base_supervision_cost = int(area_m2 * (supervision_rate + surveying_rate))
+        
+        # محاسبه مبلغ اضافه تاخیر
+        penalty_amount = int(base_supervision_cost * 0.2 * units)
+        
+        return TariffResponse(
+            base_amount=penalty_amount,
+            vat=0,
+            total_amount=penalty_amount,
+            details={
+                "تاریخ صدور پروانه": license_date,
+                "تاریخ امروز": today.strftime("%Y-%m-%d"),
+                "ماه‌های گذشته": months_passed,
+                "مازاد بر ۱۸ ماه": excess_months,
+                "تعداد واحدهای ۶ ماهه": units,
+                "هزینه نظارت پایه": base_supervision_cost,
+                "درصد هر واحد": "20%",
+                "مبلغ هر واحد": int(base_supervision_cost * 0.2),
+                "گروه ساختمانی": group_name,
+                "متراژ": area_m2,
+                "تعداد طبقات": floors
+            }
+        )

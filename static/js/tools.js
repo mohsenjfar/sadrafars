@@ -147,6 +147,19 @@ const ENGINEERING_CONFIG = {
         `,
         infoClass: "info-box",
         api_url: "/tariff/engineering/all"
+    },
+    delay_penalty: {
+        label: "هزینه تاخیر نظارت",
+        fields: ["area_m2", "floors", "license_date"],
+        info: `
+            <ul>
+                <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
+                <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
+                <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
+            </ul>
+        `,
+        infoClass: "info-box",
+        api_url: "/tariff/engineering/delay_penalty"
     }
 }
 
@@ -176,6 +189,10 @@ const FIELD_TEMPLATES = {
         <input type="number" id="height_m" placeholder="مثال: 15" min="1">
         <label style="margin-top: 10px;">تعداد ستون</label>
         <input type="number" id="columns" placeholder="مثال: 20" min="1">
+    `,
+    license_date: `
+        <label>تاریخ صدور پروانه</label>
+        <input type="date" id="license_date">
     `
 }
 
@@ -218,6 +235,16 @@ const tools = {
                 <button type="submit">محاسبه</button>
             </form>
             <div id="engineeringResult"></div>
+        `
+    },
+    delay_penalty: {
+        title: "محاسبه هزینه تاخیر نظارت",
+        html: `
+            <form id="delayPenaltyForm" class="tool-form">
+                <div id="delayPenaltyFields"></div>
+                <button type="submit">محاسبه</button>
+            </form>
+            <div id="delayPenaltyResult"></div>
         `
     },
     map: {
@@ -552,6 +579,43 @@ function initToolLogic(tool) {
             } catch (err) {
                 console.error(err)
                 displayError(result, "خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.")
+            }
+        })
+    }
+
+    if (tool === "delay_penalty") {
+        const fields = document.getElementById("delayPenaltyFields")
+        const form = document.getElementById("delayPenaltyForm")
+        const result = document.getElementById("delayPenaltyResult")
+        
+        // رندر فیلدها
+        let html = ""
+        html += FIELD_TEMPLATES.area_m2
+        html += FIELD_TEMPLATES.floors
+        html += FIELD_TEMPLATES.license_date
+        fields.innerHTML = html
+        
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault()
+            const payload = {
+                area_m2: Number(document.querySelector("#area_m2").value),
+                floors: Number(document.querySelector("#floors").value),
+                license_date: document.querySelector("#license_date").value
+            }
+            
+            result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>"
+            
+            try {
+                const response = await fetch("/tariff/engineering/delay_penalty", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                })
+                if (!response.ok) throw new Error(`HTTP ${response.status}`)
+                const data = await response.json()
+                displayResult(result, data)
+            } catch (err) {
+                displayError(result, "خطا در محاسبه")
             }
         })
     }
