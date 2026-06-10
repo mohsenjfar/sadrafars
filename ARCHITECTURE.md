@@ -20,7 +20,7 @@ graph LR
 │   │   └── modal.js
 │   └── css/style.css
 ├── templates/index.html
-└── (مراجع: eng.md, surv.md)
+└── (مراجع: eng.md, surv.md, eng.xlsx, survey.xlsx, eng.pdf, survey.pdf)
 ```
 
 ## 🧮 منطق محاسبات
@@ -58,19 +58,89 @@ graph LR
 | د۲ | ۱۳-۱۵ | 6,835,000 | 8,354,000 | 696,000 |
 | د۳ | ۱۶+ | 6,835,000 | 8,354,000 | 773,000 |
 
+### 3. هزینه تاخیر نظارت (جدید)
+- **مدت استاندارد نظارت:** ۱۸ ماه
+- **نرخ تاخیر:** هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه
+- **ورودی:** متراژ، تعداد طبقات، تاریخ صدور پروانه (شمسی)
+- **خروجی:** مبلغ مابه‌التفاوت قابل پرداخت
+
+#### فرمول:
+```
+ماه‌های گذشته = تاریخ امروز - تاریخ صدور پروانه
+مازاد = max(0, ماه‌های گذشته - 18)
+تعداد واحد = ceil(مازاد / 6)
+مبلغ اضافه = هزینه_نظارت_پایه × 0.2 × تعداد واحد
+```
+
 ## 🔗 Endpoints (`/tariff`)
 
-**نقشه‌برداری:** `/land_survey`, `/utm`, `/staking`, `/single_line_receivable`, `/subdivision_with_history`, `/subdivision_without_history`, `/topography`
+**نقشه‌برداری:**
+- `/land_survey` - مساحی عرصه
+- `/utm` - جانمایی
+- `/staking` - میخکوبی
+- `/single_line_receivable` - تک خطی قابل دریافت
+- `/subdivision_with_history` - تفکیکی دارای سابقه
+- `/subdivision_without_history` - تفکیکی فاقد سابقه
+- `/topography` - توپوگرافی
+- `/urban_block_map` - نقشه بلوک شهری
+- `/profile` - پروفیل طولی و عرضی
+- `/longitudinal_section` - مقاطع طولی
+- `/special_zone_map` - مناطق ویژه
+- `/column_vertical_control` - کنترل قائم ستون‌ها
 
-**مهندسی:** `/engineering/design`, `/engineering/supervision`, `/engineering/all`
+**مهندسی:**
+- `/engineering/design` - طراحی ۴ رشته
+- `/engineering/supervision` - نظارت + نقشه‌برداری خودکار
+- `/engineering/surveying` - نقشه‌برداری ساختمان (مستقل)
+- `/engineering/all` - مجموع کامل (خروجی TariffResponse با details)
+- `/engineering/delay_penalty` - هزینه تاخیر نظارت (جدید)
+
+## 📦 مدل‌های ورودی (Pydantic)
+
+| نام مدل | فیلدها | توضیح |
+|---------|--------|-------|
+| `AreaRequest` | `area_m2` | متراژ |
+| `PointsRequest` | `num_points` | تعداد نقاط |
+| `LengthRequest` | `length_km` | طول کیلومتر |
+| `ColumnControlRequest` | `height_m, columns` | ارتفاع و تعداد ستون |
+| `EngineeringRequest` | `area_m2, floors` | مساحت و طبقات |
+| `DelayPenaltyRequest` | `area_m2, floors, license_date` | مساحت، طبقات، تاریخ شمسی |
+| `TariffResponse` | `base_amount, vat, total_amount, details` | خروجی یکسان |
 
 ## 🎨 فرانت‌اند (tools.js)
-- `SERVICE_CONFIG` + `ENGINEERING_CONFIG` – تعریف سرویس‌ها
-- `displayResult()` – نمایش معمولی
-- `displayEngineeringAllResult()` – نمایش مخصوص `/all`
-- نقشه‌برداری خودکار است (کاربر انتخاب نمی‌کند)
+
+### ابزارها (tools object)
+| کلید | عنوان | توضیح |
+|------|-------|-------|
+| `tariff` | محاسبه تعرفه نقشه‌برداری | ۱۰ سرویس نقشه‌برداری |
+| `engineering` | محاسبه خدمات مهندسی | طراحی، نظارت، مجموع |
+| `delay_penalty` | هزینه تاخیر نظارت | محاسبه مابه‌التفاوت تاخیر |
+| `map` | مشاهده قطعه و ناحیه | در حال توسعه |
+
+### توابع کلیدی
+- `displayResult()` – نمایش نتیجه برای سرویس‌های معمولی
+- `displayEngineeringAllResult()` – نمایش مخصوص `/engineering/all`
+- `displayError()` – نمایش خطا
+- `getPayloadFromFields()` – ساخت payload از فرم
+- `initToolLogic(tool)` – راه‌اندازی منطق هر ابزار
+
+### تنظیمات
+- `SERVICE_CONFIG` – تنظیمات سرویس‌های نقشه‌برداری
+- `ENGINEERING_CONFIG` – تنظیمات سرویس‌های مهندسی (شامل `delay_penalty`)
+- `FIELD_TEMPLATES` – قالب‌های فیلدهای ورودی
+
+## 🧰 وابستگی‌ها (requirements.txt)
+```
+fastapi
+uvicorn
+pydantic
+python-multipart
+jdatetime
+```
 
 ## ⚠️ نکات سریع
 - حداقل متراژ نقشه‌برداری: ۵۰۰ متر
+- مالیات: نقشه‌برداری ۱۰٪، مهندسی ۰٪
+- تاریخ شمسی در تاخیر نظارت با `jdatetime` تبدیل می‌شود
 - کش مرورگر: `?v={{ timestamp }}`
-- مراجع داده: `eng.md`, `surv.md`
+- مراجع داده: `eng.pdf`, `surv.pdf`, `eng.xlsx`, `survey.xlsx`
