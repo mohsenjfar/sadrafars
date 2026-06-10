@@ -147,19 +147,6 @@ const ENGINEERING_CONFIG = {
         `,
         infoClass: "info-box",
         api_url: "/tariff/engineering/all"
-    },
-    delay_penalty: {
-        label: "هزینه تاخیر نظارت",
-        fields: ["area_m2", "floors", "license_date"],
-        info: `
-            <ul>
-                <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
-                <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
-                <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/engineering/delay_penalty"
     }
 }
 
