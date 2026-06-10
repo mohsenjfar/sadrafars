@@ -147,9 +147,40 @@ const ENGINEERING_CONFIG = {
         `,
         infoClass: "info-box",
         api_url: "/tariff/engineering/all"
+    },
+    delay_penalty: {
+        label: "هزینه تاخیر نظارت",
+        fields: ["area_m2", "floors", "license_date"],
+        info: `
+            <ul>
+                <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
+                <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
+                <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
+            </ul>
+        `,
+        infoClass: "info-box",
+        api_url: "/tariff/engineering/delay_penalty"
     }
 }
 
+// ============================================================
+// تنظیمات سرویس‌های مهندسی ساختمان (به روز شده)
+// ============================================================
+const DELAY_PENALTY_CONFIG = {
+    delay_penalty: {
+        label: "هزینه تاخیر نظارت",
+        fields: ["area_m2", "floors", "license_date"],
+        info: `
+            <ul>
+                <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
+                <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
+                <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
+            </ul>
+        `,
+        infoClass: "info-box",
+        api_url: "/tariff/engineering/delay_penalty"
+    }
+}
 
 // ============================================================
 // قالب‌های فیلدهای ورودی
@@ -229,11 +260,19 @@ const tools = {
     delay_penalty: {
         title: "محاسبه هزینه تاخیر نظارت",
         html: `
-            <form id="delayPenaltyForm" class="tool-form">
-                <div id="delayPenaltyFields"></div>
+            <form id="engineeringForm" class="tool-form">
+                <div class="service-selector" id="engineeringServiceSelector">
+                    ${Object.entries(DELAY_PENALTY_CONFIG).map(([key, val], i) => `
+                        <div class="service-card ${i === 0 ? 'active' : ''}" data-service="${key}">
+                            ${val.label}
+                            <span>${val.fields.length} فیلد</span>
+                        </div>
+                    `).join("")}
+                </div>
+                <div id="engineeringFields"></div>
                 <button type="submit">محاسبه</button>
             </form>
-            <div id="delayPenaltyResult"></div>
+            <div id="engineeringResult"></div>
         `
     },
     map: {
