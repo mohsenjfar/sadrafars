@@ -604,8 +604,8 @@ function initToolLogic(tool) {
                     <input type="number" id="floors" placeholder="مثال: 4" min="1" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>تاریخ صدور پروانه</label>
-                    <input type="text" id="license_date" class="form-control">
+                    <label>تاریخ صدور پروانه (شمسی)</label>
+                    <input type="text" id="license_date" placeholder="مثال: 1403/01/15" class="form-control" dir="ltr">
                 </div>
             </div>
         `
