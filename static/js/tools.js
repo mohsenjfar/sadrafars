@@ -85,90 +85,10 @@ const SERVICE_CONFIG = {
         `,
         infoClass: "info-box",
         api_url: "/tariff/utm"
-    },
-    // single_line_survey: {
-    //     label: "نقشه تک خطی",
-    //     fields: ["area_m2"],
-    //     info: `
-    //         <ul>
-    //             <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
-    //         </ul>
-    //     `,
-    //     infoClass: "info-box",
-    //     api_url: "/tariff/single_line_survey"
-    // },
-    // building_utm_drawing: {
-    //     label: "نقشه UTM ساختمانی",
-    //     fields: ["area_m2"],
-    //     info: `
-    //         <ul>
-    //             <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
-    //         </ul>
-    //     `,
-    //     infoClass: "info-box",
-    //     api_url: "/tariff/building_utm_drawing"
-    // },
-    // urban_block_map: {
-    //     label: "نقشه بلوک شهری",
-    //     fields: ["area_m2"],
-    //     info: `
-    //         <ul>
-    //             <li>محاسبه نقشه بلوک شهری بر اساس متراژ</li>
-    //         </ul>
-    //     `,
-    //     infoClass: "info-box",
-    //     api_url: "/tariff/urban_block_map"
-    // },
-    // profile: {
-    //     label: "پروفیل طولی",
-    //     fields: ["length_km"],
-    //     info: `
-    //         <ul>
-    //             <li>محاسبه پروفیل طولی بر اساس طول مسیر (کیلومتر)</li>
-    //         </ul>
-    //     `,
-    //     infoClass: "info-box",
-    //     api_url: "/tariff/profile"
-    // },
-    // longitudinal_section: {
-    //     label: "برش طولی",
-    //     fields: ["length_km"],
-    //     info: `
-    //         <ul>
-    //             <li>محاسبه برش طولی بر اساس طول مسیر (کیلومتر)</li>
-    //         </ul>
-    //     `,
-    //     infoClass: "info-box",
-    //     api_url: "/tariff/longitudinal_section"
-    // },
-    // special_zone_map: {
-    //     label: "نقشه مناطق ویژه",
-    //     fields: ["area_m2"],
-    //     info: `
-    //         <ul>
-    //             <li>محاسبه نقشه مناطق ویژه بر اساس متراژ</li>
-    //         </ul>
-    //     `,
-    //     infoClass: "info-box",
-    //     api_url: "/tariff/special_zone_map"
-    // },
-    // column_vertical_control: {
-    //     label: "کنترل قائم ستون‌ها",
-    //     fields: ["column_vertical_control"],
-    //     info: `
-    //         <ul>
-    //             <li>محاسبه هزینه کنترل قائم ستون‌ها بر اساس ارتفاع و تعداد ستون</li>
-    //         </ul>
-    //     `,
-    //     infoClass: "info-box",
-    //     api_url: "/tariff/column_vertical_control"
-    // }
+    }
 }
 
 
-// ============================================================
-// تنظیمات سرویس‌های مهندسی ساختمان (جدید)
-// ============================================================
 // ============================================================
 // تنظیمات سرویس‌های مهندسی ساختمان (به روز شده)
 // ============================================================
@@ -216,7 +136,7 @@ const ENGINEERING_CONFIG = {
     },
     all: {
         label: "مجموع خدمات",
-        fields: ["area_m2", "floors"],  // ← حذف include_surveying
+        fields: ["area_m2", "floors"],
         info: `
             <ul>
                 <li>محاسبه همزمان هزینه طراحی، نظارت و نقشه‌برداری (در صورت نیاز)</li>
@@ -243,7 +163,6 @@ const FIELD_TEMPLATES = {
         <label>تعداد طبقات</label>
         <input type="number" id="floors" placeholder="مثال: 4" min="1">
     `,
-    // include_surveying حذف شد
     num_points: `
         <label>تعداد نقاط</label>
         <input type="number" id="num_points" placeholder="مثال: 10" min="1">
@@ -326,10 +245,8 @@ const tools = {
 
 
 // ============================================================
-// توابع کمکی
+// تابع نمایش نتیجه برای سرویس‌های معمولی
 // ============================================================
-
-// تابع نمایش نتیجه با جزئیات بیشتر
 function displayResult(resultElement, data) {
     let html = `
         <div class="result-box" style="animation: resultPop 0.3s ease;">
@@ -346,17 +263,27 @@ function displayResult(resultElement, data) {
     if (data.details) {
         html += `<hr style="margin: 12px 0;"><div style="font-size: 12px; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px;">`
         html += `<strong>📋 جزئیات:</strong><br>`
+        
         for (const [key, value] of Object.entries(data.details)) {
-            if (typeof value === 'number') {
-                html += `<div>• ${key}: ${value.toLocaleString()}</div>`
+            if (typeof value === 'object' && value !== null) {
+                html += `<div style="margin-right: 15px; margin-top: 5px;"><strong>• ${key}:</strong><br>`
+                for (const [subKey, subValue] of Object.entries(value)) {
+                    if (typeof subValue === 'object' && subValue !== null) {
+                        html += `<div style="margin-right: 20px;">${subKey}: ${JSON.stringify(subValue)}</div>`
+                    } else {
+                        const formattedValue = typeof subValue === 'number' ? subValue.toLocaleString() : subValue
+                        html += `<div style="margin-right: 20px;">${subKey}: ${formattedValue}</div>`
+                    }
+                }
+                html += `</div>`
             } else {
-                html += `<div>• ${key}: ${value}</div>`
+                const formattedValue = typeof value === 'number' ? value.toLocaleString() : value
+                html += `<div>• ${key}: ${formattedValue}</div>`
             }
         }
         html += `</div>`
     }
     
-    // تبدیل به تومان برای درک بهتر
     const toman = data.total_amount / 10
     html += `<div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">
         معادل تقریبی: ${Math.round(toman).toLocaleString()} تومان
@@ -366,7 +293,88 @@ function displayResult(resultElement, data) {
     resultElement.innerHTML = html
 }
 
+
+// ============================================================
+// تابع نمایش نتیجه برای سرویس مجموع خدمات مهندسی (all)
+// ============================================================
+function displayEngineeringAllResult(resultElement, data) {
+    let html = `
+        <div class="result-box" style="animation: resultPop 0.3s ease;">
+            <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
+                <strong style="font-size: 16px;">💰 برآورد کل هزینه‌های مهندسی</strong>
+            </div>
+    `
+    
+    if (data.details) {
+        // نمایش طراحی
+        if (data.details.طراحی) {
+            html += `<div style="margin-bottom: 8px;">`
+            html += `<div><strong>🏗️ هزینه طراحی:</strong> ${data.details.طراحی.مبلغ.toLocaleString()} ریال</div>`
+            if (data.details.طراحی["نرخ هر متر مربع"]) {
+                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">نرخ هر متر مربع: ${data.details.طراحی["نرخ هر متر مربع"].toLocaleString()} ریال</div>`
+            }
+            html += `</div>`
+        }
+        
+        // نمایش نظارت
+        if (data.details.نظارت) {
+            html += `<div style="margin-bottom: 8px;">`
+            html += `<div><strong>👷 هزینه نظارت:</strong> ${data.details.نظارت.مبلغ.toLocaleString()} ریال</div>`
+            if (data.details.نظارت["نرخ نظارت هر متر مربع"]) {
+                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">نرخ نظارت هر متر مربع: ${data.details.نظارت["نرخ نظارت هر متر مربع"].toLocaleString()} ریال</div>`
+            }
+            html += `</div>`
+        }
+        
+        // نمایش نقشه‌برداری (اگر وجود داشته باشد و مبلغ آن بیشتر از 0 باشد)
+        if (data.details.نقشه‌برداری && data.details.نقشه‌برداری.مبلغ > 0) {
+            html += `<div style="margin-bottom: 8px;">`
+            html += `<div><strong>🗺️ هزینه نقشه‌برداری:</strong> ${data.details.نقشه‌برداری.مبلغ.toLocaleString()} ریال</div>`
+            if (data.details.نقشه‌برداری["نرخ هر متر مربع"]) {
+                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">نرخ هر متر مربع: ${data.details.نقشه‌برداری["نرخ هر متر مربع"].toLocaleString()} ریال</div>`
+            }
+            if (data.details.نقشه‌برداری.وضعیت) {
+                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">وضعیت: ${data.details.نقشه‌برداری.وضعیت}</div>`
+            }
+            html += `</div>`
+        }
+        
+        // اطلاعات پروژه
+        html += `<hr style="margin: 12px 0;">`
+        html += `<div style="font-size: 12px; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px;">`
+        html += `<strong>📋 مشخصات پروژه:</strong><br>`
+        if (data.details.متراژ) {
+            html += `<div>• متراژ: ${data.details.متراژ.toLocaleString()} متر مربع</div>`
+        }
+        if (data.details["تعداد طبقات"]) {
+            html += `<div>• تعداد طبقات: ${data.details["تعداد طبقات"]}</div>`
+        }
+        if (data.details.طراحی && data.details.طراحی["گروه ساختمانی"]) {
+            html += `<div>• گروه ساختمانی: ${data.details.طراحی["گروه ساختمانی"]}</div>`
+        }
+        html += `</div>`
+    }
+    
+    // جمع کل
+    html += `
+        <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-top: 12px; text-align: center;">
+            <strong style="font-size: 18px; color: #2e7d32;">جمع کل: ${data.total_amount.toLocaleString()} ریال</strong>
+        </div>
+    `
+    
+    const toman = data.total_amount / 10
+    html += `<div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">
+        معادل تقریبی: ${Math.round(toman).toLocaleString()} تومان
+    </div>`
+    
+    html += `</div>`
+    resultElement.innerHTML = html
+}
+
+
+// ============================================================
 // تابع نمایش خطا
+// ============================================================
 function displayError(resultElement, message) {
     resultElement.innerHTML = `
         <div class="error-box" style="animation: resultPop 0.3s ease;">
@@ -376,7 +384,10 @@ function displayError(resultElement, message) {
     `
 }
 
+
+// ============================================================
 // تابع دریافت payload از فیلدها
+// ============================================================
 function getPayloadFromFields(fields, formElement) {
     let payload = {}
     fields.forEach(f => {
@@ -387,12 +398,11 @@ function getPayloadFromFields(fields, formElement) {
             } else {
                 let value = Number(el.value)
                 if (isNaN(value) || value <= 0) {
-                    value = f === "include_surveying" ? false : (f === "length_km" ? 0.1 : 1)
+                    value = f === "length_km" ? 0.1 : 1
                 }
                 payload[f] = value
             }
         } else if (f === "column_vertical_control") {
-            // فیلد ترکیبی
             const heightEl = formElement.querySelector("#height_m")
             const columnsEl = formElement.querySelector("#columns")
             if (heightEl && columnsEl) {
@@ -532,7 +542,13 @@ function initToolLogic(tool) {
                 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`)
                 const data = await response.json()
-                displayResult(result, data)
+                
+                // برای سرویس all از تابع نمایش مخصوص استفاده کن
+                if (selectedService === "all") {
+                    displayEngineeringAllResult(result, data)
+                } else {
+                    displayResult(result, data)
+                }
             } catch (err) {
                 console.error(err)
                 displayError(result, "خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.")
