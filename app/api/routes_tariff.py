@@ -103,3 +103,12 @@ def calculate_all_engineering_fees(payload: EngineeringRequest):
         payload.floors, 
         payload.include_surveying
     )
+
+@router.post("/engineering/delay_penalty", response_model=TariffResponse)
+def calculate_delay_penalty(payload: DelayPenaltyRequest):
+    """محاسبه هزینه مابه‌التفاوت تاخیر نظارت (بعد از 18 ماه)"""
+    return calc.calculate_delay_penalty(
+        payload.area_m2,
+        payload.floors,
+        payload.license_date
+    )

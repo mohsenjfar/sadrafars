@@ -191,8 +191,11 @@ const FIELD_TEMPLATES = {
         <input type="number" id="columns" placeholder="مثال: 20" min="1">
     `,
     license_date: `
-        <label>تاریخ صدور پروانه</label>
-        <input type="date" id="license_date">
+            <div class="form-group">
+                <label>تاریخ صدور پروانه</label>
+                <input type="date" id="license_date" class="form-control">
+            </div>
+        </div>
     `
 }
 
@@ -588,19 +591,45 @@ function initToolLogic(tool) {
         const form = document.getElementById("delayPenaltyForm")
         const result = document.getElementById("delayPenaltyResult")
         
-        // رندر فیلدها
-        let html = ""
-        html += FIELD_TEMPLATES.area_m2
-        html += FIELD_TEMPLATES.floors
-        html += FIELD_TEMPLATES.license_date
-        fields.innerHTML = html
+        if (!fields || !form || !result) return
+        
+        // رندر فیلدها در یک ردیف
+        fields.innerHTML = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label>متراژ (متر مربع)</label>
+                    <input type="number" id="area_m2" placeholder="مثال: 750" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>تعداد طبقات</label>
+                    <input type="number" id="floors" placeholder="مثال: 4" min="1" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>تاریخ صدور پروانه</label>
+                    <input type="date" id="license_date" class="form-control">
+                </div>
+            </div>
+        `
         
         form.addEventListener("submit", async function(e) {
             e.preventDefault()
             const payload = {
-                area_m2: Number(document.querySelector("#area_m2").value),
-                floors: Number(document.querySelector("#floors").value),
-                license_date: document.querySelector("#license_date").value
+                area_m2: Number(document.querySelector("#area_m2")?.value || 0),
+                floors: Number(document.querySelector("#floors")?.value || 0),
+                license_date: document.querySelector("#license_date")?.value || ""
+            }
+            
+            if (!payload.area_m2 || payload.area_m2 <= 0) {
+                displayError(result, "لطفاً متراژ را وارد کنید")
+                return
+            }
+            if (!payload.floors || payload.floors <= 0) {
+                displayError(result, "لطفاً تعداد طبقات را وارد کنید")
+                return
+            }
+            if (!payload.license_date) {
+                displayError(result, "لطفاً تاریخ صدور پروانه را وارد کنید")
+                return
             }
             
             result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>"
@@ -611,11 +640,13 @@ function initToolLogic(tool) {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
                 })
+                
                 if (!response.ok) throw new Error(`HTTP ${response.status}`)
                 const data = await response.json()
                 displayResult(result, data)
             } catch (err) {
-                displayError(result, "خطا در محاسبه")
+                console.error(err)
+                displayError(result, "خطا در محاسبه. لطفاً دوباره تلاش کنید.")
             }
         })
     }
