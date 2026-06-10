@@ -605,7 +605,7 @@ function initToolLogic(tool) {
                 </div>
                 <div class="form-group">
                     <label>تاریخ صدور پروانه</label>
-                    <input type="date" id="license_date" class="form-control">
+                    <input type="text" id="license_date" class="form-control">
                 </div>
             </div>
         `
