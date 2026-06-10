@@ -1,7 +1,7 @@
-/*file_path: /static/js/tools.js */
+/* file_path: /static/js/tools.js */
 
 // ============================================================
-// تنظیمات سرویس‌های نقشه‌برداری (موجود)
+// تنظیمات سرویس‌های نقشه‌برداری
 // ============================================================
 const SERVICE_CONFIG = {
     single_line_receivable: {
@@ -14,7 +14,6 @@ const SERVICE_CONFIG = {
                 <li>در صورتی که عرصه ملک بزرگ باشد، تعرفه مساحی عرصه نیز اضافه میگردد (به عنوان مثال باغشهر).</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/single_line_receivable"
     },
     subdivision_with_history: {
@@ -26,7 +25,6 @@ const SERVICE_CONFIG = {
                 <li>حداقل متراژ قابل محاسبه 500 متر مربع میباشد</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/subdivision_with_history"
     },
     subdivision_without_history: {
@@ -38,7 +36,6 @@ const SERVICE_CONFIG = {
                 <li>حداقل متراژ قابل محاسبه 500 متر مربع میباشد</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/subdivision_without_history"
     },
     staking: {
@@ -50,7 +47,6 @@ const SERVICE_CONFIG = {
                 <li>حداقل تعداد میخ مورد محاسبه 8 عدد می باشد</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/staking"
     },
     topography: {
@@ -61,7 +57,6 @@ const SERVICE_CONFIG = {
                 <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/topography"
     },
     land_survey: {
@@ -72,7 +67,6 @@ const SERVICE_CONFIG = {
                 <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/land_survey"
     },
     utm: {
@@ -83,14 +77,12 @@ const SERVICE_CONFIG = {
                 <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/utm"
     }
 }
 
-
 // ============================================================
-// تنظیمات سرویس‌های مهندسی ساختمان (به روز شده)
+// تنظیمات سرویس‌های مهندسی ساختمان
 // ============================================================
 const ENGINEERING_CONFIG = {
     design: {
@@ -104,7 +96,6 @@ const ENGINEERING_CONFIG = {
                 <li><strong>نکته:</strong> هزینه = متراژ × نرخ هر متر مربع</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/engineering/design"
     },
     supervision: {
@@ -118,7 +109,6 @@ const ENGINEERING_CONFIG = {
                 <li><strong>نکته:</strong> هزینه = متراژ × (نرخ نظارت + نرخ نقشه‌برداری در صورت نیاز)</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/engineering/supervision"
     },
     surveying: {
@@ -131,7 +121,6 @@ const ENGINEERING_CONFIG = {
                 <li>گروه‌های ب، ج، د: نیاز به نقشه‌برداری دارند</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/engineering/surveying"
     },
     all: {
@@ -142,43 +131,9 @@ const ENGINEERING_CONFIG = {
                 <li>محاسبه همزمان هزینه طراحی، نظارت و نقشه‌برداری (در صورت نیاز)</li>
                 <li>نمایش تفکیک شده هر بخش</li>
                 <li>مناسب برای برآورد کامل هزینه‌های مهندسی پروژه</li>
-                <li>نقشه‌برداری در صورت نیاز به صورت خودکار محاسبه می‌شود</li>
             </ul>
         `,
-        infoClass: "info-box",
         api_url: "/tariff/engineering/all"
-    },
-    delay_penalty: {
-        label: "هزینه تاخیر نظارت",
-        fields: ["area_m2", "floors", "license_date"],
-        info: `
-            <ul>
-                <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
-                <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
-                <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/engineering/delay_penalty"
-    }
-}
-
-// ============================================================
-// تنظیمات سرویس‌های مهندسی ساختمان (به روز شده)
-// ============================================================
-const DELAY_PENALTY_CONFIG = {
-    delay_penalty: {
-        label: "هزینه تاخیر نظارت",
-        fields: ["area_m2", "floors", "license_date"],
-        info: `
-            <ul>
-                <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
-                <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
-                <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/engineering/delay_penalty"
     }
 }
 
@@ -187,42 +142,33 @@ const DELAY_PENALTY_CONFIG = {
 // ============================================================
 const FIELD_TEMPLATES = {
     area_m2: `
-        <label>متراژ (متر مربع)</label>
-        <input type="number" id="area_m2" placeholder="مثال: 750">
+        <div class="form-group">
+            <label>متراژ (متر مربع)</label>
+            <input type="number" id="area_m2" placeholder="مثال: 750" class="form-control">
+        </div>
     `,
     floors: `
-        <label>تعداد طبقات</label>
-        <input type="number" id="floors" placeholder="مثال: 4" min="1">
+        <div class="form-group">
+            <label>تعداد طبقات</label>
+            <input type="number" id="floors" placeholder="مثال: 4" min="1" class="form-control">
+        </div>
     `,
     num_points: `
-        <label>تعداد نقاط</label>
-        <input type="number" id="num_points" placeholder="مثال: 10" min="1">
-    `,
-    length_km: `
-        <label>طول مسیر (کیلومتر)</label>
-        <input type="number" id="length_km" placeholder="مثال: 2.5" step="0.1" min="0.1">
-    `,
-    column_vertical_control: `
-        <label>ارتفاع (متر)</label>
-        <input type="number" id="height_m" placeholder="مثال: 15" min="1">
-        <label style="margin-top: 10px;">تعداد ستون</label>
-        <input type="number" id="columns" placeholder="مثال: 20" min="1">
-    `,
-    license_date: `
         <div class="form-group">
-            <label>تاریخ صدور پروانه (شمسی)</label>
-            <input type="text" id="license_date" placeholder="مثال: 1403/01/15" class="form-control" dir="ltr">
+            <label>تعداد نقاط</label>
+            <input type="number" id="num_points" placeholder="مثال: 10" min="1" class="form-control">
         </div>
     `
 }
-
 
 // ============================================================
 // تعریف ابزارها (برای نمایش در مودال)
 // ============================================================
 const tools = {
+    // ابزار شماره 1: نقشه‌برداری
     tariff: {
         title: "محاسبه تعرفه نقشه‌برداری",
+        type: "tariff",
         html: `
             <form id="tariffForm" class="tool-form">
                 <div class="service-selector" id="tariffServiceSelector">
@@ -233,14 +179,17 @@ const tools = {
                         </div>
                     `).join("")}
                 </div>
-                <div id="dynamicFields"></div>
+                <div id="tariffFields"></div>
                 <button type="submit">محاسبه</button>
             </form>
-            <div id="result"></div>
+            <div id="tariffResult"></div>
         `
     },
+    
+    // ابزار شماره 2: مهندسی ساختمان
     engineering: {
         title: "محاسبه تعرفه خدمات مهندسی ساختمان",
+        type: "engineering",
         html: `
             <form id="engineeringForm" class="tool-form">
                 <div class="service-selector" id="engineeringServiceSelector">
@@ -257,51 +206,58 @@ const tools = {
             <div id="engineeringResult"></div>
         `
     },
+    
+    // ابزار شماره 3: هزینه تاخیر نظارت (ساده، بدون سرویس سلکتور)
     delay_penalty: {
         title: "محاسبه هزینه تاخیر نظارت",
+        type: "delay_penalty",
         html: `
-            <form id="engineeringForm" class="tool-form">
-                <div class="service-selector" id="engineeringServiceSelector">
-                    ${Object.entries(DELAY_PENALTY_CONFIG).map(([key, val], i) => `
-                        <div class="service-card ${i === 0 ? 'active' : ''}" data-service="${key}">
-                            ${val.label}
-                            <span>${val.fields.length} فیلد</span>
-                        </div>
-                    `).join("")}
+            <form id="delayPenaltyForm" class="tool-form">
+                <div class="info-box">
+                    <ul>
+                        <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
+                        <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
+                        <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
+                    </ul>
                 </div>
-                <div id="engineeringFields"></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>متراژ (متر مربع)</label>
+                        <input type="number" id="delay_area_m2" placeholder="مثال: 750" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>تعداد طبقات</label>
+                        <input type="number" id="delay_floors" placeholder="مثال: 4" min="1" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>تاریخ صدور پروانه (شمسی)</label>
+                    <input type="text" id="delay_license_date" placeholder="مثال: 1403/01/15" class="form-control" dir="ltr">
+                </div>
                 <button type="submit">محاسبه</button>
             </form>
-            <div id="engineeringResult"></div>
+            <div id="delayPenaltyResult"></div>
         `
     },
+    
+    // ابزار نقشه (غیرفعال)
     map: {
         title: "مشاهده قطعه و ناحیه بر روی نقشه",
+        type: "map",
         html: `
-            <form id="mapForm" class="tool-form">
-                <div class="service-selector">
-                    <div class="service-card active">
-                        نقشه تعاملی
-                        <span>در حال توسعه</span>
-                    </div>
-                </div>
-                <div id="dynamicFields">
-                    <div style="text-align: center; padding: 40px; color: #666;">
-                        <span style="font-size: 48px;">🗺️</span>
-                        <p style="margin-top: 15px;">این ابزار به زودی فعال خواهد شد</p>
-                        <p style="font-size: 12px; color: #999;">امکان مشاهده قطعه و ناحیه بر روی نقشه</p>
-                    </div>
-                </div>
-            </form>
-            <div id="result"></div>
+            <div style="text-align: center; padding: 40px; color: #666;">
+                <span style="font-size: 48px;">🗺️</span>
+                <p style="margin-top: 15px;">این ابزار به زودی فعال خواهد شد</p>
+                <p style="font-size: 12px; color: #999;">امکان مشاهده قطعه و ناحیه بر روی نقشه</p>
+            </div>
         `
     }
 }
 
+// ============================================================
+// توابع کمکی
+// ============================================================
 
-// ============================================================
-// تابع نمایش نتیجه برای سرویس‌های معمولی
-// ============================================================
 function displayResult(resultElement, data) {
     let html = `
         <div class="result-box" style="animation: resultPop 0.3s ease;">
@@ -318,17 +274,12 @@ function displayResult(resultElement, data) {
     if (data.details) {
         html += `<hr style="margin: 12px 0;"><div style="font-size: 12px; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px;">`
         html += `<strong>📋 جزئیات:</strong><br>`
-        
         for (const [key, value] of Object.entries(data.details)) {
             if (typeof value === 'object' && value !== null) {
                 html += `<div style="margin-right: 15px; margin-top: 5px;"><strong>• ${key}:</strong><br>`
                 for (const [subKey, subValue] of Object.entries(value)) {
-                    if (typeof subValue === 'object' && subValue !== null) {
-                        html += `<div style="margin-right: 20px;">${subKey}: ${JSON.stringify(subValue)}</div>`
-                    } else {
-                        const formattedValue = typeof subValue === 'number' ? subValue.toLocaleString() : subValue
-                        html += `<div style="margin-right: 20px;">${subKey}: ${formattedValue}</div>`
-                    }
+                    const formattedValue = typeof subValue === 'number' ? subValue.toLocaleString() : subValue
+                    html += `<div style="margin-right: 20px;">${subKey}: ${formattedValue}</div>`
                 }
                 html += `</div>`
             } else {
@@ -343,15 +294,10 @@ function displayResult(resultElement, data) {
     html += `<div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">
         معادل تقریبی: ${Math.round(toman).toLocaleString()} تومان
     </div>`
-    
     html += `</div>`
     resultElement.innerHTML = html
 }
 
-
-// ============================================================
-// تابع نمایش نتیجه برای سرویس مجموع خدمات مهندسی (all)
-// ============================================================
 function displayEngineeringAllResult(resultElement, data) {
     let html = `
         <div class="result-box" style="animation: resultPop 0.3s ease;">
@@ -361,7 +307,6 @@ function displayEngineeringAllResult(resultElement, data) {
     `
     
     if (data.details) {
-        // نمایش طراحی
         if (data.details.طراحی) {
             html += `<div style="margin-bottom: 8px;">`
             html += `<div><strong>🏗️ هزینه طراحی:</strong> ${data.details.طراحی.مبلغ.toLocaleString()} ریال</div>`
@@ -371,7 +316,6 @@ function displayEngineeringAllResult(resultElement, data) {
             html += `</div>`
         }
         
-        // نمایش نظارت
         if (data.details.نظارت) {
             html += `<div style="margin-bottom: 8px;">`
             html += `<div><strong>👷 هزینه نظارت:</strong> ${data.details.نظارت.مبلغ.toLocaleString()} ریال</div>`
@@ -381,55 +325,35 @@ function displayEngineeringAllResult(resultElement, data) {
             html += `</div>`
         }
         
-        // نمایش نقشه‌برداری (اگر وجود داشته باشد و مبلغ آن بیشتر از 0 باشد)
         if (data.details.نقشه‌برداری && data.details.نقشه‌برداری.مبلغ > 0) {
             html += `<div style="margin-bottom: 8px;">`
             html += `<div><strong>🗺️ هزینه نقشه‌برداری:</strong> ${data.details.نقشه‌برداری.مبلغ.toLocaleString()} ریال</div>`
             if (data.details.نقشه‌برداری["نرخ هر متر مربع"]) {
                 html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">نرخ هر متر مربع: ${data.details.نقشه‌برداری["نرخ هر متر مربع"].toLocaleString()} ریال</div>`
             }
-            if (data.details.نقشه‌برداری.وضعیت) {
-                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">وضعیت: ${data.details.نقشه‌برداری.وضعیت}</div>`
-            }
             html += `</div>`
         }
         
-        // اطلاعات پروژه
         html += `<hr style="margin: 12px 0;">`
         html += `<div style="font-size: 12px; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px;">`
         html += `<strong>📋 مشخصات پروژه:</strong><br>`
-        if (data.details.متراژ) {
-            html += `<div>• متراژ: ${data.details.متراژ.toLocaleString()} متر مربع</div>`
-        }
-        if (data.details["تعداد طبقات"]) {
-            html += `<div>• تعداد طبقات: ${data.details["تعداد طبقات"]}</div>`
-        }
-        if (data.details.طراحی && data.details.طراحی["گروه ساختمانی"]) {
-            html += `<div>• گروه ساختمانی: ${data.details.طراحی["گروه ساختمانی"]}</div>`
-        }
+        if (data.details.متراژ) html += `<div>• متراژ: ${data.details.متراژ.toLocaleString()} متر مربع</div>`
+        if (data.details["تعداد طبقات"]) html += `<div>• تعداد طبقات: ${data.details["تعداد طبقات"]}</div>`
+        if (data.details.طراحی && data.details.طراحی["گروه ساختمانی"]) html += `<div>• گروه ساختمانی: ${data.details.طراحی["گروه ساختمانی"]}</div>`
         html += `</div>`
     }
     
-    // جمع کل
     html += `
         <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-top: 12px; text-align: center;">
             <strong style="font-size: 18px; color: #2e7d32;">جمع کل: ${data.total_amount.toLocaleString()} ریال</strong>
         </div>
-    `
-    
-    const toman = data.total_amount / 10
-    html += `<div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">
-        معادل تقریبی: ${Math.round(toman).toLocaleString()} تومان
+        <div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">
+            معادل تقریبی: ${Math.round(data.total_amount / 10).toLocaleString()} تومان
+        </div>
     </div>`
-    
-    html += `</div>`
     resultElement.innerHTML = html
 }
 
-
-// ============================================================
-// تابع نمایش خطا
-// ============================================================
 function displayError(resultElement, message) {
     resultElement.innerHTML = `
         <div class="error-box" style="animation: resultPop 0.3s ease;">
@@ -439,36 +363,35 @@ function displayError(resultElement, message) {
     `
 }
 
+function renderFields(container, config, selectedService) {
+    const serviceConfig = config[selectedService]
+    let html = ""
+    
+    if (serviceConfig.info) {
+        html += `<div class="info-box">${serviceConfig.info}</div>`
+    }
+    
+    html += `<div class="form-row">`
+    serviceConfig.fields.forEach(f => {
+        if (FIELD_TEMPLATES[f]) {
+            html += FIELD_TEMPLATES[f]
+        }
+    })
+    html += `</div>`
+    
+    container.innerHTML = html
+}
 
-// ============================================================
-// تابع دریافت payload از فیلدها
-// ============================================================
-function getPayloadFromFields(fields, formElement) {
+function getPayload(fields, formElement, prefix = "") {
     let payload = {}
     fields.forEach(f => {
-        const el = formElement.querySelector(`#${f}`)
+        const el = formElement.querySelector(`#${prefix}${f}`)
         if (el) {
-            if (el.type === "checkbox") {
-                payload[f] = el.checked
-            } else {
-                let value = Number(el.value)
-                if (isNaN(value) || value <= 0) {
-                    value = f === "length_km" ? 0.1 : 1
-                }
-                payload[f] = value
-            }
-        } else if (f === "column_vertical_control") {
-            const heightEl = formElement.querySelector("#height_m")
-            const columnsEl = formElement.querySelector("#columns")
-            if (heightEl && columnsEl) {
-                payload["height_m"] = Number(heightEl.value) || 1
-                payload["columns"] = Number(columnsEl.value) || 1
-            }
+            payload[f] = Number(el.value) || 0
         }
     })
     return payload
 }
-
 
 // ============================================================
 // تابع اصلی راه‌اندازی ابزارها
@@ -480,46 +403,29 @@ function initToolLogic(tool) {
     // --------------------------------------------------------
     if (tool === "tariff") {
         const cards = document.querySelectorAll("#tariffServiceSelector .service-card")
-        const fields = document.getElementById("dynamicFields")
+        const fieldsContainer = document.getElementById("tariffFields")
         const form = document.getElementById("tariffForm")
-        const result = document.getElementById("result")
+        const result = document.getElementById("tariffResult")
         
-        if (!cards.length || !fields || !form) return
+        if (!cards.length || !fieldsContainer || !form) return
         
         let selectedService = Object.keys(SERVICE_CONFIG)[0]
         
-        function renderFields(service) {
-            const config = SERVICE_CONFIG[service]
-            let html = ""
-            
-            if (config.info) {
-                html += `<div class="${config.infoClass || 'info-box'}">${config.info}</div>`
-            }
-            
-            config.fields.forEach(f => {
-                if (FIELD_TEMPLATES[f]) {
-                    html += FIELD_TEMPLATES[f]
-                }
-            })
-            
-            fields.innerHTML = html
-        }
-        
-        renderFields(selectedService)
+        renderFields(fieldsContainer, SERVICE_CONFIG, selectedService)
         
         cards.forEach(card => {
             card.addEventListener("click", function() {
                 cards.forEach(c => c.classList.remove("active"))
                 this.classList.add("active")
                 selectedService = this.dataset.service
-                renderFields(selectedService)
+                renderFields(fieldsContainer, SERVICE_CONFIG, selectedService)
             })
         })
         
         form.addEventListener("submit", async function(e) {
             e.preventDefault()
             const config = SERVICE_CONFIG[selectedService]
-            let payload = getPayloadFromFields(config.fields, form)
+            const payload = getPayload(config.fields, form, "")
             
             result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>"
             
@@ -529,7 +435,6 @@ function initToolLogic(tool) {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
                 })
-                
                 if (!response.ok) throw new Error(`HTTP ${response.status}`)
                 const data = await response.json()
                 displayResult(result, data)
@@ -545,46 +450,29 @@ function initToolLogic(tool) {
     // --------------------------------------------------------
     if (tool === "engineering") {
         const cards = document.querySelectorAll("#engineeringServiceSelector .service-card")
-        const fields = document.getElementById("engineeringFields")
+        const fieldsContainer = document.getElementById("engineeringFields")
         const form = document.getElementById("engineeringForm")
         const result = document.getElementById("engineeringResult")
         
-        if (!cards.length || !fields || !form) return
+        if (!cards.length || !fieldsContainer || !form) return
         
         let selectedService = Object.keys(ENGINEERING_CONFIG)[0]
         
-        function renderFields(service) {
-            const config = ENGINEERING_CONFIG[service]
-            let html = ""
-            
-            if (config.info) {
-                html += `<div class="${config.infoClass || 'info-box'}">${config.info}</div>`
-            }
-            
-            config.fields.forEach(f => {
-                if (FIELD_TEMPLATES[f]) {
-                    html += FIELD_TEMPLATES[f]
-                }
-            })
-            
-            fields.innerHTML = html
-        }
-        
-        renderFields(selectedService)
+        renderFields(fieldsContainer, ENGINEERING_CONFIG, selectedService)
         
         cards.forEach(card => {
             card.addEventListener("click", function() {
                 cards.forEach(c => c.classList.remove("active"))
                 this.classList.add("active")
                 selectedService = this.dataset.service
-                renderFields(selectedService)
+                renderFields(fieldsContainer, ENGINEERING_CONFIG, selectedService)
             })
         })
         
         form.addEventListener("submit", async function(e) {
             e.preventDefault()
             const config = ENGINEERING_CONFIG[selectedService]
-            let payload = getPayloadFromFields(config.fields, form)
+            const payload = getPayload(config.fields, form, "")
             
             result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>"
             
@@ -594,11 +482,9 @@ function initToolLogic(tool) {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
                 })
-                
                 if (!response.ok) throw new Error(`HTTP ${response.status}`)
                 const data = await response.json()
                 
-                // برای سرویس all از تابع نمایش مخصوص استفاده کن
                 if (selectedService === "all") {
                     displayEngineeringAllResult(result, data)
                 } else {
@@ -610,58 +496,32 @@ function initToolLogic(tool) {
             }
         })
     }
-
+    
+    // --------------------------------------------------------
+    // ابزار هزینه تاخیر نظارت (delay_penalty) - اصلاح شده
+    // --------------------------------------------------------
     if (tool === "delay_penalty") {
-        const fields = document.getElementById("delayPenaltyFields")
         const form = document.getElementById("delayPenaltyForm")
         const result = document.getElementById("delayPenaltyResult")
         
-        if (!fields || !form || !result) return
-        
-        // رندر info-box و فیلدها
-        const config = ENGINEERING_CONFIG.delay_penalty
-        let html = ""
-        
-        if (config.info) {
-            html += `<div class="${config.infoClass || 'info-box'}">${config.info}</div>`
-        }
-        
-        html += `
-            <div class="form-row">
-                <div class="form-group">
-                    <label>متراژ (متر مربع)</label>
-                    <input type="number" id="area_m2" placeholder="مثال: 750" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>تعداد طبقات</label>
-                    <input type="number" id="floors" placeholder="مثال: 4" min="1" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>تاریخ صدور پروانه (شمسی)</label>
-                    <input type="text" id="license_date" placeholder="مثال: 1403/01/15" class="form-control" dir="ltr">
-                </div>
-            </div>
-        `
-        
-        fields.innerHTML = html
+        if (!form || !result) return
         
         form.addEventListener("submit", async function(e) {
             e.preventDefault()
-            const payload = {
-                area_m2: Number(document.querySelector("#area_m2")?.value || 0),
-                floors: Number(document.querySelector("#floors")?.value || 0),
-                license_date: document.querySelector("#license_date")?.value || ""
-            }
             
-            if (!payload.area_m2 || payload.area_m2 <= 0) {
+            const area_m2 = Number(document.getElementById("delay_area_m2")?.value || 0)
+            const floors = Number(document.getElementById("delay_floors")?.value || 0)
+            const license_date = document.getElementById("delay_license_date")?.value || ""
+            
+            if (!area_m2 || area_m2 <= 0) {
                 displayError(result, "لطفاً متراژ را وارد کنید")
                 return
             }
-            if (!payload.floors || payload.floors <= 0) {
+            if (!floors || floors <= 0) {
                 displayError(result, "لطفاً تعداد طبقات را وارد کنید")
                 return
             }
-            if (!payload.license_date) {
+            if (!license_date) {
                 displayError(result, "لطفاً تاریخ صدور پروانه را وارد کنید")
                 return
             }
@@ -672,7 +532,7 @@ function initToolLogic(tool) {
                 const response = await fetch("/tariff/engineering/delay_penalty", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ area_m2, floors, license_date })
                 })
                 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`)
