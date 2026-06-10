@@ -521,3 +521,43 @@ class TariffCalculator:
                 "تعداد طبقات": floors
             }
         )
+
+    def calculate_staking_plus_utm(self, num_points: int, area_m2: float) -> TariffResponse:
+        """
+        محاسبه مجموع هزینه میخکوبی و جانمایی (UTM)
+        """
+        # محاسبه میخکوبی
+        staking_result = self.calculate_staking(num_points)
+        
+        # محاسبه جانمایی
+        utm_result = self.calculate_utm(area_m2)
+        
+        # جمع کل
+        base_amount = staking_result.base_amount + utm_result.base_amount
+        vat = staking_result.vat + utm_result.vat
+        total_amount = staking_result.total_amount + utm_result.total_amount
+        
+        return TariffResponse(
+            base_amount=base_amount,
+            vat=vat,
+            total_amount=total_amount,
+            details={
+                "میخکوبی": {
+                    "تعداد نقاط": num_points,
+                    "مبلغ پایه": staking_result.base_amount,
+                    "مالیات": staking_result.vat,
+                    "مبلغ نهایی": staking_result.total_amount
+                },
+                "جانمایی": {
+                    "متراژ": area_m2,
+                    "مبلغ پایه": utm_result.base_amount,
+                    "مالیات": utm_result.vat,
+                    "مبلغ نهایی": utm_result.total_amount
+                },
+                "جمع کل": {
+                    "مبلغ پایه": base_amount,
+                    "مالیات": vat,
+                    "مبلغ نهایی": total_amount
+                }
+            }
+        )

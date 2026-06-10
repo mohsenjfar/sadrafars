@@ -78,6 +78,20 @@ const SERVICE_CONFIG = {
             </ul>
         `,
         api_url: "/tariff/utm"
+    },
+    staking_plus_utm: {
+        label: "میخکوبی + جانمایی",
+        fields: ["num_points", "area_m2"],
+        info: `
+            <ul>
+                <li>محاسبه همزمان هزینه میخکوبی و جانمایی (UTM)</li>
+                <li>میخکوبی: بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
+                <li>جانمایی: بر اساس متراژ (حداقل 500 متر مربع)</li>
+                <li>مناسب برای پروژه‌هایی که نیاز به هر دو سرویس دارند</li>
+            </ul>
+        `,
+        infoClass: "info-box",
+        api_url: "/tariff/staking_plus_utm"
     }
 }
 

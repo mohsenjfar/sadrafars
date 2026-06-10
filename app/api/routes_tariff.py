@@ -112,3 +112,11 @@ def calculate_delay_penalty(payload: DelayPenaltyRequest):
         payload.floors,
         payload.license_date
     )
+
+@router.post("/staking_plus_utm", response_model=TariffResponse)
+def calculate_staking_plus_utm(payload: StakingPlusUtmRequest):
+    """محاسبه مجموع هزینه میخکوبی و جانمایی"""
+    return calc.calculate_staking_plus_utm(
+        payload.num_points,
+        payload.area_m2
+    )

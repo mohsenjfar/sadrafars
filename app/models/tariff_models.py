@@ -38,3 +38,7 @@ class DelayPenaltyRequest(BaseModel):
     area_m2: float = Field(..., gt=0)
     floors: int = Field(..., gt=0)
     license_date: str = Field(..., description="تاریخ صدور پروانه به شمسی (فرمت: YYYY/MM/DD)")
+
+class StakingPlusUtmRequest(BaseModel):
+    num_points: int = Field(..., gt=0, description="تعداد نقاط میخکوبی")
+    area_m2: float = Field(..., gt=0, description="متراژ برای جانمایی")
