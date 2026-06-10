@@ -1,0 +1,392 @@
+/*file_path: /static/css/style.css */
+
+:root {
+--primary: #2563eb;
+--accent: #059669;
+--dark: #1e293b;
+--glass: rgba(255, 255, 255, 0.8);
+}
+
+button,
+input,
+select,
+textarea{
+font-family:inherit;
+}
+
+body {
+margin: 0;
+font-family: 'Vazirmatn', sans-serif;
+background: #f8fafc;
+color: var(--dark);
+}
+
+/* --- Header --- */
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center; /* تمام محتوا را در مرکز افقی قرار می‌دهد */
+    height: 70px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center; /* لینک‌ها را در مرکز قرار می‌دهد */
+    gap: 10px; /* فاصله بین لینک‌ها */
+}
+
+.nav-links a {
+    text-decoration: none; 
+    color: var(--dark);
+    padding: 10px 20px; /* افزایش فضای کلیک برای تجربه کاربری بهتر */
+    font-weight: 500; 
+    font-size: 15px;
+    transition: 0.3s;
+    border-radius: 8px;
+}
+
+.nav-links a:hover { 
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.05); /* یک پس‌زمینه بسیار ملایم هنگام هاور */
+}
+
+/* --- Hero Section --- */
+.hero {
+padding: 140px 5% 60px;
+background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+display: flex; align-items: center; justify-content: space-between;
+gap: 40px;
+}
+
+.hero-text { flex: 1; }
+.hero-text h1 { font-size: 42px; color: var(--dark); line-height: 1.4; margin-bottom: 20px; }
+.hero-text p { font-size: 18px; color: #64748b; margin-bottom: 30px; }
+
+.hero-image { flex: 1; text-align: center; position: relative; }
+.hero-image img { width: 90%; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+/* --- Tool Cards --- */
+.section-title { text-align: center; margin: 60px 0 40px; }
+.section-title h2 { font-size: 28px; }
+
+.tools-grid {
+display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 25px; padding: 0 10%; margin-bottom: 80px;
+}
+
+.tool-card {
+background: white; border-radius: 24px; padding: 40px;
+text-align: center; border: 1px solid #e2e8f0;
+transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+cursor: pointer;
+}
+
+.tool-card:hover {
+transform: translateY(-12px); border-color: var(--primary);
+box-shadow: 0 20px 30px rgba(37, 99, 235, 0.1);
+}
+
+.tool-icon {
+width: 70px; height: 70px; background: #eff6ff;
+border-radius: 20px; display: flex; align-items: center;
+justify-content: center; margin: 0 auto 20px;
+font-size: 30px; color: var(--primary);
+}
+
+/* --- News Section --- */
+.news-section { background: #f1f5f9; padding: 80px 10%; }
+.news-grid {
+display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;
+}
+.news-card {
+background: white; border-radius: 16px; overflow: hidden;
+box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.news-img { width: 100%; height: 200px; background: #ddd; object-fit: cover; }
+.news-content { padding: 20px; }
+.news-content span { color: var(--primary); font-size: 12px; font-weight: bold; }
+.news-content h3 { font-size: 18px; margin: 10px 0; }
+
+.modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(8px);
+    z-index:2000;
+}
+
+/* Modal Box */
+
+.modal-container{
+    width:650px;
+    max-width:92%;
+    background:white;
+    border-radius:16px;
+    box-shadow:0 40px 90px rgba(0,0,0,0.25);
+    overflow:hidden;
+    animation:modalOpen .3s ease;
+}
+
+/* Header */
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 25px;
+    border-bottom:1px solid #eee;
+}
+
+/* Body */
+
+.modal-body {
+    padding:25px;
+    max-height:70vh;
+    overflow-y:auto;
+}
+
+/* Close Button */
+
+.modal-close {
+    background:none;
+    border:none;
+    font-size:22px;
+    cursor:pointer;
+    color:#666;
+    transition:.2s;
+}
+
+.modal-close:hover{
+    color:#000;
+    transform:scale(1.2);
+}
+
+/* animation */
+
+@keyframes modalOpen{
+    from {
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media (max-width: 900px) {
+.hero { flex-direction: column; text-align: center; }
+.nav-links { display: none; }
+}
+
+.tool-form{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.tool-form label{
+font-size:14px;
+font-weight:500;
+color:#475569;
+}
+
+.tool-form input,
+.tool-form select{
+
+padding:12px;
+border-radius:10px;
+border:1px solid #e2e8f0;
+font-family:'Vazirmatn';
+font-size:14px;
+transition:.2s;
+
+}
+
+.tool-form input:focus,
+.tool-form select:focus{
+
+outline:none;
+border-color:var(--primary);
+box-shadow:0 0 0 3px rgba(37,99,235,0.1);
+
+}
+
+.tool-form button{
+
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:10px;
+background:var(--primary);
+color:white;
+font-size:15px;
+cursor:pointer;
+transition:.2s;
+}
+
+.tool-form button:hover{
+
+transform:translateY(-1px);
+box-shadow:0 6px 14px rgba(37,99,235,.2);
+
+}
+
+#result{
+
+margin-top:25px;
+
+display:flex;
+justify-content:center;
+
+}
+
+@keyframes resultPop{
+
+from{
+opacity:0;
+transform:scale(.9);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+.service-selector{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:12px;
+margin-bottom:20px;
+}
+
+.service-card{
+
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+text-align:center;
+cursor:pointer;
+transition:.25s;
+font-size:14px;
+font-weight:600;
+color:#334155;
+
+}
+
+.service-card span{
+display:block;
+font-size:12px;
+font-weight:400;
+color:#64748b;
+margin-top:4px;
+}
+
+.service-card:hover{
+border-color:var(--primary);
+transform:translateY(-3px);
+box-shadow:0 8px 18px rgba(37,99,235,.08);
+}
+
+.service-card.active{
+background:var(--primary);
+color:white;
+border-color:var(--primary);
+box-shadow:0 12px 25px rgba(37,99,235,.25);
+}
+
+.service-card.active span{
+color:#e0f2fe;
+}
+
+.info-box{
+background:#e8f5e9;
+border:2px solid #2e7d32;
+padding:12px;
+border-radius:8px;
+margin-bottom:15px;
+font-size:14px;
+line-height:1.9;
+}
+
+.info-box ul{
+margin:0;
+padding-right:18px;
+}
+
+.result-box{
+background:#f5f5f5;
+border:2px solid #333;
+padding:15px;
+margin-top:15px;
+border-radius:8px;
+font-size:16px;
+color:rgb(0, 0, 0);
+}
+
+.error-box{
+background:#fdecea;
+border:2px solid #c62828;
+padding:12px;
+margin-top:15px;
+border-radius:8px;
+}
+
+/* فرم با ردیف‌های موازی */
+.form-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 120px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 14px;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* برای فیلد تاریخ */
+input[type="date"].form-control {
+    padding: 9px 12px;
+}

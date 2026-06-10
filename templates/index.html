@@ -1,0 +1,113 @@
+<!-- file_path: /templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صدرافارس | پورتال تخصصی مهندسی و ساختمان</title>
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"/>
+<link rel="stylesheet" href="/static/css/style.css?v={{ timestamp }}">
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav-links">
+    <a href="#">صفحه اصلی</a>
+    <a href="#tools">ابزارها</a>
+    <!-- <a href="#news">اخبار ساختمان</a> -->
+    <a href="#">درباره ما</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>پورتال جامع<br><span style="color:var(--primary)">خدمات مهندسی</span> شهر صدرا</h1>
+    <p>دسترسی سریع به محاسبات تعرفه ۱۴۰۵، نقشه‌های ثبتی و آخرین اخبار شهر صدرا در یک قاب.</p>
+    <!-- <div style="display:flex; gap:15px;">
+      <a href="#tools" style="background:var(--dark); color:white; padding:15px 30px; border-radius:12px; text-decoration:none; display:inline-block;">
+        مشاهده ابزارها
+      </a>
+      <a href="#news" style="background:white; color:var(--dark); padding:15px 30px; border-radius:12px; border:1px solid #ddd; text-decoration:none; display:inline-block;">
+        آخرین اخبار
+      </a>
+    </div> -->
+  </div>
+  <div class="hero-image">
+    <img src="/static/images/bg.png" alt="Banner">
+  </div>
+</section>
+
+<section id="tools">
+  <div class="section-title">
+    <h2>پنل ابزارهای محاسباتی</h2>
+    <p>دقیق، سریع و بر اساس آخرین بخشنامه‌ها</p>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-card" onclick="openTool('tariff')">
+      <div class="tool-icon">📐</div>
+      <h3>محاسبه تعرفه نقشه‌برداری</h3>
+      <p>محاسبه آنلاین ردیف‌های ۱۰ گانه تعرفه سال ۱۴۰۵ با دقت بالا.</p>
+    </div>
+    <div class="tool-card" onclick="openTool('engineering')">
+      <div class="tool-icon">🏗️</div>
+      <h3>محاسبه هزینه طراحی و نظارت</h3>
+      <p>برآورد هزینه‌های نظارت، طراحی و اجرا بر اساس متراژ و گروه ساختمانی.</p>
+    </div>
+    <div class="tool-card" onclick="openTool('delay_penalty')">
+      <div class="tool-icon">⏰</div>
+      <h3>هزینه تاخیر نظارت</h3>
+      <p>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه بر اساس تاریخ صدور پروانه.</p>
+    </div>
+    <!-- <div class="tool-card" onclick="openTool('map')">
+      <div class="tool-icon">📍</div>
+      <h3>مشاهده قطعه و ناحیه</h3>
+      <p>استعلام موقعیت روی نقشه و انطباق با حریم‌های قانونی.</p>
+    </div> -->
+  </div>
+</section>
+
+<!-- <section class="news-section" id="news">
+  <div class="section-title">
+    <h2>مجله اطلاع‌رسانی صدرا فارس</h2>
+  </div>
+  <div class="news-grid">
+    <div class="news-card">
+      <div class="news-img"></div>
+      <div class="news-content">
+        <span>۱۷ خرداد ۱۴۰۵</span>
+        <h3>تغییرات جدید در قانون نظام مهندسی ساختمان</h3>
+        <p>بررسی ابعاد اصلاحیه جدید مجلس در خصوص مسئولیت مهندسین ناظر...</p>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-img"></div>
+      <div class="news-content">
+        <span>۱۵ خرداد ۱۴۰۵</span>
+        <h3>گزارش بازار مسکن در بهار امسال</h3>
+        <p>تحلیل روند قیمت‌ها در پروژه‌های نهضت ملی مسکن و پیش‌بینی فصل تابستان...</p>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<footer style="background:var(--dark); color:white; padding:40px; text-align:center;">
+  <p>© تمام حقوق برای صدرا فارس محفوظ است</p>
+</footer>
+
+<div id="toolModal" class="modal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script src="/static/js/tools.js?v={{ timestamp }}"></script>
+<script src="/static/js/modal.js?v={{ timestamp }}"></script>
+
+</body>
+</html>

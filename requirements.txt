@@ -1,3 +1,6 @@
 --index-url https://mirror2.chabokan.net/pypi/simple/
+
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
+jinja2
+jdatetime
