@@ -1,3 +1,5 @@
+# file_path: app/api/routes_tariff.py
+
 from fastapi import APIRouter
 from app.models.tariff_models import *
 from app.services.tariff_calculator import TariffCalculator

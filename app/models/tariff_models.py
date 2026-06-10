@@ -1,3 +1,5 @@
+# file_path: app/models/tariff_models.py
+
 from pydantic import BaseModel, Field
 from typing import Optional
 

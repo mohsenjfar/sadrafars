@@ -1,3 +1,5 @@
+/*file_path: /static/js/modal.js */
+
 const modal = document.getElementById("toolModal")
 const modalBody = document.getElementById("modalBody")
 const modalTitle = document.getElementById("modalTitle")
