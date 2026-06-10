@@ -191,10 +191,9 @@ const FIELD_TEMPLATES = {
         <input type="number" id="columns" placeholder="مثال: 20" min="1">
     `,
     license_date: `
-            <div class="form-group">
-                <label>تاریخ صدور پروانه</label>
-                <input type="date" id="license_date" class="form-control">
-            </div>
+        <div class="form-group">
+            <label>تاریخ صدور پروانه (شمسی)</label>
+            <input type="text" id="license_date" placeholder="مثال: 1403/01/15" class="form-control" dir="ltr">
         </div>
     `
 }

@@ -436,6 +436,21 @@ class TariffCalculator:
             details=details
         )
 
+    def _jalali_to_gregorian(self, jalali_date: str) -> str:
+        """تبدیل تاریخ شمسی به میلادی (فرمت ورودی: YYYY/MM/DD)"""
+        from jalali import Jalali
+        
+        parts = jalali_date.split('/')
+        if len(parts) != 3:
+            raise ValueError("فرمت تاریخ باید YYYY/MM/DD باشد")
+        
+        year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
+        
+        # تبدیل شمسی به میلادی
+        gregorian = Jalali.to_gregorian(year, month, day)
+        
+        return f"{gregorian[0]}-{gregorian[1]:02d}-{gregorian[2]:02d}"
+    
     def calculate_delay_penalty(self, area_m2: float, floors: int, license_date: str) -> TariffResponse:
         """
         محاسبه هزینه مابه‌التفاوت تاخیر نظارت
@@ -443,8 +458,19 @@ class TariffCalculator:
         """
         from datetime import datetime
         
-        # محاسبه تعداد ماه‌های گذشته از تاریخ صدور پروانه
-        license_datetime = datetime.strptime(license_date, "%Y-%m-%d")
+        # تبدیل تاریخ شمسی به میلادی
+        try:
+            gregorian_date = self._jalali_to_gregorian(license_date)
+        except Exception as e:
+            return TariffResponse(
+                base_amount=0,
+                vat=0,
+                total_amount=0,
+                details={"error": f"فرمت تاریخ نامعتبر: {str(e)}", "راهنما": "فرمت صحیح: 1403/01/15"}
+            )
+        
+        # محاسبه تعداد ماه‌های گذشته
+        license_datetime = datetime.strptime(gregorian_date, "%Y-%m-%d")
         today = datetime.now()
         
         months_passed = (today.year - license_datetime.year) * 12 + (today.month - license_datetime.month)
@@ -453,9 +479,9 @@ class TariffCalculator:
         excess_months = max(0, months_passed - 18)
         
         # محاسبه تعداد واحدهای 6 ماهه (با سقف)
-        units = (excess_months + 5) // 6  # ceil division
+        units = (excess_months + 5) // 6
         
-        # محاسبه هزینه نظارت پایه (بدون مالیات)
+        # محاسبه هزینه نظارت پایه
         group_name, group_key = self._get_group(floors)
         supervision_rate = self._get_supervision_rate(group_key)
         surveying_rate = self._get_surveying_rate(group_key)
@@ -465,13 +491,18 @@ class TariffCalculator:
         # محاسبه مبلغ اضافه تاخیر
         penalty_amount = int(base_supervision_cost * 0.2 * units)
         
+        # محاسبه تاریخ امروز شمسی برای نمایش
+        from jalali import Jalali
+        today_jalali = Jalali(today.year, today.month, today.day)
+        today_str = f"{today_jalali.year}/{today_jalali.month:02d}/{today_jalali.day:02d}"
+        
         return TariffResponse(
             base_amount=penalty_amount,
             vat=0,
             total_amount=penalty_amount,
             details={
-                "تاریخ صدور پروانه": license_date,
-                "تاریخ امروز": today.strftime("%Y-%m-%d"),
+                "تاریخ صدور پروانه (شمسی)": license_date,
+                "تاریخ امروز (شمسی)": today_str,
                 "ماه‌های گذشته": months_passed,
                 "مازاد بر ۱۸ ماه": excess_months,
                 "تعداد واحدهای ۶ ماهه": units,

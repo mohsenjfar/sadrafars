@@ -35,6 +35,6 @@ class TariffResponse(BaseModel):
     details: Optional[dict] = None  # برای نمایش جزئیات بیشتر
 
 class DelayPenaltyRequest(BaseModel):
-    area_m2: float = Field(..., gt=0, description="متراژ زیربنا")
-    floors: int = Field(..., gt=0, description="تعداد طبقات")
-    license_date: str = Field(..., description="تاریخ صدور پروانه (فرمت: YYYY-MM-DD)")
+    area_m2: float = Field(..., gt=0)
+    floors: int = Field(..., gt=0)
+    license_date: str = Field(..., description="تاریخ صدور پروانه به شمسی (فرمت: YYYY/MM/DD)")
