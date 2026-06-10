@@ -592,8 +592,15 @@ function initToolLogic(tool) {
         
         if (!fields || !form || !result) return
         
-        // رندر فیلدها در یک ردیف
-        fields.innerHTML = `
+        // رندر info-box و فیلدها
+        const config = ENGINEERING_CONFIG.delay_penalty
+        let html = ""
+        
+        if (config.info) {
+            html += `<div class="${config.infoClass || 'info-box'}">${config.info}</div>`
+        }
+        
+        html += `
             <div class="form-row">
                 <div class="form-group">
                     <label>متراژ (متر مربع)</label>
@@ -609,6 +616,8 @@ function initToolLogic(tool) {
                 </div>
             </div>
         `
+        
+        fields.innerHTML = html
         
         form.addEventListener("submit", async function(e) {
             e.preventDefault()
