@@ -74,7 +74,7 @@ const SERVICE_CONFIG = {
         fields: ["area_m2"],
         info: `
             <ul>
-                <li>حداقل متراژ مورد محاسبه 1000 متر میباشد</li>
+                <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
             </ul>
         `,
         api_url: "/tariff/utm"
@@ -86,7 +86,7 @@ const SERVICE_CONFIG = {
             <ul>
                 <li>محاسبه همزمان هزینه میخکوبی و جانمایی (UTM)</li>
                 <li>میخکوبی: بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
-                <li>جانمایی: بر اساس متراژ (حداقل 1000 متر مربع)</li>
+                <li>جانمایی: بر اساس متراژ (حداقل 500 متر مربع)</li>
                 <li>مناسب برای پروژه‌هایی که نیاز به هر دو سرویس دارند</li>
             </ul>
         `,
@@ -176,19 +176,6 @@ const ENGINEERING_CONFIG = {
             </ul>
         `,
         api_url: "/tariff/engineering/all"
-    },
-    delay_penalty: {
-        label: "هزینه تاخیر نظارت",
-        fields: ["area_m2", "floors", "license_date"],
-        info: `
-            <ul>
-                <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
-                <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
-                <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
-            </ul>
-        `,
-        infoClass: "info-box",
-        api_url: "/tariff/engineering/delay_penalty"
     }
 }
 
@@ -212,12 +199,6 @@ const FIELD_TEMPLATES = {
         <div class="form-group">
             <label>تعداد نقاط</label>
             <input type="number" id="num_points" placeholder="مثال: 10" min="1" class="form-control">
-        </div>
-    `,
-    license_date: `
-        <div class="form-group">
-            <label>تاریخ صدور پروانه (شمسی)</label>
-            <input type="text" id="license_date" placeholder="مثال: 1403/01/15" class="form-control" dir="ltr">
         </div>
     `,
     built_up_area: `
@@ -274,6 +255,37 @@ const tools = {
                 <button type="submit">محاسبه</button>
             </form>
             <div id="engineeringResult"></div>
+        `
+    },
+    delay_penalty: {
+        title: "محاسبه هزینه تاخیر نظارت",
+        type: "delay_penalty",
+        html: `
+            <form id="delayPenaltyForm" class="tool-form">
+                <div class="info-box">
+                    <ul>
+                        <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
+                        <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
+                        <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
+                    </ul>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>متراژ (متر مربع)</label>
+                        <input type="number" id="delay_area_m2" placeholder="مثال: 750" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>تعداد طبقات</label>
+                        <input type="number" id="delay_floors" placeholder="مثال: 4" min="1" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>تاریخ صدور پروانه (شمسی)</label>
+                    <input type="text" id="delay_license_date" placeholder="مثال: 1403/01/15" class="form-control" dir="ltr">
+                </div>
+                <button type="submit">محاسبه</button>
+            </form>
+            <div id="delayPenaltyResult"></div>
         `
     },
     map: {
@@ -406,7 +418,6 @@ function renderFields(container, config, selectedService) {
         html += `<div class="${serviceConfig.infoClass || 'info-box'}">${serviceConfig.info}</div>`
     }
     
-    // برای سرویس تک خطی + مساحی عرصه از فیلدهای خاص استفاده کن
     if (selectedService === "single_line_plus_land_survey") {
         html += `<div class="form-row">`
         html += FIELD_TEMPLATES.built_up_area
@@ -428,15 +439,12 @@ function renderFields(container, config, selectedService) {
 function getPayload(fields, formElement, selectedService = "") {
     let payload = {}
     
-    // برای سرویس تک خطی + مساحی عرصه
     if (selectedService === "single_line_plus_land_survey") {
         const builtUpArea = formElement.querySelector("#built_up_area")
         const landArea = formElement.querySelector("#land_area")
         if (builtUpArea) payload.built_up_area = Number(builtUpArea.value) || 0
         if (landArea) payload.land_area = Number(landArea.value) || 0
-    } 
-    // برای سایر سرویس‌ها
-    else {
+    } else {
         fields.forEach(f => {
             const el = formElement.querySelector(`#${f}`)
             if (el) {
@@ -548,6 +556,54 @@ function initToolLogic(tool) {
             } catch (err) {
                 console.error(err)
                 displayError(result, "خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.")
+            }
+        })
+    }
+    
+    // --------------------------------------------------------
+    // ابزار هزینه تاخیر نظارت (delay_penalty)
+    // --------------------------------------------------------
+    if (tool === "delay_penalty") {
+        const form = document.getElementById("delayPenaltyForm")
+        const result = document.getElementById("delayPenaltyResult")
+        
+        if (!form || !result) return
+        
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault()
+            
+            const area_m2 = Number(document.getElementById("delay_area_m2")?.value || 0)
+            const floors = Number(document.getElementById("delay_floors")?.value || 0)
+            const license_date = document.getElementById("delay_license_date")?.value || ""
+            
+            if (!area_m2 || area_m2 <= 0) {
+                displayError(result, "لطفاً متراژ را وارد کنید")
+                return
+            }
+            if (!floors || floors <= 0) {
+                displayError(result, "لطفاً تعداد طبقات را وارد کنید")
+                return
+            }
+            if (!license_date) {
+                displayError(result, "لطفاً تاریخ صدور پروانه را وارد کنید")
+                return
+            }
+            
+            result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>"
+            
+            try {
+                const response = await fetch("/tariff/engineering/delay_penalty", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ area_m2, floors, license_date })
+                })
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`)
+                const data = await response.json()
+                displayResult(result, data)
+            } catch (err) {
+                console.error(err)
+                displayError(result, "خطا در محاسبه. لطفاً دوباره تلاش کنید.")
             }
         })
     }
