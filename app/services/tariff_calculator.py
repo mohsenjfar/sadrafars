@@ -394,34 +394,44 @@ class TariffCalculator:
             }
         )
 
-    def calculate_all_engineering_fees(self, area_m2: float, floors: int, include_surveying: bool = False) -> dict:
+    def calculate_all_engineering_fees(self, area_m2: float, floors: int, include_surveying: bool = False) -> TariffResponse:
         """
         محاسبه تمام هزینه‌های مهندسی (طراحی + نظارت + نقشه‌برداری در صورت نیاز)
         بدون مالیات
+        بازگشت به صورت TariffResponse برای نمایش یکپارچه در فرانت‌اند
         """
         design = self.calculate_design(area_m2, floors)
         supervision = self.calculate_supervision(area_m2, floors)
         
-        result = {
-            "design": design.dict(),
-            "supervision": supervision.dict(),
-            "total": design.total_amount + supervision.total_amount
+        total_amount = design.total_amount + supervision.total_amount
+        
+        # ساخت جزئیات کامل برای نمایش
+        details = {
+            "طراحی": {
+                "مبلغ": design.total_amount,
+                "گروه ساختمانی": design.details.get("گروه ساختمانی"),
+                "نرخ هر متر مربع": design.details.get("نرخ هر متر مربع"),
+            },
+            "نظارت": {
+                "مبلغ": supervision.total_amount,
+                "گروه ساختمانی": supervision.details.get("گروه ساختمانی"),
+                "نرخ نظارت هر متر مربع": supervision.details.get("نرخ نظارت هر متر مربع"),
+            },
+            "متراژ": area_m2,
+            "تعداد طبقات": floors,
         }
         
-        # اگر نقشه‌برداری مستقل خواسته شده باشد (یا در نظارت نبوده باشد)
-        if include_surveying:
-            surveying = self.calculate_engineering_surveying(area_m2, floors)
-            result["surveying"] = surveying.dict()
-            result["total"] += surveying.total_amount
-        else:
-            # اطلاعات نقشه‌برداری را از supervision استخراج می‌کنیم
-            group_name, group_key = self._get_group(floors)
-            surveying_rate = self._get_surveying_rate(group_key)
-            if surveying_rate > 0:
-                result["surveying_info"] = {
-                    "نرخ هر متر مربع": surveying_rate,
-                    "هزینه تخمینی": int(area_m2 * surveying_rate),
-                    "توضیح": "این هزینه در بخش نظارت لحاظ شده است"
-                }
+        # اضافه کردن جزئیات نقشه‌برداری اگر وجود داشته باشد
+        if "نرخ نقشه‌برداری هر متر مربع" in supervision.details:
+            details["نقشه‌برداری"] = {
+                "مبلغ": supervision.details.get("هزینه نقشه‌برداری"),
+                "نرخ هر متر مربع": supervision.details.get("نرخ نقشه‌برداری هر متر مربع"),
+                "وضعیت": supervision.details.get("وضعیت نقشه‌برداری"),
+            }
         
-        return result
+        return TariffResponse(
+            base_amount=total_amount,
+            vat=0,
+            total_amount=total_amount,
+            details=details
+        )
