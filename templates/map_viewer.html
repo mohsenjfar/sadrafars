@@ -1,0 +1,444 @@
+<!-- file_path: /templates/map_viewer.html -->
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>نمایش قطعه و ناحیه - صدرافارس</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #f0f2f5;
+        }
+
+        .map-header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .map-header h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box select, .search-box input {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        .search-box button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .map-container {
+            width: 100%;
+            height: calc(100vh - 90px);
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #e8edf2;
+        }
+
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            min-width: 250px;
+            border-right: 4px solid #2563eb;
+        }
+
+        .info-panel h4 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .info-panel p {
+            font-size: 13px;
+            color: #475569;
+            margin: 5px 0;
+        }
+
+        .info-panel .highlight {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .legend span {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 700px) {
+            .map-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .search-box {
+                width: 100%;
+                justify-content: center;
+            }
+            .info-panel {
+                bottom: 70px;
+                right: 10px;
+                left: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="map-header">
+        <h1>
+            <span>🗺️</span>
+            نقشه قطعات و نواحی شهر صدرا
+        </h1>
+        <div class="search-box">
+            <select id="zoneSelect">
+                <option value="">انتخاب ناحیه</option>
+                <option value="1">ناحیه ۱</option>
+                <option value="2">ناحیه ۲</option>
+                <option value="3">ناحیه ۳</option>
+                <option value="4">ناحیه ۴</option>
+                <option value="5">ناحیه ۵</option>
+            </select>
+            <select id="pieceSelect">
+                <option value="">انتخاب قطعه</option>
+            </select>
+            <button onclick="searchLocation()">🔍 جستجو</button>
+        </div>
+        <a href="/" class="back-btn">← بازگشت به صفحه اصلی</a>
+    </div>
+    <div class="map-container">
+        <div id="map"></div>
+        <div class="info-panel" id="infoPanel" style="display: none;">
+            <h4>📍 اطلاعات قطعه</h4>
+            <p><strong>ناحیه:</strong> <span id="infoZone">-</span></p>
+            <p><strong>قطعه:</strong> <span id="infoPiece">-</span></p>
+            <p><strong>مساحت:</strong> <span id="infoArea">-</span> متر مربع</p>
+            <p><strong>کاربری:</strong> <span id="infoUsage">-</span></p>
+        </div>
+        <div class="legend">
+            <div><span style="background: #fbbf24;"></span> قطعات مسکونی</div>
+            <div><span style="background: #34d399;"></span> قطعات تجاری</div>
+            <div><span style="background: #60a5fa;"></span> فضای سبز / عمومی</div>
+            <div><span style="background: #f87171;"></span> قطعه انتخاب شده</div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // دیتای قطعات و نواحی شهر صدرا (بر اساس نقشه‌های تفکیکی)
+        // ============================================================
+        const SADRA_DATA = {
+            // مختصات تقریبی مرکز شهر صدرا (شیراز)
+            center: [29.8597, 52.6758],
+            zoom: 14,
+            
+            // تعریف مرز نواحی (چندضلعی‌های تقریبی)
+            zones: {
+                1: {
+                    name: "ناحیه ۱",
+                    bounds: [[29.875, 52.660], [29.865, 52.675], [29.860, 52.670], [29.870, 52.655]],
+                    pieces: {
+                        "A1": { center: [29.872, 52.665], area: 850, usage: "مسکونی" },
+                        "A2": { center: [29.870, 52.668], area: 720, usage: "مسکونی" },
+                        "A3": { center: [29.868, 52.662], area: 950, usage: "تجاری" },
+                        "A4": { center: [29.866, 52.670], area: 610, usage: "مسکونی" },
+                        "A5": { center: [29.873, 52.672], area: 540, usage: "فضای سبز" }
+                    }
+                },
+                2: {
+                    name: "ناحیه ۲",
+                    bounds: [[29.860, 52.680], [29.850, 52.685], [29.845, 52.678], [29.855, 52.672]],
+                    pieces: {
+                        "B1": { center: [29.858, 52.682], area: 1100, usage: "مسکونی" },
+                        "B2": { center: [29.855, 52.678], area: 890, usage: "تجاری" },
+                        "B3": { center: [29.852, 52.684], area: 760, usage: "مسکونی" },
+                        "B4": { center: [29.849, 52.680], area: 630, usage: "مسکونی" },
+                        "B5": { center: [29.860, 52.676], area: 480, usage: "اداری" }
+                    }
+                },
+                3: {
+                    name: "ناحیه ۳",
+                    bounds: [[29.845, 52.665], [29.840, 52.672], [29.835, 52.668], [29.842, 52.660]],
+                    pieces: {
+                        "C1": { center: [29.843, 52.668], area: 920, usage: "مسکونی" },
+                        "C2": { center: [29.840, 52.664], area: 780, usage: "مسکونی" },
+                        "C3": { center: [29.838, 52.670], area: 650, usage: "فضای سبز" },
+                        "C4": { center: [29.842, 52.662], area: 540, usage: "تجاری" }
+                    }
+                },
+                4: {
+                    name: "ناحیه ۴",
+                    bounds: [[29.850, 52.650], [29.845, 52.658], [29.838, 52.655], [29.842, 52.648]],
+                    pieces: {
+                        "D1": { center: [29.848, 52.654], area: 1050, usage: "مسکونی" },
+                        "D2": { center: [29.845, 52.652], area: 820, usage: "تجاری" },
+                        "D3": { center: [29.842, 52.656], area: 690, usage: "مسکونی" },
+                        "D4": { center: [29.840, 52.650], area: 570, usage: "اداری" }
+                    }
+                },
+                5: {
+                    name: "ناحیه ۵",
+                    bounds: [[29.865, 52.685], [29.858, 52.690], [29.855, 52.686], [29.862, 52.682]],
+                    pieces: {
+                        "E1": { center: [29.862, 52.688], area: 980, usage: "مسکونی" },
+                        "E2": { center: [29.860, 52.685], area: 740, usage: "مسکونی" },
+                        "E3": { center: [29.857, 52.689], area: 620, usage: "فضای سبز" },
+                        "E4": { center: [29.863, 52.684], area: 510, usage: "تجاری" },
+                        "E5": { center: [29.859, 52.691], area: 430, usage: "مسکونی" }
+                    }
+                }
+            }
+        };
+
+        let map;
+        let currentHighlight = null;
+        let zoneLayers = {};
+        let pieceMarkers = {};
+
+        // تابع مقداردهی اولیه نقشه
+        function initMap() {
+            map = L.map('map').setView(SADRA_DATA.center, SADRA_DATA.zoom);
+            
+            // لایه پس‌زمینه (OpenStreetMap)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                subdomains: 'abcd',
+                maxZoom: 19,
+                minZoom: 12
+            }).addTo(map);
+
+            // بارگذاری تمام نواحی و قطعات
+            loadAllZonesAndPieces();
+        }
+
+        // بارگذاری تمام نواحی و قطعات روی نقشه
+        function loadAllZonesAndPieces() {
+            for (const [zoneId, zoneData] of Object.entries(SADRA_DATA.zones)) {
+                // رسم مرز ناحیه
+                const polygon = L.polygon(zoneData.bounds, {
+                    color: '#3b82f6',
+                    weight: 2,
+                    opacity: 0.7,
+                    fillColor: '#93c5fd',
+                    fillOpacity: 0.15,
+                    smoothFactor: 1
+                }).addTo(map);
+                
+                polygon.bindTooltip(`<strong>${zoneData.name}</strong>`, { sticky: true });
+                zoneLayers[zoneId] = polygon;
+
+                // رسم قطعات
+                for (const [pieceCode, pieceData] of Object.entries(zoneData.pieces)) {
+                    let markerColor = '#fbbf24'; // زرد برای مسکونی
+                    if (pieceData.usage === 'تجاری') markerColor = '#34d399';
+                    else if (pieceData.usage === 'فضای سبز') markerColor = '#60a5fa';
+                    else if (pieceData.usage === 'اداری') markerColor = '#a78bfa';
+                    
+                    const customIcon = L.divIcon({
+                        html: `<div style="background: ${markerColor}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>`,
+                        iconSize: [12, 12],
+                        className: 'custom-marker'
+                    });
+                    
+                    const marker = L.marker(pieceData.center, { icon: customIcon }).addTo(map);
+                    marker.bindTooltip(`<strong>قطعه ${pieceCode}</strong><br>${pieceData.usage} | ${pieceData.area}㎡`, { sticky: true });
+                    
+                    marker.on('click', () => {
+                        showPieceInfo(zoneId, pieceCode, pieceData);
+                        highlightPiece(zoneId, pieceCode, pieceData.center);
+                    });
+                    
+                    if (!pieceMarkers[zoneId]) pieceMarkers[zoneId] = {};
+                    pieceMarkers[zoneId][pieceCode] = { marker, data: pieceData };
+                }
+            }
+        }
+
+        // جستجو بر اساس ناحیه و قطعه
+        function searchLocation() {
+            const zoneId = document.getElementById('zoneSelect').value;
+            const pieceCode = document.getElementById('pieceSelect').value;
+            
+            if (!zoneId) {
+                alert('لطفاً ابتدا ناحیه را انتخاب کنید');
+                return;
+            }
+            
+            if (!pieceCode) {
+                alert('لطفاً قطعه را انتخاب کنید');
+                return;
+            }
+            
+            const zoneData = SADRA_DATA.zones[zoneId];
+            if (!zoneData) return;
+            
+            const pieceData = zoneData.pieces[pieceCode];
+            if (!pieceData) return;
+            
+            // حرکت نقشه به سمت قطعه
+            map.setView(pieceData.center, 18);
+            
+            // نمایش اطلاعات
+            showPieceInfo(zoneId, pieceCode, pieceData);
+            
+            // هایلایت قطعه
+            highlightPiece(zoneId, pieceCode, pieceData.center);
+        }
+
+        // نمایش اطلاعات قطعه در پنل
+        function showPieceInfo(zoneId, pieceCode, pieceData) {
+            const zoneData = SADRA_DATA.zones[zoneId];
+            const panel = document.getElementById('infoPanel');
+            
+            document.getElementById('infoZone').innerHTML = `${zoneData.name} (ناحیه ${zoneId})`;
+            document.getElementById('infoPiece').innerHTML = pieceCode;
+            document.getElementById('infoArea').innerHTML = pieceData.area.toLocaleString();
+            document.getElementById('infoUsage').innerHTML = pieceData.usage;
+            
+            panel.style.display = 'block';
+            
+            // بعد از 5 ثانیه مخفی کردن خودکار
+            setTimeout(() => {
+                if (panel.style.display === 'block') {
+                    // فقط در صورتی مخفی کن که موس روی پنل نباشد
+                    if (!panel.matches(':hover')) {
+                        panel.style.display = 'none';
+                    }
+                }
+            }, 5000);
+        }
+
+        // هایلایت کردن قطعه انتخاب شده
+        function highlightPiece(zoneId, pieceCode, center) {
+            // حذف هایلایت قبلی
+            if (currentHighlight) {
+                map.removeLayer(currentHighlight);
+                currentHighlight = null;
+            }
+            
+            // ایجاد دایره هایلایت
+            currentHighlight = L.circle(center, {
+                color: '#f87171',
+                weight: 3,
+                opacity: 1,
+                fillColor: '#f87171',
+                fillOpacity: 0.2,
+                radius: 25
+            }).addTo(map);
+        }
+
+        // آپدیت لیست قطعات بر اساس ناحیه انتخاب شده
+        function updatePiecesList() {
+            const zoneId = document.getElementById('zoneSelect').value;
+            const pieceSelect = document.getElementById('pieceSelect');
+            
+            pieceSelect.innerHTML = '<option value="">انتخاب قطعه</option>';
+            
+            if (!zoneId || !SADRA_DATA.zones[zoneId]) return;
+            
+            const pieces = SADRA_DATA.zones[zoneId].pieces;
+            for (const [pieceCode, pieceData] of Object.entries(pieces)) {
+                const option = document.createElement('option');
+                option.value = pieceCode;
+                option.textContent = `${pieceCode} | ${pieceData.usage} | ${pieceData.area}㎡`;
+                pieceSelect.appendChild(option);
+            }
+        }
+
+        // بارگذاری نقشه پس از لود صفحه
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            document.getElementById('zoneSelect').addEventListener('change', updatePiecesList);
+        });
+    </script>
+</body>
+</html>

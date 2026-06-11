@@ -289,15 +289,12 @@ const tools = {
         `
     },
     map: {
-        title: "مشاهده قطعه و ناحیه بر روی نقشه",
+        title: "مشاهده قطعه و ناحیه",
         type: "map",
-        html: `
-            <div style="text-align: center; padding: 40px; color: #666;">
-                <span style="font-size: 48px;">🗺️</span>
-                <p style="margin-top: 15px;">این ابزار به زودی فعال خواهد شد</p>
-                <p style="font-size: 12px; color: #999;">امکان مشاهده قطعه و ناحیه بر روی نقشه</p>
-            </div>
-        `
+        html: `<div style="text-align: center; padding: 20px;">
+            <div style="font-size: 48px;">🗺️</div>
+            <p style="margin-top: 15px;">در حال انتقال به صفحه نقشه...</p>
+        </div>`
     }
 }
 

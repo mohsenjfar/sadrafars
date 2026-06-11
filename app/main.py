@@ -34,5 +34,13 @@ def index(request: Request):
         }
     )
 
+# صفحه نقشه قطعات و نواحی (جدید)
+@app.get("/map", response_class=HTMLResponse)
+def map_viewer(request: Request):
+    return templates.TemplateResponse(
+        "map_viewer.html",
+        {"request": request}
+    )
+
 # اضافه کردن API
 app.include_router(tariff_router)
