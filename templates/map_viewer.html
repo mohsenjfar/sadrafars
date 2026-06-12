@@ -1,4 +1,3 @@
-<!-- file_path: /templates/map_viewer.html -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -42,9 +41,9 @@
         .search-box {
             background: white;
             padding: 8px 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -55,7 +54,7 @@
             border-radius: 8px;
             font-family: 'Vazirmatn', sans-serif;
             font-size: 14px;
-            min-width: 120px;
+            min-width: 150px;
         }
 
         .search-box button {
@@ -113,11 +112,6 @@
             margin: 5px 0;
         }
 
-        .info-panel .highlight {
-            color: #2563eb;
-            font-weight: bold;
-        }
-
         .legend {
             position: absolute;
             bottom: 20px;
@@ -155,6 +149,19 @@
             background: rgba(255,255,255,0.3);
         }
 
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 2000;
+            font-size: 14px;
+        }
+
         @media (max-width: 700px) {
             .map-header {
                 flex-direction: column;
@@ -180,14 +187,6 @@
             نقشه قطعات و نواحی شهر صدرا
         </h1>
         <div class="search-box">
-            <select id="zoneSelect">
-                <option value="">انتخاب ناحیه</option>
-                <option value="1">ناحیه ۱</option>
-                <option value="2">ناحیه ۲</option>
-                <option value="3">ناحیه ۳</option>
-                <option value="4">ناحیه ۴</option>
-                <option value="5">ناحیه ۵</option>
-            </select>
             <select id="pieceSelect">
                 <option value="">انتخاب قطعه</option>
             </select>
@@ -199,206 +198,294 @@
         <div id="map"></div>
         <div class="info-panel" id="infoPanel" style="display: none;">
             <h4>📍 اطلاعات قطعه</h4>
-            <p><strong>ناحیه:</strong> <span id="infoZone">-</span></p>
-            <p><strong>قطعه:</strong> <span id="infoPiece">-</span></p>
-            <p><strong>مساحت:</strong> <span id="infoArea">-</span> متر مربع</p>
-            <p><strong>کاربری:</strong> <span id="infoUsage">-</span></p>
+            <p><strong>شناسه قطعه:</strong> <span id="infoPieceId">-</span></p>
+            <p><strong>نوع:</strong> <span id="infoType">-</span></p>
+            <p><strong>طول خط:</strong> <span id="infoLength">-</span> متر</p>
         </div>
         <div class="legend">
-            <div><span style="background: #fbbf24;"></span> قطعات مسکونی</div>
-            <div><span style="background: #34d399;"></span> قطعات تجاری</div>
-            <div><span style="background: #60a5fa;"></span> فضای سبز / عمومی</div>
+            <div><span style="background: #3b82f6;"></span> خطوط قطعات</div>
             <div><span style="background: #f87171;"></span> قطعه انتخاب شده</div>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // دیتای قطعات و نواحی شهر صدرا (بر اساس نقشه‌های تفکیکی)
-        // ============================================================
-        const SADRA_DATA = {
-            // مختصات تقریبی مرکز شهر صدرا (شیراز)
-            center: [29.80093973621686, 52.508106775046926],
-            zoom: 14,
-            
-            // تعریف مرز نواحی (چندضلعی‌های تقریبی)
-            zones: {
-                1: {
-                    name: "ناحیه ۱",
-                    bounds: [
-                        [29.801034484046884, 52.508106339181694], 
-                        [29.80089679290288, 52.50836374489263], 
-                        [29.80063058948716, 52.508182150452726], 
-                        [29.800722383848456, 52.50800937127689],
-                        [29.800783580042534, 52.50805521065006],
-                        [29.800827947259837, 52.507970584114965],
-                    ],
-                    pieces: {
-                        "A1": { center: [29.80089067329209, 52.50811868055139], area: 850, usage: "اداری" }
-                    }
-                }
-            }
-        };
-
         let map;
         let currentHighlight = null;
-        let zoneLayers = {};
-        let pieceMarkers = {};
+        let allFeatures = [];
+        let geojsonLayer = null;
+
+        // مختصات مرکزی تقریبی محدوده (از داده‌های GeoJSON استخراج شده)
+        const DEFAULT_BOUNDS = [[52.444, 29.808], [52.458, 29.817]];
 
         // تابع مقداردهی اولیه نقشه
         function initMap() {
-            map = L.map('map').setView(SADRA_DATA.center, SADRA_DATA.zoom);
+            map = L.map('map').fitBounds(DEFAULT_BOUNDS);
             
-            // لایه پس‌زمینه (OpenStreetMap)
+            // لایه پس‌زمینه
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 subdomains: 'abcd',
-                maxZoom: 19,
-                minZoom: 12
+                maxZoom: 19
             }).addTo(map);
 
-            // بارگذاری تمام نواحی و قطعات
-            loadAllZonesAndPieces();
+            // بارگذاری داده‌های GeoJSON
+            loadGeoJSONData();
         }
 
-        // بارگذاری تمام نواحی و قطعات روی نقشه
-        function loadAllZonesAndPieces() {
-            for (const [zoneId, zoneData] of Object.entries(SADRA_DATA.zones)) {
-                // رسم مرز ناحیه
-                const polygon = L.polygon(zoneData.bounds, {
-                    color: '#3b82f6',
-                    weight: 2,
-                    opacity: 0.7,
-                    fillColor: '#93c5fd',
-                    fillOpacity: 0.15,
-                    smoothFactor: 1
+        // بارگذاری فایل GeoJSON
+        async function loadGeoJSONData() {
+            showLoading(true);
+            
+            try {
+                // مسیر فایل GeoJSON - لطفاً مسیر صحیح را قرار دهید
+                const response = await fetch('/static/data/baharestannewtafkik_2.js');
+                const data = await response.json();
+                
+                if (!data || !data.features) {
+                    throw new Error('فرمت فایل GeoJSON صحیح نیست');
+                }
+                
+                allFeatures = data.features;
+                
+                // ایجاد لایه GeoJSON روی نقشه
+                geojsonLayer = L.geoJSON(data, {
+                    style: {
+                        color: '#3b82f6',
+                        weight: 2,
+                        opacity: 0.7,
+                        smoothFactor: 1
+                    },
+                    onEachFeature: function(feature, layer) {
+                        // ذخیره اطلاعات feature در layer
+                        layer.feature = feature;
+                        
+                        // اضافه کردن tooltip
+                        const pieceId = getPieceId(feature);
+                        if (pieceId) {
+                            layer.bindTooltip(`قطعه ${pieceId}`, { sticky: true });
+                        }
+                        
+                        // کلیک روی خط برای نمایش اطلاعات
+                        layer.on('click', function() {
+                            showPieceInfo(feature);
+                            highlightPiece(layer);
+                        });
+                    }
                 }).addTo(map);
                 
-                polygon.bindTooltip(`<strong>${zoneData.name}</strong>`, { sticky: true });
-                zoneLayers[zoneId] = polygon;
-
-                // رسم قطعات
-                for (const [pieceCode, pieceData] of Object.entries(zoneData.pieces)) {
-                    let markerColor = '#fbbf24'; // زرد برای مسکونی
-                    if (pieceData.usage === 'تجاری') markerColor = '#34d399';
-                    else if (pieceData.usage === 'فضای سبز') markerColor = '#60a5fa';
-                    else if (pieceData.usage === 'اداری') markerColor = '#a78bfa';
-                    
-                    const customIcon = L.divIcon({
-                        html: `<div style="background: ${markerColor}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>`,
-                        iconSize: [12, 12],
-                        className: 'custom-marker'
-                    });
-                    
-                    const marker = L.marker(pieceData.center, { icon: customIcon }).addTo(map);
-                    marker.bindTooltip(`<strong>قطعه ${pieceCode}</strong><br>${pieceData.usage} | ${pieceData.area}㎡`, { sticky: true });
-                    
-                    marker.on('click', () => {
-                        showPieceInfo(zoneId, pieceCode, pieceData);
-                        highlightPiece(zoneId, pieceCode, pieceData.center);
-                    });
-                    
-                    if (!pieceMarkers[zoneId]) pieceMarkers[zoneId] = {};
-                    pieceMarkers[zoneId][pieceCode] = { marker, data: pieceData };
+                // تنظیم نمای نقشه به محدوده داده‌ها
+                if (geojsonLayer.getBounds().isValid()) {
+                    map.fitBounds(geojsonLayer.getBounds());
+                } else {
+                    map.fitBounds(DEFAULT_BOUNDS);
                 }
+                
+                // پر کردن لیست قطعات
+                populatePieceList();
+                
+            } catch (error) {
+                console.error('خطا در بارگذاری GeoJSON:', error);
+                showError('خطا در بارگذاری داده‌های نقشه. لطفاً دوباره تلاش کنید.');
+            } finally {
+                showLoading(false);
             }
         }
 
-        // جستجو بر اساس ناحیه و قطعه
-        function searchLocation() {
-            const zoneId = document.getElementById('zoneSelect').value;
-            const pieceCode = document.getElementById('pieceSelect').value;
-            
-            if (!zoneId) {
-                alert('لطفاً ابتدا ناحیه را انتخاب کنید');
-                return;
+        // استخراج شناسه قطعه از feature
+        function getPieceId(feature) {
+            if (feature.properties) {
+                // اولویت: fid، سپس handle، سپس id
+                if (feature.properties.fid) return feature.properties.fid;
+                if (feature.properties.handle) return feature.properties.handle;
+                if (feature.properties.id) return feature.properties.id;
+                if (feature.id) return feature.id;
             }
-            
-            if (!pieceCode) {
-                alert('لطفاً قطعه را انتخاب کنید');
-                return;
+            return null;
+        }
+
+        // محاسبه طول تقریبی خط (برای نمایش در پنل اطلاعات)
+        function calculateLineLength(coordinates) {
+            let totalLength = 0;
+            for (let i = 0; i < coordinates.length - 1; i++) {
+                const p1 = coordinates[i];
+                const p2 = coordinates[i + 1];
+                // محاسبه تقریبی فاصله (درجه به متر - تقریبی)
+                const latDiff = (p2[1] - p1[1]) * 111000;
+                const lonDiff = (p2[0] - p1[0]) * 111000 * Math.cos(p1[1] * Math.PI / 180);
+                totalLength += Math.sqrt(latDiff * latDiff + lonDiff * lonDiff);
             }
-            
-            const zoneData = SADRA_DATA.zones[zoneId];
-            if (!zoneData) return;
-            
-            const pieceData = zoneData.pieces[pieceCode];
-            if (!pieceData) return;
-            
-            // حرکت نقشه به سمت قطعه
-            map.setView(pieceData.center, 18);
-            
-            // نمایش اطلاعات
-            showPieceInfo(zoneId, pieceCode, pieceData);
-            
-            // هایلایت قطعه
-            highlightPiece(zoneId, pieceCode, pieceData.center);
+            return Math.round(totalLength);
         }
 
         // نمایش اطلاعات قطعه در پنل
-        function showPieceInfo(zoneId, pieceCode, pieceData) {
-            const zoneData = SADRA_DATA.zones[zoneId];
+        function showPieceInfo(feature) {
+            const pieceId = getPieceId(feature);
             const panel = document.getElementById('infoPanel');
             
-            document.getElementById('infoZone').innerHTML = `${zoneData.name} (ناحیه ${zoneId})`;
-            document.getElementById('infoPiece').innerHTML = pieceCode;
-            document.getElementById('infoArea').innerHTML = pieceData.area.toLocaleString();
-            document.getElementById('infoUsage').innerHTML = pieceData.usage;
+            document.getElementById('infoPieceId').innerHTML = pieceId || 'نامشخص';
+            
+            // مشخص کردن نوع خط (مثلاً از روی layer یا ویژگی‌های دیگر)
+            const layerType = feature.properties?.layer || 'نامشخص';
+            document.getElementById('infoType').innerHTML = layerType;
+            
+            // محاسبه طول خط
+            let totalLength = 0;
+            if (feature.geometry.type === 'MultiLineString') {
+                for (const line of feature.geometry.coordinates) {
+                    totalLength += calculateLineLength(line);
+                }
+            } else if (feature.geometry.type === 'LineString') {
+                totalLength = calculateLineLength(feature.geometry.coordinates);
+            }
+            document.getElementById('infoLength').innerHTML = totalLength.toLocaleString();
             
             panel.style.display = 'block';
             
-            // بعد از 5 ثانیه مخفی کردن خودکار
+            // بعد از 5 ثانیه مخفی شدن خودکار
             setTimeout(() => {
-                if (panel.style.display === 'block') {
-                    // فقط در صورتی مخفی کن که موس روی پنل نباشد
-                    if (!panel.matches(':hover')) {
-                        panel.style.display = 'none';
-                    }
+                if (panel.style.display === 'block' && !panel.matches(':hover')) {
+                    panel.style.display = 'none';
                 }
             }, 5000);
         }
 
         // هایلایت کردن قطعه انتخاب شده
-        function highlightPiece(zoneId, pieceCode, center) {
+        function highlightPiece(layer) {
             // حذف هایلایت قبلی
             if (currentHighlight) {
-                map.removeLayer(currentHighlight);
-                currentHighlight = null;
+                geojsonLayer.resetStyle(currentHighlight);
             }
             
-            // ایجاد دایره هایلایت
-            currentHighlight = L.circle(center, {
+            // ست کردن هایلایت جدید
+            currentHighlight = layer;
+            layer.setStyle({
                 color: '#f87171',
-                weight: 3,
-                opacity: 1,
-                fillColor: '#f87171',
-                fillOpacity: 0.2,
-                radius: 25
-            }).addTo(map);
+                weight: 4,
+                opacity: 1
+            });
+            
+            // آوردن به جلو
+            if (layer.bringToFront) {
+                layer.bringToFront();
+            }
         }
 
-        // آپدیت لیست قطعات بر اساس ناحیه انتخاب شده
-        function updatePiecesList() {
-            const zoneId = document.getElementById('zoneSelect').value;
+        // پر کردن لیست قطعات در select box
+        function populatePieceList() {
             const pieceSelect = document.getElementById('pieceSelect');
-            
             pieceSelect.innerHTML = '<option value="">انتخاب قطعه</option>';
             
-            if (!zoneId || !SADRA_DATA.zones[zoneId]) return;
+            const pieces = [];
             
-            const pieces = SADRA_DATA.zones[zoneId].pieces;
-            for (const [pieceCode, pieceData] of Object.entries(pieces)) {
+            // جمع‌آوری تمام قطعات
+            allFeatures.forEach(feature => {
+                const pieceId = getPieceId(feature);
+                if (pieceId) {
+                    pieces.push({
+                        id: pieceId,
+                        feature: feature
+                    });
+                }
+            });
+            
+            // مرتب‌سازی بر اساس شناسه
+            pieces.sort((a, b) => {
+                const aNum = parseFloat(a.id);
+                const bNum = parseFloat(b.id);
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return aNum - bNum;
+                }
+                return String(a.id).localeCompare(String(b.id));
+            });
+            
+            // اضافه کردن به select
+            pieces.forEach(piece => {
                 const option = document.createElement('option');
-                option.value = pieceCode;
-                option.textContent = `${pieceCode} | ${pieceData.usage} | ${pieceData.area}㎡`;
+                option.value = piece.id;
+                option.textContent = `قطعه ${piece.id}`;
+                option.dataset.featureIndex = allFeatures.findIndex(f => getPieceId(f) === piece.id);
                 pieceSelect.appendChild(option);
+            });
+            
+            if (pieces.length === 0) {
+                pieceSelect.innerHTML = '<option value="">هیچ قطعه‌ای یافت نشد</option>';
+            }
+        }
+
+        // جستجو و نمایش قطعه انتخاب شده
+        function searchLocation() {
+            const pieceSelect = document.getElementById('pieceSelect');
+            const selectedValue = pieceSelect.value;
+            
+            if (!selectedValue) {
+                alert('لطفاً یک قطعه را انتخاب کنید');
+                return;
+            }
+            
+            // پیدا کردن feature مربوطه
+            const selectedFeature = allFeatures.find(f => getPieceId(f) == selectedValue);
+            
+            if (!selectedFeature) {
+                alert('قطعه مورد نظر یافت نشد');
+                return;
+            }
+            
+            // یافتن لایه مربوط به این feature
+            let targetLayer = null;
+            geojsonLayer.eachLayer(layer => {
+                if (layer.feature && getPieceId(layer.feature) == selectedValue) {
+                    targetLayer = layer;
+                }
+            });
+            
+            if (targetLayer) {
+                // زوم به محدوده قطعه
+                const bounds = targetLayer.getBounds();
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                } else {
+                    // اگر bounds نامعتبر بود، از مرکز خط استفاده کن
+                    const center = targetLayer.getBounds().getCenter();
+                    map.setView(center, 18);
+                }
+                
+                // نمایش اطلاعات و هایلایت
+                showPieceInfo(selectedFeature);
+                highlightPiece(targetLayer);
+            } else {
+                alert('خطا در یافتن لایه قطعه');
+            }
+        }
+
+        // نمایش پیام خطا
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'loading';
+            errorDiv.style.background = 'rgba(220, 38, 38, 0.9)';
+            errorDiv.innerHTML = `⚠️ ${message}`;
+            document.body.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 3000);
+        }
+
+        // نمایش/مخفی کردن لودینگ
+        function showLoading(show) {
+            let loadingDiv = document.getElementById('loadingDiv');
+            if (show) {
+                if (!loadingDiv) {
+                    loadingDiv = document.createElement('div');
+                    loadingDiv.id = 'loadingDiv';
+                    loadingDiv.className = 'loading';
+                    loadingDiv.innerHTML = '⏳ در حال بارگذاری داده‌های نقشه...';
+                    document.body.appendChild(loadingDiv);
+                }
+            } else {
+                if (loadingDiv) loadingDiv.remove();
             }
         }
 
         // بارگذاری نقشه پس از لود صفحه
         document.addEventListener('DOMContentLoaded', () => {
             initMap();
-            document.getElementById('zoneSelect').addEventListener('change', updatePiecesList);
         });
     </script>
 </body>
