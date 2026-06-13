@@ -79,36 +79,37 @@ def calculate_column_vertical_control(payload: ColumnControlRequest):
 
 @router.post("/engineering/design", response_model=TariffResponse)
 def calculate_engineering_design(payload: EngineeringRequest):
-    """محاسبه هزینه طراحی ساختمان"""
-    return calc.calculate_design(payload.area_m2, payload.floors)
+    """محاسبه هزینه طراحی ساختمان (4 رشته اصلی + شهرسازی در صورت نیاز)"""
+    return calc.calculate_design(payload.area_m2, payload.ceilings)
 
 
 @router.post("/engineering/supervision", response_model=TariffResponse)
 def calculate_engineering_supervision(payload: EngineeringRequest):
-    """محاسبه هزینه نظارت ساختمان"""
-    return calc.calculate_supervision(payload.area_m2, payload.floors)
+    """محاسبه هزینه نظارت ساختمان (با شرط جدید ناظر نقشه‌بردار)"""
+    return calc.calculate_supervision(payload.area_m2, payload.ceilings)
 
 
-@router.post("/engineering/surveying", response_model=TariffResponse)
-def calculate_engineering_surveying(payload: EngineeringRequest):
-    """محاسبه هزینه نقشه‌برداری ساختمان (در صورت نیاز)"""
-    return calc.calculate_engineering_surveying(payload.area_m2, payload.floors)
+@router.post("/engineering/urban_design", response_model=TariffResponse)
+def calculate_engineering_urban_design(payload: EngineeringRequest):
+    """محاسبه هزینه طراحی شهرسازی (فقط گروه‌های ج و د)"""
+    return calc.calculate_urban_design(payload.area_m2, payload.ceilings)
 
 
-@router.post("/engineering/all")
+@router.post("/engineering/all", response_model=TariffResponse)
 def calculate_all_engineering_fees(payload: EngineeringRequest):
-    """محاسبه تمام هزینه‌های مهندسی (طراحی + نظارت + نقشه‌برداری)"""
+    """محاسبه تمام هزینه‌های مهندسی (طراحی + نظارت + نقشه‌برداری + شهرسازی)"""
     return calc.calculate_all_engineering_fees(
         payload.area_m2, 
-        payload.floors, 
+        payload.ceilings,
         payload.include_surveying
     )
 
+
 @router.post("/engineering/delay_penalty", response_model=TariffResponse)
 def calculate_delay_penalty(payload: DelayPenaltyRequest):
-    """محاسبه هزینه مابه‌التفاوت تاخیر نظارت (بعد از 18 ماه)"""
+    """محاسبه هزینه تمدید نظارت (ماهانه بر اساس تاریخ پروانه)"""
     return calc.calculate_delay_penalty(
         payload.area_m2,
-        payload.floors,
+        payload.ceilings,
         payload.license_date
     )
