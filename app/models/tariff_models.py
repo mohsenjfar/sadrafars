@@ -24,7 +24,7 @@ class ColumnControlRequest(BaseModel):
 # مدل‌های جدید برای خدمات مهندسی ساختمان
 class EngineeringRequest(BaseModel):
     area_m2: float = Field(..., gt=0, description="مساحت زیربنا به مترمربع")
-    floors: int = Field(..., gt=0, description="تعداد طبقات")
+    ceilings: int = Field(..., gt=0, description="تعداد سقف")
     include_surveying: Optional[bool] = Field(False, description="آیا نقشه‌برداری محاسبه شود؟")
 
 
@@ -34,7 +34,8 @@ class TariffResponse(BaseModel):
     total_amount: float
     details: Optional[dict] = None  # برای نمایش جزئیات بیشتر
 
+
 class DelayPenaltyRequest(BaseModel):
     area_m2: float = Field(..., gt=0)
-    floors: int = Field(..., gt=0)
+    ceilings: int = Field(..., gt=0)
     license_date: str = Field(..., description="تاریخ صدور پروانه به شمسی (فرمت: YYYY/MM/DD)")
