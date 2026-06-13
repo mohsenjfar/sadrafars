@@ -1,26 +1,277 @@
+// static/data/phase2/faz2centroid.geojson
 {
-"type": "FeatureCollection",
-"name": "faz2centroid",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "Name": "72", "masahat": "229", "lon": 52.4283062676, "lat": 29.832599094399999, "layer": "زمین شهری" }, "geometry": { "type": "Point", "coordinates": [ 52.428301859985758, 29.834399278934072 ] } },
-{ "type": "Feature", "properties": { "Name": "85", "masahat": "222", "lon": 52.430497003399999, "lat": 29.835681823600002, "layer": "عشایر و تعاون" }, "geometry": { "type": "Point", "coordinates": [ 52.429791179751682, 29.8354114451908 ] } },
-{ "type": "Feature", "properties": { "Name": "822", "masahat": "347", "lon": 52.426408435699997, "lat": 29.843781199399999, "layer": "کشاورزی" }, "geometry": { "type": "Point", "coordinates": [ 52.424625790985395, 29.838621504766849 ] } },
-{ "type": "Feature", "properties": { "Name": "826", "masahat": "188", "lon": 52.452495954200003, "lat": 29.823343448500001, "layer": "28hec" }, "geometry": { "type": "Point", "coordinates": [ 52.448151896395785, 29.825740893473657 ] } },
-{ "type": "Feature", "properties": { "Name": "958", "masahat": "274", "lon": 52.43791, "lat": 29.83283, "layer": "جهاد" }, "geometry": { "type": "Point", "coordinates": [ 52.436824008869337, 29.839112357426821 ] } },
-{ "type": "Feature", "properties": { "Name": "37", "masahat": "388", "lon": 52.450573713600001, "lat": 29.833759156199999, "layer": "کاشی حافظ" }, "geometry": { "type": "Point", "coordinates": [ 52.45135976089967, 29.833210960336231 ] } },
-{ "type": "Feature", "properties": { "Name": "1255", "masahat": "287", "lon": 52.467963061500001, "lat": 29.827273841699999, "layer": "نیروانتظامی" }, "geometry": { "type": "Point", "coordinates": [ 52.468206330155169, 29.823618066172575 ] } },
-{ "type": "Feature", "properties": { "Name": "399", "masahat": "239", "lon": 52.464191239199998, "lat": 29.828200181300002, "layer": "115hec" }, "geometry": { "type": "Point", "coordinates": [ 52.465575278456072, 29.829928704578826 ] } },
-{ "type": "Feature", "properties": { "Name": "1.15", "masahat": "247", "lon": 52.456575048099999, "lat": 29.8310725947, "layer": "26hec" }, "geometry": { "type": "Point", "coordinates": [ 52.45514008367271, 29.82558859700945 ] } },
-{ "type": "Feature", "properties": { "Name": "774", "masahat": "200", "lon": 52.4688828245, "lat": 29.820916762700001, "layer": "زون" }, "geometry": { "type": "Point", "coordinates": [ 52.461327820500756, 29.819452453163866 ] } },
-{ "type": "Feature", "properties": { "Name": "19", "masahat": "190", "lon": 52.450413754899998, "lat": 29.822562913799999, "layer": "نادر محمدی" }, "geometry": { "type": "Point", "coordinates": [ 52.451513507034953, 29.823815632835355 ] } },
-{ "type": "Feature", "properties": { "Name": "473", "masahat": "189", "lon": 52.443836243900002, "lat": 29.828444466899999, "layer": "زمزم" }, "geometry": { "type": "Point", "coordinates": [ 52.443978899688958, 29.828657036867195 ] } },
-{ "type": "Feature", "properties": { "Name": "307", "masahat": "978", "lon": 52.451701980099998, "lat": 29.836664356499998, "layer": "مخابرات 2" }, "geometry": { "type": "Point", "coordinates": [ 52.451892631739675, 29.837980573582357 ] } },
-{ "type": "Feature", "properties": { "Name": "56", "masahat": "146", "lon": 52.427241514599999, "lat": 29.837556073999998, "layer": "هلال احمر" }, "geometry": { "type": "Point", "coordinates": [ 52.426898744538597, 29.837646652745793 ] } },
-{ "type": "Feature", "properties": { "Name": "264", "masahat": "279", "lon": 52.447654231000001, "lat": 29.836646672800001, "layer": "ارتش" }, "geometry": { "type": "Point", "coordinates": [ 52.448139054125605, 29.833571118488269 ] } },
-{ "type": "Feature", "properties": { "Name": "34", "masahat": "898", "lon": 52.4598073461, "lat": 29.8294366479, "layer": "علوم پزشکی" }, "geometry": { "type": "Point", "coordinates": [ 52.460052122471893, 29.826447892216848 ] } },
-{ "type": "Feature", "properties": { "Name": "589", "masahat": "247", "lon": 52.438012744700004, "lat": 29.837771010600001, "layer": "مخابرات 1" }, "geometry": { "type": "Point", "coordinates": [ 52.441288568989727, 29.838313272438523 ] } },
-{ "type": "Feature", "properties": { "Name": "261", "masahat": "482", "lon": 52.437856361800002, "lat": 29.829589006300001, "layer": "هنرستان" }, "geometry": { "type": "Point", "coordinates": [ 52.441267431574964, 29.831062965176887 ] } },
-{ "type": "Feature", "properties": { "Name": "170", "masahat": "258/50", "lon": 52.43453966, "lat": 29.82974781, "layer": "تربیت بدنی" }, "geometry": { "type": "Point", "coordinates": [ 52.431930051228399, 29.832032108669981 ] } }
-]
+  "type": "FeatureCollection",
+  "name": "faz2centroid",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "72",
+        "masahat": "229",
+        "lon": 52.4283062676,
+        "lat": 29.832599094399999,
+        "layer": "زمین شهری"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.428301859985758, 29.834399278934072]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "85",
+        "masahat": "222",
+        "lon": 52.430497003399999,
+        "lat": 29.835681823600002,
+        "layer": "عشایر و تعاون"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.429791179751682, 29.8354114451908]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "822",
+        "masahat": "347",
+        "lon": 52.426408435699997,
+        "lat": 29.843781199399999,
+        "layer": "کشاورزی"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.424625790985395, 29.838621504766849]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "826",
+        "masahat": "188",
+        "lon": 52.452495954200003,
+        "lat": 29.823343448500001,
+        "layer": "28hec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.448151896395785, 29.825740893473657]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "958",
+        "masahat": "274",
+        "lon": 52.43791,
+        "lat": 29.83283,
+        "layer": "جهاد"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.436824008869337, 29.839112357426821]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "37",
+        "masahat": "388",
+        "lon": 52.450573713600001,
+        "lat": 29.833759156199999,
+        "layer": "کاشی حافظ"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.45135976089967, 29.833210960336231]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "1255",
+        "masahat": "287",
+        "lon": 52.467963061500001,
+        "lat": 29.827273841699999,
+        "layer": "نیروانتظامی"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.468206330155169, 29.823618066172575]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "399",
+        "masahat": "239",
+        "lon": 52.464191239199998,
+        "lat": 29.828200181300002,
+        "layer": "115hec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.465575278456072, 29.829928704578826]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "1.15",
+        "masahat": "247",
+        "lon": 52.456575048099999,
+        "lat": 29.8310725947,
+        "layer": "26hec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.45514008367271, 29.82558859700945]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "774",
+        "masahat": "200",
+        "lon": 52.4688828245,
+        "lat": 29.820916762700001,
+        "layer": "زون"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.461327820500756, 29.819452453163866]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "19",
+        "masahat": "190",
+        "lon": 52.450413754899998,
+        "lat": 29.822562913799999,
+        "layer": "نادر محمدی"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.451513507034953, 29.823815632835355]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "473",
+        "masahat": "189",
+        "lon": 52.443836243900002,
+        "lat": 29.828444466899999,
+        "layer": "زمزم"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.443978899688958, 29.828657036867195]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "307",
+        "masahat": "978",
+        "lon": 52.451701980099998,
+        "lat": 29.836664356499998,
+        "layer": "مخابرات 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.451892631739675, 29.837980573582357]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "56",
+        "masahat": "146",
+        "lon": 52.427241514599999,
+        "lat": 29.837556073999998,
+        "layer": "هلال احمر"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.426898744538597, 29.837646652745793]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "264",
+        "masahat": "279",
+        "lon": 52.447654231000001,
+        "lat": 29.836646672800001,
+        "layer": "ارتش"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.448139054125605, 29.833571118488269]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "34",
+        "masahat": "898",
+        "lon": 52.4598073461,
+        "lat": 29.8294366479,
+        "layer": "علوم پزشکی"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.460052122471893, 29.826447892216848]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "589",
+        "masahat": "247",
+        "lon": 52.438012744700004,
+        "lat": 29.837771010600001,
+        "layer": "مخابرات 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.441288568989727, 29.838313272438523]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "261",
+        "masahat": "482",
+        "lon": 52.437856361800002,
+        "lat": 29.829589006300001,
+        "layer": "هنرستان"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.441267431574964, 29.831062965176887]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "170",
+        "masahat": "258/50",
+        "lon": 52.43453966,
+        "lat": 29.82974781,
+        "layer": "تربیت بدنی"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [52.431930051228399, 29.832032108669981]
+      }
+    }
+  ]
 }
