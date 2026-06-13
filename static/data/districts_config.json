@@ -1,0 +1,164 @@
+{
+  "districts": [
+    {
+      "id": "baharestan",
+      "name_fa": "بهارستان",
+      "name_en": "baharestan",
+      "path": "/static/data/bagheshahri/baharestan/",
+      "is_split": true,
+      "layers": ["baharestan_2", "baharestan_3", "baharestan_4"],
+      "layer_files": [
+        "/static/data/bagheshahri/baharestan/baharestan_2.geojson",
+        "/static/data/bagheshahri/baharestan/baharestan_3.geojson",
+        "/static/data/bagheshahri/baharestan/baharestan_4.geojson"
+      ],
+      "piece_field": "Name",
+      "center": [52.448, 29.814],
+      "bounds": [[52.444, 29.809], [52.458, 29.820]]
+    },
+    {
+      "id": "dadgahen",
+      "name_fa": "دادگاه‌",
+      "name_en": "dadgahen",
+      "path": "/static/data/bagheshahri/dadgahen/",
+      "is_split": false,
+      "layer_files": ["/static/data/bagheshahri/dadgahen/dadgahen.geojson"],
+      "piece_field": "Name",
+      "center": [52.448, 29.795],
+      "bounds": [[52.444, 29.790], [52.453, 29.800]]
+    },
+    {
+      "id": "dadgostari1",
+      "name_fa": "دادگستری ۱",
+      "name_en": "dadgostari1",
+      "path": "/static/data/bagheshahri/dadgostari1/",
+      "is_split": true,
+      "layers": ["dadgostari1_2", "dadgostari1_3", "dadgostari1_4"],
+      "layer_files": [
+        "/static/data/bagheshahri/dadgostari1/dadgostari1_2.geojson",
+        "/static/data/bagheshahri/dadgostari1/dadgostari1_3.geojson",
+        "/static/data/bagheshahri/dadgostari1/dadgostari1_4.geojson"
+      ],
+      "piece_field": "Name",
+      "center": [52.447, 29.797],
+      "bounds": [[52.443, 29.792], [52.452, 29.803]]
+    },
+    {
+      "id": "dadgostari2",
+      "name_fa": "دادگستری ۲",
+      "name_en": "dadgostari2",
+      "path": "/static/data/bagheshahri/dadgostari2/",
+      "is_split": true,
+      "layers": ["dadgostari2_2", "dadgostari2_3", "dadgostari2_4"],
+      "layer_files": [
+        "/static/data/bagheshahri/dadgostari2/dadgostari2_2.geojson",
+        "/static/data/bagheshahri/dadgostari2/dadgostari2_3.geojson",
+        "/static/data/bagheshahri/dadgostari2/dadgostari2_4.geojson"
+      ],
+      "piece_field": "Name",
+      "center": [52.446, 29.798],
+      "bounds": [[52.442, 29.792], [52.451, 29.805]]
+    },
+    {
+      "id": "dadgostari3",
+      "name_fa": "دادگستری ۳",
+      "name_en": "dadgostari3",
+      "path": "/static/data/bagheshahri/dadgostari3/",
+      "is_split": true,
+      "layers": ["dadgostari3_2", "dadgostari3_3", "dadgostari3_4"],
+      "layer_files": [
+        "/static/data/bagheshahri/dadgostari3/dadgostari3_2.geojson",
+        "/static/data/bagheshahri/dadgostari3/dadgostari3_3.geojson",
+        "/static/data/bagheshahri/dadgostari3/dadgostari3_4.geojson"
+      ],
+      "piece_field": "Name",
+      "center": [52.446, 29.796],
+      "bounds": [[52.442, 29.790], [52.450, 29.802]]
+    },
+    {
+      "id": "ghasresabz",
+      "name_fa": "قصرسبز",
+      "name_en": "ghasresabz",
+      "path": "/static/data/bagheshahri/ghasresabz/",
+      "is_split": true,
+      "layers": ["ghasresabz_2", "ghasresabz_3", "ghasresabz_4"],
+      "layer_files": [
+        "/static/data/bagheshahri/ghasresabz/ghasresabz_2.geojson",
+        "/static/data/bagheshahri/ghasresabz/ghasresabz_3.geojson",
+        "/static/data/bagheshahri/ghasresabz/ghasresabz_4.geojson"
+      ],
+      "piece_field": "Name",
+      "center": [52.450, 29.798],
+      "bounds": [[52.445, 29.792], [52.455, 29.805]]
+    },
+    {
+      "id": "golbahar",
+      "name_fa": "گلبهار",
+      "name_en": "golbahar",
+      "path": "/static/data/bagheshahri/golbahar/",
+      "is_split": false,
+      "layer_files": ["/static/data/bagheshahri/golbahar/golbahar_2.geojson"],
+      "piece_field": "Name",
+      "center": [29.809001528704467, 52.487222087806984],
+      "bounds": [[52.475, 29.794], [52.486, 29.805]]
+    },
+    {
+      "id": "negarestan",
+      "name_fa": "نگارستان",
+      "name_en": "negarestan",
+      "path": "/static/data/bagheshahri/negarestan/",
+      "is_split": true,
+      "layers": ["negarestan_2", "negarestan_3", "negarestan_4"],
+      "layer_files": [
+        "/static/data/bagheshahri/negarestan/negarestan_2.geojson",
+        "/static/data/bagheshahri/negarestan/negarestan_3.geojson",
+        "/static/data/bagheshahri/negarestan/negarestan_4.geojson"
+      ],
+      "piece_field": "Name",
+      "center": [52.452, 29.795],
+      "bounds": [[52.447, 29.789], [52.458, 29.802]]
+    },
+    {
+      "id": "tangjalab",
+      "name_fa": "تنگ جلب",
+      "name_en": "tangjalab",
+      "path": "/static/data/bagheshahri/tangjalab/",
+      "is_split": true,
+      "layers": ["tangjalab_2", "tangjalab_3", "tangjalab_4", "tangjalab_5"],
+      "layer_files": [
+        "/static/data/bagheshahri/tangjalab/tangjalab_2.geojson",
+        "/static/data/bagheshahri/tangjalab/tangjalab_3.geojson",
+        "/static/data/bagheshahri/tangjalab/tangjalab_4.geojson",
+        "/static/data/bagheshahri/tangjalab/tangjalab_5.geojson"
+      ],
+      "piece_field": "Name",
+      "center": [52.460, 29.810],
+      "bounds": [[52.453, 29.804], [52.467, 29.817]]
+    },
+    {
+      "id": "phase1_14hectari",
+      "name_fa": "فاز ۱ - ۱۴ هکتاری",
+      "name_en": "phase1-14hectari",
+      "path": "/static/data/phase1/14hectari/",
+      "is_split": false,
+      "layer_files": ["/static/data/phase1/14hectari/14hectari.geojson"],
+      "piece_field": "Name",
+      "center": [52.530, 29.787],
+      "bounds": [[52.523, 29.784], [52.533, 29.792]]
+    },
+    {
+      "id": "phase2_26hectari",
+      "name_fa": "فاز ۲ - ۲۶ هکتاری",
+      "name_en": "phase2-26hectari",
+      "path": "/static/data/phase2/26hectari/",
+      "is_split": false,
+      "layer_files": ["/static/data/phase2/26hectari/26hectari.geojson"],
+      "piece_field": "Name",
+      "center": [52.456, 29.826],
+      "bounds": [[52.452, 29.820], [52.460, 29.832]]
+    }
+  ],
+  "city_center": [29.809001528704467, 52.487222087806984],
+  "default_zoom": 13,
+  "piece_zoom": 16
+}

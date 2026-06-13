@@ -1,3 +1,5 @@
+<!-- file_path: /templates/map_viewer.html -->
+
 {% extends "layouts/base.html" %}
 
 {% block title %}نقشه قطعات - صدرافارس{% endblock %}
@@ -8,14 +10,19 @@
 
 {% block content %}
 <div class="map-header">
-    <h1>🗺️ نقشه قطعات شهر صدرا</h1>
-    <div style="position: relative;">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="جستجوی شماره قطعه..." autocomplete="off">
-            <button onclick="searchPiece()">🔍 جستجو</button>
+    <div class="search-wrapper">
+        <select id="districtSelect" class="district-select">
+            <option value="">انتخاب ناحیه</option>
+        </select>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="شماره قطعه..." autocomplete="off">
+            <div id="suggestions" class="suggestion-list" style="display: none;"></div>
         </div>
-        <div id="suggestions" class="suggestion-list" style="display: none;"></div>
+        
+        <button onclick="searchPiece()" class="search-btn">🔍 جستجو</button>
     </div>
+    
     <a href="/" class="back-btn">← بازگشت</a>
 </div>
 
@@ -31,7 +38,7 @@
     
     <div class="legend">
         <div><span style="background: #3b82f6;"></span> خطوط قطعات</div>
-        <div><span style="background: #ef4444;"></span> محل قطعه</div>
+        <div><span style="background: #ef4444;"></span> قطعه انتخاب شده</div>
         <div><span style="background: #10b981;"></span> نقاط دارای شماره</div>
     </div>
 </div>
