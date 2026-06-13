@@ -5,7 +5,7 @@
 {% block title %}نقشه قطعات - صدرافارس{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/map_viewer.css">
+<link rel="stylesheet" href="/static/css/map_viewer.css?v={{ timestamp }}">
 {% endblock %}
 
 {% block content %}
@@ -45,5 +45,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/map_viewer.js"></script>
+<script src="/static/js/map_viewer.js?v={{ timestamp }}"></script>
 {% endblock %}
