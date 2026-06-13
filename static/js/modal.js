@@ -17,13 +17,10 @@ function openTool(tool) {
     initToolLogic(tool)
 }
 
-function closeModal() {
-    modal.style.display = "none"
-    modalBody.innerHTML = ""
-}
+function closeModal(){
 
-window.onclick = function(e) {
-    if(e.target === modal) {
-        closeModal()
-    }
+modal.style.display = "none"
+
+modalBody.innerHTML = ""
+
 }

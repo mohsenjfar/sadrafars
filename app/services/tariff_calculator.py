@@ -227,235 +227,576 @@ class TariffCalculator:
 
     # ============================================================
     # بخش ۲: تعرفه‌های خدمات مهندسی ساختمان (بدون مالیات)
+    # با قوانین جدید:
+    # 1. ارتقای گروه بر اساس متراژ
+    # 2. شرط نقشه‌برداری: سقف > 5 OR متراژ > 1200
+    # 3. شهرسازی فقط برای گروه‌های C و D
+    # 4. تمدید نظارت ماهانه
     # ============================================================
 
-    def _get_group(self, floors: int) -> tuple:
+    def _get_base_group(self, ceilings: int) -> tuple:
         """
-        تعیین گروه ساختمانی بر اساس تعداد طبقات (سقف)
-        بازگشت: (نام گروه، کلید گروه برای جستجو در جدول)
+        تعیین گروه پایه بر اساس تعداد سقف
+        بازگشت: (نام گروه, کلید گروه)
         """
-        if floors <= 2:
-            return ("الف", "A")
-        elif floors <= 5:
-            return ("ب", "B")
-        elif floors <= 7:
-            return ("ج (۶-۷)", "C1")
-        elif floors <= 10:
-            return ("ج (۸-۱۰)", "C2")
-        elif floors <= 12:
-            return ("د (۱۱-۱۲)", "D1")
-        elif floors <= 15:
-            return ("د (۱۳-۱۵)", "D2")
+        if ceilings <= 2:
+            return ("الف (۱-۲ سقف)", "A")
+        elif ceilings <= 5:
+            return ("ب (۳-۵ سقف)", "B")
+        elif ceilings <= 7:
+            return ("ج (۶-۷ سقف)", "C1")
+        elif ceilings <= 10:
+            return ("ج (۸-۱۰ سقف)", "C2")
+        elif ceilings <= 12:
+            return ("د (۱۱-۱۲ سقف)", "D1")
+        elif ceilings <= 15:
+            return ("د (۱۳-۱۵ سقف)", "D2")
         else:
-            return ("د (۱۶+)", "D3")
+            return ("د (۱۶+ سقف)", "D3")
 
-    def _get_supervision_rate(self, group_key: str) -> int:
+    def _apply_area_upgrade(self, group_key: str, area_m2: float) -> tuple:
         """
-        نرخ نظارت ۴ رشته اصلی به ازای هر مترمربع (ریال)
-        بر اساس ۷ گروه
+        ارتقای گروه بر اساس متراژ
+        قوانین:
+        - الف (A): اگر متراژ > 600 → ارتقا به ب (B)
+        - ب (B): اگر متراژ > 2000 → ارتقا به ج (C1)
+        - ج (C1): اگر متراژ > 5000 → ارتقا به ج (C2)
+        - ج (C2): اگر متراژ > 5000 → ارتقا به د (D1)
+        - گروه‌های د: ارتقا ندارند
+        """
+        upgraded = False
+        original_group = group_key
+        
+        if group_key == "A" and area_m2 > 600:
+            group_key = "B"
+            upgraded = True
+        elif group_key == "B" and area_m2 > 2000:
+            group_key = "C1"
+            upgraded = True
+        elif group_key == "C1" and area_m2 > 5000:
+            group_key = "C2"
+            upgraded = True
+        elif group_key == "C2" and area_m2 > 5000:
+            group_key = "D1"
+            upgraded = True
+        
+        return group_key, upgraded, original_group
+
+    def _get_group_name(self, group_key: str) -> str:
+        """دریافت نام گروه از کلید"""
+        names = {
+            "A": "الف (۱-۲ سقف)",
+            "B": "ب (۳-۵ سقف)",
+            "C1": "ج (۶-۷ سقف)",
+            "C2": "ج (۸-۱۰ سقف)",
+            "D1": "د (۱۱-۱۲ سقف)",
+            "D2": "د (۱۳-۱۵ سقف)",
+            "D3": "د (۱۶+ سقف)",
+        }
+        return names.get(group_key, group_key)
+
+    # ============================================================
+    # نرخ‌های تفکیک شده هر رشته (از جدول اکسل)
+    # ============================================================
+
+    def _get_design_breakdown(self, group_key: str) -> dict:
+        """
+        نرخ طراحی تفکیک شده هر رشته (ریال به ازای هر مترمربع)
+        از جدول اکسل: معماری، عمران، تاسیسات مکانیکی، تاسیسات برقی، هماهنگ کننده
         """
         rates = {
-            "A": 3_534_000,   # الف (۱-۲ سقف)
-            "B": 4_498_000,   # ب (۳-۵ سقف)
-            "C1": 5_077_000,  # ج (۶-۷ سقف)
-            "C2": 5_783_000,  # ج (۸-۱۰ سقف)
-            "D1": 7_069_000,  # د (۱۱-۱۲ سقف)
-            "D2": 8_354_000,  # د (۱۳-۱۵ سقف)
-            "D3": 8_354_000,  # د (۱۶+ سقف)
+            "A": {
+                "معماری": 916_000,
+                "عمران": 1_055_000,
+                "تاسیسات مکانیکی": 416_000,
+                "تاسیسات برقی": 389_000,
+                "هماهنگ کننده": 116_000,
+            },
+            "B": {
+                "معماری": 1_119_000,
+                "عمران": 1_294_000,
+                "تاسیسات مکانیکی": 559_000,
+                "تاسیسات برقی": 524_000,
+                "هماهنگ کننده": 184_000,
+            },
+            "C1": {
+                "معماری": 1_210_000,
+                "عمران": 1_406_000,
+                "تاسیسات مکانیکی": 664_000,
+                "تاسیسات برقی": 625_000,
+                "هماهنگ کننده": 249_000,
+            },
+            "C2": {
+                "معماری": 1_379_000,
+                "عمران": 1_601_000,
+                "تاسیسات مکانیکی": 756_000,
+                "تاسیسات برقی": 712_000,
+                "هماهنگ کننده": 284_000,
+            },
+            "D1": {
+                "معماری": 1_613_000,
+                "عمران": 1_882_000,
+                "تاسیسات مکانیکی": 968_000,
+                "تاسیسات برقی": 914_000,
+                "هماهنگ کننده": 405_000,
+            },
+            "D2": {
+                "معماری": 1_907_000,
+                "عمران": 2_225_000,
+                "تاسیسات مکانیکی": 1_144_000,
+                "تاسیسات برقی": 1_081_000,
+                "هماهنگ کننده": 478_000,
+            },
+            "D3": {
+                "معماری": 1_907_000,
+                "عمران": 2_225_000,
+                "تاسیسات مکانیکی": 1_144_000,
+                "تاسیسات برقی": 1_081_000,
+                "هماهنگ کننده": 478_000,
+            },
+        }
+        return rates.get(group_key, rates["A"])
+
+    def _get_supervision_breakdown(self, group_key: str) -> dict:
+        """
+        نرخ نظارت تفکیک شده هر رشته (ریال به ازای هر مترمربع)
+        از جدول اکسل: معماری، عمران، تاسیسات مکانیکی، تاسیسات برقی، هماهنگ کننده
+        """
+        rates = {
+            "A": {
+                "معماری": 1_120_000,
+                "عمران": 1_289_000,
+                "تاسیسات مکانیکی": 509_000,
+                "تاسیسات برقی": 475_000,
+                "هماهنگ کننده": 141_000,
+            },
+            "B": {
+                "معماری": 1_367_000,
+                "عمران": 1_581_000,
+                "تاسیسات مکانیکی": 684_000,
+                "تاسیسات برقی": 641_000,
+                "هماهنگ کننده": 225_000,
+            },
+            "C1": {
+                "معماری": 1_479_000,
+                "عمران": 1_718_000,
+                "تاسیسات مکانیکی": 811_000,
+                "تاسیسات برقی": 764_000,
+                "هماهنگ کننده": 305_000,
+            },
+            "C2": {
+                "معماری": 1_685_000,
+                "عمران": 1_957_000,
+                "تاسیسات مکانیکی": 924_000,
+                "تاسیسات برقی": 870_000,
+                "هماهنگ کننده": 347_000,
+            },
+            "D1": {
+                "معماری": 1_972_000,
+                "عمران": 2_301_000,
+                "تاسیسات مکانیکی": 1_183_000,
+                "تاسیسات برقی": 1_118_000,
+                "هماهنگ کننده": 495_000,
+            },
+            "D2": {
+                "معماری": 2_331_000,
+                "عمران": 2_719_000,
+                "تاسیسات مکانیکی": 1_398_000,
+                "تاسیسات برقی": 1_321_000,
+                "هماهنگ کننده": 585_000,
+            },
+            "D3": {
+                "معماری": 2_331_000,
+                "عمران": 2_719_000,
+                "تاسیسات مکانیکی": 1_398_000,
+                "تاسیسات برقی": 1_321_000,
+                "هماهنگ کننده": 585_000,
+            },
+        }
+        return rates.get(group_key, rates["A"])
+
+    def _get_design_rate(self, group_key: str) -> int:
+        """نرخ طراحی مجموع ۴ رشته اصلی به ازای هر مترمربع (ریال)"""
+        rates = {
+            "A": 2_892_000,
+            "B": 3_680_000,
+            "C1": 4_154_000,
+            "C2": 4_732_000,
+            "D1": 5_783_000,
+            "D2": 6_835_000,
+            "D3": 6_835_000,
+        }
+        return rates.get(group_key, 0)
+
+    def _get_supervision_rate(self, group_key: str) -> int:
+        """نرخ نظارت مجموع ۴ رشته اصلی به ازای هر مترمربع (ریال)"""
+        rates = {
+            "A": 3_534_000,
+            "B": 4_498_000,
+            "C1": 5_077_000,
+            "C2": 5_783_000,
+            "D1": 7_069_000,
+            "D2": 8_354_000,
+            "D3": 8_354_000,
         }
         return rates.get(group_key, 0)
 
     def _get_surveying_rate(self, group_key: str) -> int:
-        """
-        نرخ نقشه‌برداری ساختمان به ازای هر مترمربع (ریال)
-        گروه الف: نیازی ندارد (۰)
-        """
+        """نرخ نقشه‌برداری ساختمان به ازای هر مترمربع (ریال)"""
         rates = {
-            "A": 0,            # الف - نیاز ندارد
-            "B": 587_000,      # ب (۳-۵ سقف)
-            "C1": 628_000,     # ج (۶-۷ سقف)
-            "C2": 642_000,     # ج (۸-۱۰ سقف)
-            "D1": 681_000,     # د (۱۱-۱۲ سقف)
-            "D2": 696_000,     # د (۱۳-۱۵ سقف)
-            "D3": 773_000,     # د (۱۶+ سقف)
+            "A": 0,
+            "B": 587_000,
+            "C1": 628_000,
+            "C2": 642_000,
+            "D1": 681_000,
+            "D2": 696_000,
+            "D3": 773_000,
         }
         return rates.get(group_key, 0)
 
-    def _get_design_rate(self, group_key: str) -> int:
+    def _needs_surveyor(self, ceilings: int, area_m2: float) -> bool:
         """
-        نرخ طراحی ۴ رشته اصلی به ازای هر مترمربع (ریال)
-        بر اساس ۷ گروه - از جدول طراحی در اکسل
+        شرط نیاز به ناظر نقشه‌بردار (طبق شرط کاربر):
+        سقف > 5 OR متراژ > 1200
+        """
+        return ceilings > 5 or area_m2 > 1200
+
+    def _get_urban_design_rate(self, group_key: str) -> int:
+        """
+        نرخ طراحی شهرسازی به ازای هر مترمربع (ریال)
+        از جدول اکسل: "طرح های انطباق شهری ساختمان ها (طراح شهرسازی)"
+        فقط برای گروه‌های C و D
         """
         rates = {
-            "A": 2_892_000,   # الف (۱-۲ سقف)
-            "B": 3_680_000,   # ب (۳-۵ سقف)
-            "C1": 4_154_000,  # ج (۶-۷ سقف)
-            "C2": 4_732_000,  # ج (۸-۱۰ سقف)
-            "D1": 5_783_000,  # د (۱۱-۱۲ سقف)
-            "D2": 6_835_000,  # د (۱۳-۱۵ سقف)
-            "D3": 6_835_000,  # د (۱۶+ سقف)
+            "C1": 168_000,
+            "C2": 194_000,
+            "D1": 291_000,
+            "D2": 311_000,
+            "D3": 325_000,
         }
         return rates.get(group_key, 0)
 
-    def calculate_design(self, area_m2: float, floors: int) -> TariffResponse:
-        """
-        محاسبه هزینه طراحی ساختمان
-        هزینه = متراژ × نرخ هر مترمربع
-        بدون مالیات
-        """
-        group_name, group_key = self._get_group(floors)
-        rate = self._get_design_rate(group_key)
-        base_amount = int(area_m2 * rate)
+    def _needs_urban_design(self, group_key: str) -> bool:
+        """آیا نیاز به طراح شهرساز دارد؟ (فقط گروه‌های C و D)"""
+        return group_key.startswith("C") or group_key.startswith("D")
 
-        return TariffResponse(
-            base_amount=base_amount,
-            vat=0,
-            total_amount=base_amount,
-            details={
-                "گروه ساختمانی": group_name,
-                "تعداد طبقات": floors,
-                "متراژ": area_m2,
-                "نرخ هر متر مربع": rate,
-                "نوع خدمت": "طراحی"
-            }
-        )
-
-    def calculate_supervision(self, area_m2: float, floors: int) -> TariffResponse:
+    def _get_final_group(self, ceilings: int, area_m2: float) -> tuple:
         """
-        محاسبه هزینه نظارت ساختمان (شامل نقشه‌برداری در صورت نیاز)
-        هزینه = متراژ × نرخ نظارت هر مترمربع + (متراژ × نرخ نقشه‌برداری در صورت نیاز)
-        بدون مالیات
+        دریافت گروه نهایی پس از اعمال ارتقای متراژ
+        بازگشت: (group_key, group_name, was_upgraded, original_group_name)
         """
-        group_name, group_key = self._get_group(floors)
-        supervision_rate = self._get_supervision_rate(group_key)
-        surveying_rate = self._get_surveying_rate(group_key)
+        base_group_key = self._get_base_group(ceilings)[1]
+        final_group_key, upgraded, original_key = self._apply_area_upgrade(base_group_key, area_m2)
         
-        supervision_cost = int(area_m2 * supervision_rate)
-        surveying_cost = int(area_m2 * surveying_rate) if surveying_rate > 0 else 0
-        base_amount = supervision_cost + surveying_cost
+        group_name = self._get_group_name(final_group_key)
+        original_name = self._get_group_name(original_key)
+        
+        return final_group_key, group_name, upgraded, original_name
 
+    def calculate_design(self, area_m2: float, ceilings: int) -> TariffResponse:
+        """
+        محاسبه هزینه طراحی ساختمان با تفکیک هر رشته
+        شامل: طراحی 4 رشته اصلی (تفکیک شده) + طراحی شهرسازی (در صورت نیاز)
+        بدون مالیات
+        """
+        # تعیین گروه نهایی
+        group_key, group_name, upgraded, original_name = self._get_final_group(ceilings, area_m2)
+        
+        # دریافت نرخ‌های تفکیک شده طراحی
+        design_rates = self._get_design_breakdown(group_key)
+        
+        # محاسبه هزینه هر رشته
+        design_breakdown = {}
+        design_total = 0
+        
+        for discipline, rate in design_rates.items():
+            cost = int(area_m2 * rate)
+            design_breakdown[discipline] = {
+                "نرخ هر متر مربع": rate,
+                "مبلغ": cost
+            }
+            design_total += cost
+        
+        # محاسبه طراحی شهرسازی (در صورت نیاز)
+        urban_cost = 0
+        urban_details = {}
+        
+        if self._needs_urban_design(group_key):
+            urban_rate = self._get_urban_design_rate(group_key)
+            urban_cost = int(area_m2 * urban_rate)
+            urban_details = {
+                "نرخ هر متر مربع": urban_rate,
+                "مبلغ": urban_cost,
+                "وضعیت": "نیاز دارد (گروه‌های ج و د)"
+            }
+        else:
+            urban_details = {
+                "مبلغ": 0,
+                "وضعیت": "نیازی به طراح شهرساز نیست (گروه الف یا ب)"
+            }
+        
+        total_cost = design_total + urban_cost
+        
+        # ساخت جزئیات کامل
         details = {
             "گروه ساختمانی": group_name,
-            "تعداد طبقات": floors,
+            "تعداد سقف": ceilings,
             "متراژ": area_m2,
-            "نرخ نظارت هر متر مربع": supervision_rate,
-            "هزینه نظارت": supervision_cost,
+            "طراحی - تفکیک رشته‌ها": design_breakdown,
+            "جمع طراحی ۴ رشته": design_total,
+            "طراحی شهرسازی": urban_details,
+            "جمع کل طراحی": total_cost
         }
         
-        if surveying_rate > 0:
-            details["نرخ نقشه‌برداری هر متر مربع"] = surveying_rate
-            details["هزینه نقشه‌برداری"] = surveying_cost
-            details["وضعیت نقشه‌برداری"] = "نیاز دارد"
-        else:
-            details["وضعیت نقشه‌برداری"] = "نیاز ندارد (گروه الف)"
-
+        if upgraded:
+            details["توضیح ارتقا"] = f"به دلیل متراژ {area_m2} مترمربع، گروه از {original_name} به {group_name} ارتقا یافت"
+        
         return TariffResponse(
-            base_amount=base_amount,
+            base_amount=total_cost,
             vat=0,
-            total_amount=base_amount,
+            total_amount=total_cost,
             details=details
         )
 
-    def calculate_engineering_surveying(self, area_m2: float, floors: int) -> TariffResponse:
+    def calculate_supervision(self, area_m2: float, ceilings: int) -> TariffResponse:
         """
-        محاسبه هزینه نقشه‌برداری ساختمان (به صورت مستقل)
-        هزینه = متراژ × نرخ نقشه‌برداری (در صورت نیاز)
+        محاسبه هزینه نظارت ساختمان با تفکیک هر رشته
+        شامل: نظارت 4 رشته اصلی (تفکیک شده) + نقشه‌برداری (در صورت نیاز)
         بدون مالیات
         """
-        group_name, group_key = self._get_group(floors)
-        surveying_rate = self._get_surveying_rate(group_key)
+        # تعیین گروه نهایی
+        group_key, group_name, upgraded, original_name = self._get_final_group(ceilings, area_m2)
         
-        if surveying_rate == 0:
+        # دریافت نرخ‌های تفکیک شده نظارت
+        supervision_rates = self._get_supervision_breakdown(group_key)
+        
+        # محاسبه هزینه هر رشته
+        supervision_breakdown = {}
+        supervision_total = 0
+        
+        for discipline, rate in supervision_rates.items():
+            cost = int(area_m2 * rate)
+            supervision_breakdown[discipline] = {
+                "نرخ هر متر مربع": rate,
+                "مبلغ": cost
+            }
+            supervision_total += cost
+        
+        # محاسبه نقشه‌برداری با شرط جدید (سقف > 5 OR متراژ > 1200)
+        surveying_cost = 0
+        surveying_details = {}
+        
+        if self._needs_surveyor(ceilings, area_m2):
+            surveying_rate = self._get_surveying_rate(group_key)
+            surveying_cost = int(area_m2 * surveying_rate)
+            surveying_details = {
+                "نرخ هر متر مربع": surveying_rate,
+                "مبلغ": surveying_cost,
+                "وضعیت": f"نیاز دارد (سقف={ceilings}, متراژ={area_m2})"
+            }
+        else:
+            surveying_details = {
+                "مبلغ": 0,
+                "وضعیت": f"نیازی به ناظر نقشه‌بردار نیست (سقف≤5 و متراژ≤1200)"
+            }
+        
+        total_cost = supervision_total + surveying_cost
+        
+        # ساخت جزئیات کامل
+        details = {
+            "گروه ساختمانی": group_name,
+            "تعداد سقف": ceilings,
+            "متراژ": area_m2,
+            "نظارت - تفکیک رشته‌ها": supervision_breakdown,
+            "جمع نظارت ۴ رشته": supervision_total,
+            "نقشه‌برداری ساختمان": surveying_details,
+            "جمع کل نظارت": total_cost
+        }
+        
+        if upgraded:
+            details["توضیح ارتقا"] = f"به دلیل متراژ {area_m2} مترمربع، گروه از {original_name} به {group_name} ارتقا یافت"
+        
+        return TariffResponse(
+            base_amount=total_cost,
+            vat=0,
+            total_amount=total_cost,
+            details=details
+        )
+
+    def calculate_urban_design(self, area_m2: float, ceilings: int) -> TariffResponse:
+        """
+        محاسبه مستقل هزینه طراحی شهرسازی
+        فقط برای گروه‌های ج و د
+        (برای استفاده در صورت نیاز)
+        """
+        # تعیین گروه نهایی
+        group_key, group_name, upgraded, original_name = self._get_final_group(ceilings, area_m2)
+        
+        details = {
+            "گروه ساختمانی": group_name,
+            "تعداد سقف": ceilings,
+            "متراژ": area_m2,
+        }
+        
+        if upgraded:
+            details["توضیح ارتقا"] = f"به دلیل متراژ {area_m2} مترمربع، گروه از {original_name} به {group_name} ارتقا یافت"
+        
+        if self._needs_urban_design(group_key):
+            urban_rate = self._get_urban_design_rate(group_key)
+            urban_cost = int(area_m2 * urban_rate)
+            details["وضعیت"] = "نیاز به طراح شهرساز دارد"
+            details["نرخ هر متر مربع"] = urban_rate
+            details["هزینه طراحی شهرسازی"] = urban_cost
+            
+            return TariffResponse(
+                base_amount=urban_cost,
+                vat=0,
+                total_amount=urban_cost,
+                details=details
+            )
+        else:
+            details["وضعیت"] = "نیازی به طراح شهرساز نیست (گروه الف یا ب)"
+            details["هزینه طراحی شهرسازی"] = 0
+            
             return TariffResponse(
                 base_amount=0,
                 vat=0,
                 total_amount=0,
-                details={
-                    "گروه ساختمانی": group_name,
-                    "تعداد طبقات": floors,
-                    "وضعیت": "نیازی به نقشه‌برداری مستقل نیست"
-                }
+                details=details
             )
-        
-        base_amount = int(area_m2 * surveying_rate)
-        
-        return TariffResponse(
-            base_amount=base_amount,
-            vat=0,
-            total_amount=base_amount,
-            details={
-                "گروه ساختمانی": group_name,
-                "تعداد طبقات": floors,
-                "متراژ": area_m2,
-                "نرخ هر متر مربع": surveying_rate,
-                "وضعیت": "نیاز به نقشه‌برداری دارد"
-            }
-        )
 
-    def calculate_all_engineering_fees(self, area_m2: float, floors: int, include_surveying: bool = False) -> TariffResponse:
+    def calculate_all_engineering_fees(self, area_m2: float, ceilings: int, include_surveying: bool = False) -> TariffResponse:
         """
-        محاسبه تمام هزینه‌های مهندسی (طراحی + نظارت + نقشه‌برداری در صورت نیاز)
+        محاسبه تمام هزینه‌های مهندسی با تفکیک کامل
+        شامل: طراحی (تفکیک 5 رشته + شهرسازی) + نظارت (تفکیک 5 رشته + نقشه‌برداری)
         بدون مالیات
-        بازگشت به صورت TariffResponse برای نمایش یکپارچه در فرانت‌اند
         """
-        design = self.calculate_design(area_m2, floors)
-        supervision = self.calculate_supervision(area_m2, floors)
+        # تعیین گروه نهایی
+        group_key, group_name, upgraded, original_name = self._get_final_group(ceilings, area_m2)
         
-        total_amount = design.total_amount + supervision.total_amount
+        # ============================================================
+        # بخش طراحی
+        # ============================================================
+        design_rates = self._get_design_breakdown(group_key)
+        design_breakdown = {}
+        design_total = 0
         
-        # ساخت جزئیات کامل برای نمایش
+        for discipline, rate in design_rates.items():
+            cost = int(area_m2 * rate)
+            design_breakdown[discipline] = {
+                "نرخ هر متر مربع": rate,
+                "مبلغ": cost
+            }
+            design_total += cost
+        
+        # طراحی شهرسازی
+        urban_cost = 0
+        urban_details = {}
+        
+        if self._needs_urban_design(group_key):
+            urban_rate = self._get_urban_design_rate(group_key)
+            urban_cost = int(area_m2 * urban_rate)
+            urban_details = {
+                "نرخ هر متر مربع": urban_rate,
+                "مبلغ": urban_cost,
+                "وضعیت": "نیاز دارد (گروه‌های ج و د)"
+            }
+        else:
+            urban_details = {
+                "مبلغ": 0,
+                "وضعیت": "نیازی به طراح شهرساز نیست (گروه الف یا ب)"
+            }
+        
+        total_design = design_total + urban_cost
+        
+        # ============================================================
+        # بخش نظارت
+        # ============================================================
+        supervision_rates = self._get_supervision_breakdown(group_key)
+        supervision_breakdown = {}
+        supervision_total = 0
+        
+        for discipline, rate in supervision_rates.items():
+            cost = int(area_m2 * rate)
+            supervision_breakdown[discipline] = {
+                "نرخ هر متر مربع": rate,
+                "مبلغ": cost
+            }
+            supervision_total += cost
+        
+        # نقشه‌برداری ساختمان
+        surveying_cost = 0
+        surveying_details = {}
+        
+        if self._needs_surveyor(ceilings, area_m2):
+            surveying_rate = self._get_surveying_rate(group_key)
+            surveying_cost = int(area_m2 * surveying_rate)
+            surveying_details = {
+                "نرخ هر متر مربع": surveying_rate,
+                "مبلغ": surveying_cost,
+                "وضعیت": f"نیاز دارد (سقف={ceilings}, متراژ={area_m2})"
+            }
+        else:
+            surveying_details = {
+                "مبلغ": 0,
+                "وضعیت": f"نیازی به ناظر نقشه‌بردار نیست (سقف≤5 و متراژ≤1200)"
+            }
+        
+        total_supervision = supervision_total + surveying_cost
+        
+        # ============================================================
+        # جمع کل نهایی
+        # ============================================================
+        grand_total = total_design + total_supervision
+        
+        # ============================================================
+        # ساخت خروجی تفکیک شده کامل
+        # ============================================================
         details = {
-            "طراحی": {
-                "مبلغ": design.total_amount,
-                "گروه ساختمانی": design.details.get("گروه ساختمانی"),
-                "نرخ هر متر مربع": design.details.get("نرخ هر متر مربع"),
-            },
-            "نظارت": {
-                "مبلغ": supervision.total_amount,
-                "گروه ساختمانی": supervision.details.get("گروه ساختمانی"),
-                "نرخ نظارت هر متر مربع": supervision.details.get("نرخ نظارت هر متر مربع"),
-            },
+            "گروه ساختمانی": group_name,
+            "تعداد سقف": ceilings,
             "متراژ": area_m2,
-            "تعداد طبقات": floors,
+            
+            "═══════════════════════════════════════": "📐 بخش طراحی",
+            "طراحی - تفکیک رشته‌ها": design_breakdown,
+            "جمع طراحی ۴ رشته": design_total,
+            "طراحی شهرسازی": urban_details,
+            "جمع کل طراحی": total_design,
+            
+            "═══════════════════════════════════════": "👷 بخش نظارت",
+            "نظارت - تفکیک رشته‌ها": supervision_breakdown,
+            "جمع نظارت ۴ رشته": supervision_total,
+            "نقشه‌برداری ساختمان": surveying_details,
+            "جمع کل نظارت": total_supervision,
+            
+            "═══════════════════════════════════════": "💰 جمع نهایی",
+            "جمع کل (طراحی + نظارت)": grand_total
         }
         
-        # اضافه کردن جزئیات نقشه‌برداری اگر وجود داشته باشد
-        if "نرخ نقشه‌برداری هر متر مربع" in supervision.details:
-            details["نقشه‌برداری"] = {
-                "مبلغ": supervision.details.get("هزینه نقشه‌برداری"),
-                "نرخ هر متر مربع": supervision.details.get("نرخ نقشه‌برداری هر متر مربع"),
-                "وضعیت": supervision.details.get("وضعیت نقشه‌برداری"),
-            }
+        if upgraded:
+            details["توضیح ارتقا"] = f"به دلیل متراژ {area_m2} مترمربع، گروه از {original_name} به {group_name} ارتقا یافت"
         
         return TariffResponse(
-            base_amount=total_amount,
+            base_amount=grand_total,
             vat=0,
-            total_amount=total_amount,
+            total_amount=grand_total,
             details=details
         )
 
-    def _jalali_to_gregorian(self, jalali_date: str) -> str:
-        """تبدیل تاریخ شمسی به میلادی (فرمت ورودی: YYYY/MM/DD)"""
-        import jdatetime
-        
-        parts = jalali_date.split('/')
-        if len(parts) != 3:
-            raise ValueError("فرمت تاریخ باید YYYY/MM/DD باشد")
-        
-        year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
-        
-        # تبدیل شمسی به میلادی
-        gregorian = jdatetime.date(year, month, day).togregorian()
-        
-        return f"{gregorian.year}-{gregorian.month:02d}-{gregorian.day:02d}"
-    
-    def calculate_delay_penalty(self, area_m2: float, floors: int, license_date: str) -> TariffResponse:
+    def calculate_delay_penalty(self, area_m2: float, ceilings: int, license_date: str) -> TariffResponse:
         """
-        محاسبه هزینه مابه‌التفاوت تاخیر نظارت
-        هر 6 ماه (یا کسری) بعد از 18 ماه = 20% هزینه نظارت پایه
+        محاسبه هزینه تمدید نظارت (ماهانه)
+        فرمول: هزینه تمدید = ماه‌های تمدید شده × (0.6 × مبلغ قرارداد نظارت پایه ÷ 18)
+        
+        قرارداد نظارت پایه برای 18 ماه است
+        اگر ماه‌های گذشته > 18 باشد، مازاد تمدید محسوب می‌شود
         """
         from datetime import datetime
         import jdatetime
+        
+        # ابتدا هزینه نظارت پایه را محاسبه می‌کنیم (بدون تمدید)
+        base_supervision = self.calculate_supervision(area_m2, ceilings)
+        base_contract_amount = base_supervision.total_amount  # مبلغ کل قرارداد نظارت برای 18 ماه
         
         # تبدیل تاریخ شمسی به میلادی
         try:
@@ -465,7 +806,7 @@ class TariffCalculator:
             
             year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
             gregorian = jdatetime.date(year, month, day).togregorian()
-            gregorian_date = f"{gregorian.year}-{gregorian.month:02d}-{gregorian.day:02d}"
+            license_datetime = datetime(gregorian.year, gregorian.month, gregorian.day)
             
         except Exception as e:
             return TariffResponse(
@@ -476,26 +817,17 @@ class TariffCalculator:
             )
         
         # محاسبه تعداد ماه‌های گذشته
-        license_datetime = datetime.strptime(gregorian_date, "%Y-%m-%d")
         today = datetime.now()
-        
         months_passed = (today.year - license_datetime.year) * 12 + (today.month - license_datetime.month)
         
         # محاسبه مازاد بر 18 ماه
         excess_months = max(0, months_passed - 18)
         
-        # محاسبه تعداد واحدهای 6 ماهه (با سقف)
-        units = (excess_months + 5) // 6
+        # محاسبه نرخ ماهانه تمدید
+        monthly_rate = (0.6 * base_contract_amount) / 18
         
-        # محاسبه هزینه نظارت پایه
-        group_name, group_key = self._get_group(floors)
-        supervision_rate = self._get_supervision_rate(group_key)
-        surveying_rate = self._get_surveying_rate(group_key)
-        
-        base_supervision_cost = int(area_m2 * (supervision_rate + surveying_rate))
-        
-        # محاسبه مبلغ اضافه تاخیر
-        penalty_amount = int(base_supervision_cost * 0.2 * units)
+        # محاسبه مبلغ کل تمدید
+        penalty_amount = int(excess_months * monthly_rate)
         
         # محاسبه تاریخ امروز شمسی برای نمایش
         today_jalali = jdatetime.date.today()
@@ -508,15 +840,135 @@ class TariffCalculator:
             details={
                 "تاریخ صدور پروانه (شمسی)": license_date,
                 "تاریخ امروز (شمسی)": today_str,
-                "ماه‌های گذشته": months_passed,
-                "مازاد بر ۱۸ ماه": excess_months,
-                "تعداد واحدهای ۶ ماهه": units,
-                "هزینه نظارت پایه": base_supervision_cost,
-                "درصد هر واحد": "20%",
-                "مبلغ هر واحد": int(base_supervision_cost * 0.2),
-                "گروه ساختمانی": group_name,
+                "ماه‌های گذشته از صدور پروانه": months_passed,
+                "مدت قرارداد پایه (ماه)": 18,
+                "ماه‌های تمدید شده": excess_months,
+                "مبلغ کل قرارداد نظارت پایه": base_contract_amount,
+                "نرخ ماهانه تمدید": int(monthly_rate),
+                "فرمول محاسبه": "تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد ÷ 18)",
+                "گروه ساختمانی": base_supervision.details.get("گروه ساختمانی"),
                 "متراژ": area_m2,
-                "تعداد طبقات": floors
+                "تعداد سقف": ceilings
+            }
+        )
+
+    def calculate_staking_plus_utm(self, num_points: int, area_m2: float) -> TariffResponse:
+        """
+        محاسبه مجموع هزینه میخکوبی و جانمایی (UTM)
+        """
+        # محاسبه میخکوبی
+        staking_result = self.calculate_staking(num_points)
+        
+        # محاسبه جانمایی
+        utm_result = self.calculate_utm(area_m2)
+        
+        # جمع کل
+        base_amount = staking_result.base_amount + utm_result.base_amount
+        vat = staking_result.vat + utm_result.vat
+        total_amount = staking_result.total_amount + utm_result.total_amount
+        
+        return TariffResponse(
+            base_amount=base_amount,
+            vat=vat,
+            total_amount=total_amount,
+            details={
+                "میخکوبی": {
+                    "تعداد نقاط": num_points,
+                    "مبلغ پایه": staking_result.base_amount,
+                    "مالیات": staking_result.vat,
+                    "مبلغ نهایی": staking_result.total_amount
+                },
+                "جانمایی": {
+                    "متراژ": area_m2,
+                    "مبلغ پایه": utm_result.base_amount,
+                    "مالیات": utm_result.vat,
+                    "مبلغ نهایی": utm_result.total_amount
+                },
+                "جمع کل": {
+                    "مبلغ پایه": base_amount,
+                    "مالیات": vat,
+                    "مبلغ نهایی": total_amount
+                }
+            }
+        )
+
+    def calculate_staking_plus_topography(self, num_points: int, area_m2: float) -> TariffResponse:
+        """
+        محاسبه مجموع هزینه میخکوبی و توپوگرافی
+        """
+        # محاسبه میخکوبی
+        staking_result = self.calculate_staking(num_points)
+        
+        # محاسبه توپوگرافی
+        topography_result = self.calculate_topography(area_m2)
+        
+        # جمع کل
+        base_amount = staking_result.base_amount + topography_result.base_amount
+        vat = staking_result.vat + topography_result.vat
+        total_amount = staking_result.total_amount + topography_result.total_amount
+        
+        return TariffResponse(
+            base_amount=base_amount,
+            vat=vat,
+            total_amount=total_amount,
+            details={
+                "میخکوبی": {
+                    "تعداد نقاط": num_points,
+                    "مبلغ پایه": staking_result.base_amount,
+                    "مالیات": staking_result.vat,
+                    "مبلغ نهایی": staking_result.total_amount
+                },
+                "توپوگرافی": {
+                    "متراژ": area_m2,
+                    "مبلغ پایه": topography_result.base_amount,
+                    "مالیات": topography_result.vat,
+                    "مبلغ نهایی": topography_result.total_amount
+                },
+                "جمع کل": {
+                    "مبلغ پایه": base_amount,
+                    "مالیات": vat,
+                    "مبلغ نهایی": total_amount
+                }
+            }
+        )
+
+    def calculate_single_line_plus_land_survey(self, built_up_area: float, land_area: float) -> TariffResponse:
+        """
+        محاسبه مجموع هزینه تک خطی قابل دریافت و مساحی عرصه
+        """
+        # محاسبه تک خطی قابل دریافت (بر اساس زیربنا)
+        single_line_result = self.calculate_single_line_receivable(built_up_area)
+        
+        # محاسبه مساحی عرصه (بر اساس مساحت زمین)
+        land_survey_result = self.calculate_land_survey(land_area)
+        
+        # جمع کل
+        base_amount = single_line_result.base_amount + land_survey_result.base_amount
+        vat = single_line_result.vat + land_survey_result.vat
+        total_amount = single_line_result.total_amount + land_survey_result.total_amount
+        
+        return TariffResponse(
+            base_amount=base_amount,
+            vat=vat,
+            total_amount=total_amount,
+            details={
+                "تک خطی قابل دریافت": {
+                    "مساحت زیربنا": built_up_area,
+                    "مبلغ پایه": single_line_result.base_amount,
+                    "مالیات": single_line_result.vat,
+                    "مبلغ نهایی": single_line_result.total_amount
+                },
+                "مساحی عرصه": {
+                    "مساحت زمین": land_area,
+                    "مبلغ پایه": land_survey_result.base_amount,
+                    "مالیات": land_survey_result.vat,
+                    "مبلغ نهایی": land_survey_result.total_amount
+                },
+                "جمع کل": {
+                    "مبلغ پایه": base_amount,
+                    "مالیات": vat,
+                    "مبلغ نهایی": total_amount
+                }
             }
         )
 

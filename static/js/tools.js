@@ -129,48 +129,35 @@ const SERVICE_CONFIG = {
 const ENGINEERING_CONFIG = {
     design: {
         label: "هزینه طراحی",
-        fields: ["area_m2", "floors"],
+        fields: ["area_m2", "ceilings"],
         info: `
             <ul>
-                <li>محاسبه هزینه طراحی ساختمان بر اساس گروه ساختمانی (تعداد طبقات)</li>
-                <li>شامل رشته‌های: معماری، عمران، تاسیسات مکانیکی و برقی</li>
-                <li>تعرفه سال ۱۴۰۵ - استان فارس</li>
-                <li><strong>نکته:</strong> هزینه = متراژ × نرخ هر متر مربع</li>
+                <li>محاسبه هزینه طراحی ساختمان بر اساس گروه ساختمانی (تعداد سقف و متراژ)</li>
+                <li>شامل رشته‌های: معماری، عمران، تاسیسات مکانیکی، تاسیسات برقی، هماهنگ کننده</li>
+                <li><strong>➕ هزینه طراحی شهرسازی</strong> برای گروه‌های ج و د به صورت خودکار اضافه می‌شود</li>
+                <li><strong>نکته مهم:</strong> اگر متراژ بیشتر از حد مجاز گروه باشد، گروه به سطح بالاتر ارتقا می‌یابد</li>
             </ul>
         `,
         api_url: "/tariff/engineering/design"
     },
     supervision: {
         label: "هزینه نظارت",
-        fields: ["area_m2", "floors"],
+        fields: ["area_m2", "ceilings"],
         info: `
             <ul>
                 <li>محاسبه هزینه نظارت ساختمان (۴ رشته اصلی)</li>
-                <li>در صورت نیاز، هزینه نقشه‌برداری به صورت خودکار به نظارت اضافه می‌شود</li>
-                <li>تعرفه سال ۱۴۰۵ - استان فارس</li>
-                <li><strong>نکته:</strong> هزینه = متراژ × (نرخ نظارت + نرخ نقشه‌برداری در صورت نیاز)</li>
+                <li><strong>➕ ناظر نقشه‌بردار</strong> در صورت وجود شرایط (سقف > 5 یا متراژ > 1200) اضافه می‌شود</li>
+                <li><strong>نکته مهم:</strong> اگر متراژ بیشتر از حد مجاز گروه باشد، گروه به سطح بالاتر ارتقا می‌یابد</li>
             </ul>
         `,
         api_url: "/tariff/engineering/supervision"
     },
-    surveying: {
-        label: "نقشه‌برداری ساختمان",
-        fields: ["area_m2", "floors"],
-        info: `
-            <ul>
-                <li>بررسی خودکار نیاز به نقشه‌برداری بر اساس گروه ساختمانی</li>
-                <li>گروه الف: نیازی به نقشه‌برداری ندارد</li>
-                <li>گروه‌های ب، ج، د: نیاز به نقشه‌برداری دارند</li>
-            </ul>
-        `,
-        api_url: "/tariff/engineering/surveying"
-    },
     all: {
         label: "مجموع خدمات",
-        fields: ["area_m2", "floors"],
+        fields: ["area_m2", "ceilings"],
         info: `
             <ul>
-                <li>محاسبه همزمان هزینه طراحی، نظارت و نقشه‌برداری (در صورت نیاز)</li>
+                <li>محاسبه همزمان هزینه طراحی، نظارت، نقشه‌برداری (در صورت نیاز) و شهرسازی (در صورت نیاز)</li>
                 <li>نمایش تفکیک شده هر بخش</li>
                 <li>مناسب برای برآورد کامل هزینه‌های مهندسی پروژه</li>
             </ul>
@@ -189,10 +176,10 @@ const FIELD_TEMPLATES = {
             <input type="number" id="area_m2" placeholder="مثال: 750" class="form-control">
         </div>
     `,
-    floors: `
+    ceilings: `
         <div class="form-group">
-            <label>تعداد طبقات</label>
-            <input type="number" id="floors" placeholder="مثال: 4" min="1" class="form-control">
+            <label>تعداد سقف</label>
+            <input type="number" id="ceilings" placeholder="مثال: 4" min="1" class="form-control">
         </div>
     `,
     num_points: `
@@ -216,7 +203,7 @@ const FIELD_TEMPLATES = {
 }
 
 // ============================================================
-// تعریف ابزارها (برای نمایش در مودال)
+// تعریف ابزارها
 // ============================================================
 const tools = {
     tariff: {
@@ -258,14 +245,15 @@ const tools = {
         `
     },
     delay_penalty: {
-        title: "محاسبه هزینه تاخیر نظارت",
+        title: "محاسبه هزینه تمدید نظارت",
         type: "delay_penalty",
         html: `
             <form id="delayPenaltyForm" class="tool-form">
                 <div class="info-box">
                     <ul>
-                        <li>محاسبه مابه‌التفاوت تاخیر نظارت بعد از ۱۸ ماه</li>
-                        <li>هر ۶ ماه (یا کسری) = ۲۰٪ هزینه نظارت پایه</li>
+                        <li>قرارداد نظارت پایه برای <strong>۱۸ ماه</strong> می‌باشد</li>
+                        <li>پس از اتمام ۱۸ ماه، هر ماه تمدید محاسبه می‌شود</li>
+                        <li><strong>فرمول:</strong> هزینه تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد ÷ 18)</li>
                         <li>بر اساس تاریخ صدور پروانه محاسبه می‌شود</li>
                     </ul>
                 </div>
@@ -275,8 +263,8 @@ const tools = {
                         <input type="number" id="delay_area_m2" placeholder="مثال: 750" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>تعداد طبقات</label>
-                        <input type="number" id="delay_floors" placeholder="مثال: 4" min="1" class="form-control">
+                        <label>تعداد سقف</label>
+                        <input type="number" id="delay_ceilings" placeholder="مثال: 4" min="1" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
@@ -299,105 +287,8 @@ const tools = {
 }
 
 // ============================================================
-// توابع کمکی
+// تابع نمایش خطا
 // ============================================================
-
-function displayResult(resultElement, data) {
-    let html = `
-        <div class="result-box" style="animation: resultPop 0.3s ease;">
-            <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
-                <strong style="font-size: 16px;">💰 نتیجه محاسبه</strong>
-            </div>
-            <div><strong>مبلغ پایه:</strong> ${data.base_amount.toLocaleString()} ریال</div>
-            <div><strong>مالیات (۱۰٪):</strong> ${data.vat.toLocaleString()} ریال</div>
-            <div style="background: #e8f5e9; padding: 8px; border-radius: 8px; margin-top: 8px;">
-                <strong style="font-size: 18px; color: #2e7d32;">مبلغ نهایی: ${data.total_amount.toLocaleString()} ریال</strong>
-            </div>
-    `
-    
-    if (data.details) {
-        html += `<hr style="margin: 12px 0;"><div style="font-size: 12px; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px;">`
-        html += `<strong>📋 جزئیات:</strong><br>`
-        for (const [key, value] of Object.entries(data.details)) {
-            if (typeof value === 'object' && value !== null) {
-                html += `<div style="margin-right: 15px; margin-top: 5px;"><strong>• ${key}:</strong><br>`
-                for (const [subKey, subValue] of Object.entries(value)) {
-                    const formattedValue = typeof subValue === 'number' ? subValue.toLocaleString() : subValue
-                    html += `<div style="margin-right: 20px;">${subKey}: ${formattedValue}</div>`
-                }
-                html += `</div>`
-            } else {
-                const formattedValue = typeof value === 'number' ? value.toLocaleString() : value
-                html += `<div>• ${key}: ${formattedValue}</div>`
-            }
-        }
-        html += `</div>`
-    }
-    
-    const toman = data.total_amount / 10
-    html += `<div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">
-        معادل تقریبی: ${Math.round(toman).toLocaleString()} تومان
-    </div>`
-    html += `</div>`
-    resultElement.innerHTML = html
-}
-
-function displayEngineeringAllResult(resultElement, data) {
-    let html = `
-        <div class="result-box" style="animation: resultPop 0.3s ease;">
-            <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
-                <strong style="font-size: 16px;">💰 برآورد کل هزینه‌های مهندسی</strong>
-            </div>
-    `
-    
-    if (data.details) {
-        if (data.details.طراحی) {
-            html += `<div style="margin-bottom: 8px;">`
-            html += `<div><strong>🏗️ هزینه طراحی:</strong> ${data.details.طراحی.مبلغ.toLocaleString()} ریال</div>`
-            if (data.details.طراحی["نرخ هر متر مربع"]) {
-                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">نرخ هر متر مربع: ${data.details.طراحی["نرخ هر متر مربع"].toLocaleString()} ریال</div>`
-            }
-            html += `</div>`
-        }
-        
-        if (data.details.نظارت) {
-            html += `<div style="margin-bottom: 8px;">`
-            html += `<div><strong>👷 هزینه نظارت:</strong> ${data.details.نظارت.مبلغ.toLocaleString()} ریال</div>`
-            if (data.details.نظارت["نرخ نظارت هر متر مربع"]) {
-                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">نرخ نظارت هر متر مربع: ${data.details.نظارت["نرخ نظارت هر متر مربع"].toLocaleString()} ریال</div>`
-            }
-            html += `</div>`
-        }
-        
-        if (data.details.نقشه‌برداری && data.details.نقشه‌برداری.مبلغ > 0) {
-            html += `<div style="margin-bottom: 8px;">`
-            html += `<div><strong>🗺️ هزینه نقشه‌برداری:</strong> ${data.details.نقشه‌برداری.مبلغ.toLocaleString()} ریال</div>`
-            if (data.details.نقشه‌برداری["نرخ هر متر مربع"]) {
-                html += `<div style="font-size: 11px; color: #666; margin-right: 20px;">نرخ هر متر مربع: ${data.details.نقشه‌برداری["نرخ هر متر مربع"].toLocaleString()} ریال</div>`
-            }
-            html += `</div>`
-        }
-        
-        html += `<hr style="margin: 12px 0;">`
-        html += `<div style="font-size: 12px; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px;">`
-        html += `<strong>📋 مشخصات پروژه:</strong><br>`
-        if (data.details.متراژ) html += `<div>• متراژ: ${data.details.متراژ.toLocaleString()} متر مربع</div>`
-        if (data.details["تعداد طبقات"]) html += `<div>• تعداد طبقات: ${data.details["تعداد طبقات"]}</div>`
-        if (data.details.طراحی && data.details.طراحی["گروه ساختمانی"]) html += `<div>• گروه ساختمانی: ${data.details.طراحی["گروه ساختمانی"]}</div>`
-        html += `</div>`
-    }
-    
-    html += `
-        <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-top: 12px; text-align: center;">
-            <strong style="font-size: 18px; color: #2e7d32;">جمع کل: ${data.total_amount.toLocaleString()} ریال</strong>
-        </div>
-        <div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">
-            معادل تقریبی: ${Math.round(data.total_amount / 10).toLocaleString()} تومان
-        </div>
-    </div>`
-    resultElement.innerHTML = html
-}
-
 function displayError(resultElement, message) {
     resultElement.innerHTML = `
         <div class="error-box" style="animation: resultPop 0.3s ease;">
@@ -407,6 +298,373 @@ function displayError(resultElement, message) {
     `
 }
 
+// ============================================================
+// تابع نمایش نتیجه (پشتیبانی از تمام ابزارها)
+// ============================================================
+function displayResult(resultElement, data) {
+    let html = `
+        <div class="result-box" style="animation: resultPop 0.3s ease;">
+            <div style="border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin-bottom: 15px;">
+                <strong style="font-size: 18px;">💰 نتیجه محاسبه</strong>
+            </div>
+    `
+    
+    if (data.details) {
+        // ============================================================
+        // بررسی: آیا این خروجی پنالتی (تمدید نظارت) است؟
+        // ============================================================
+        if (data.details["تاریخ صدور پروانه (شمسی)"]) {
+            // نمایش جزئیات تمدید نظارت
+            html += `<div style="background: #f0f9ff; padding: 12px; border-radius: 10px; margin-bottom: 15px;">`
+            html += `<div style="font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #2563eb; padding-bottom: 5px;">⏰ هزینه تمدید نظارت</div>`
+            
+            html += `<div style="margin-right: 10px;">`
+            html += `<div><strong>📅 تاریخ صدور پروانه:</strong> ${data.details["تاریخ صدور پروانه (شمسی)"]}</div>`
+            html += `<div><strong>📅 تاریخ امروز:</strong> ${data.details["تاریخ امروز (شمسی)"]}</div>`
+            html += `<hr style="margin: 8px 0;">`
+            html += `<div><strong>📊 جزئیات محاسبه:</strong></div>`
+            html += `<div style="margin-right: 15px;">`
+            html += `<div>• ماه‌های گذشته از صدور پروانه: ${data.details["ماه‌های گذشته از صدور پروانه"]} ماه</div>`
+            html += `<div>• مدت قرارداد پایه: ${data.details["مدت قرارداد پایه (ماه)"]} ماه</div>`
+            html += `<div>• ماه‌های تمدید شده: ${data.details["ماه‌های تمدید شده"]} ماه</div>`
+            html += `<div>• مبلغ کل قرارداد نظارت پایه: ${data.details["مبلغ کل قرارداد نظارت پایه"].toLocaleString()} ریال</div>`
+            html += `<div>• نرخ ماهانه تمدید: ${data.details["نرخ ماهانه تمدید"].toLocaleString()} ریال</div>`
+            html += `<div style="font-size: 11px; color: #666;">• فرمول: ${data.details["فرمول محاسبه"]}</div>`
+            html += `</div>`
+            
+            if (data.details["گروه ساختمانی"]) {
+                html += `<hr style="margin: 8px 0;">`
+                html += `<div><strong>🏢 گروه ساختمانی:</strong> ${data.details["گروه ساختمانی"]}</div>`
+                html += `<div><strong>📏 تعداد سقف:</strong> ${data.details["تعداد سقف"]}</div>`
+                html += `<div><strong>📐 متراژ:</strong> ${data.details["متراژ"].toLocaleString()} متر مربع</div>`
+            }
+            
+            html += `</div>`
+            html += `<hr style="margin: 12px 0;">`
+            html += `<div style="background: #e8f5e9; padding: 10px; border-radius: 8px; text-align: center;">`
+            html += `<strong style="font-size: 18px; color: #2e7d32;">💰 هزینه تمدید نظارت: ${data.total_amount.toLocaleString()} ریال</strong>`
+            html += `</div>`
+            html += `</div>`
+            
+            const toman = data.total_amount / 10
+            html += `<div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">`
+            html += `معادل تقریبی: ${Math.round(toman).toLocaleString()} تومان`
+            html += `</div>`
+            html += `</div>`
+            
+            resultElement.innerHTML = html
+            return
+        }
+        
+        // ============================================================
+        // اطلاعات پایه (برای سایر ابزارها)
+        // ============================================================
+        if (data.details["گروه ساختمانی"]) {
+            html += `<div style="background: #f0f9ff; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px;">`
+            html += `<strong>🏢 گروه ساختمانی:</strong> ${data.details["گروه ساختمانی"]}<br>`
+            if (data.details["تعداد سقف"]) html += `<strong>📏 تعداد سقف:</strong> ${data.details["تعداد سقف"]}<br>`
+            if (data.details["متراژ"]) html += `<strong>📐 متراژ:</strong> ${data.details["متراژ"].toLocaleString()} متر مربع`
+            html += `</div>`
+        } else if (data.details["مساحت محاسبه شده"]) {
+            html += `<div style="background: #f0f9ff; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px;">`
+            html += `<strong>📐 مساحت:</strong> ${data.details["مساحت محاسبه شده"].toLocaleString()} متر مربع<br>`
+            if (data.details["نوع محاسبه"]) html += `<strong>📊 نوع محاسبه:</strong> ${data.details["نوع محاسبه"]}`
+            html += `</div>`
+        } else if (data.details["تعداد نقاط"]) {
+            html += `<div style="background: #f0f9ff; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px;">`
+            html += `<strong>📍 تعداد نقاط:</strong> ${data.details["تعداد نقاط"]}<br>`
+            if (data.details["نوع محاسبه"]) html += `<strong>📊 نوع محاسبه:</strong> ${data.details["نوع محاسبه"]}`
+            html += `</div>`
+        } else if (data.details["طول (کیلومتر)"]) {
+            html += `<div style="background: #f0f9ff; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px;">`
+            html += `<strong>📏 طول:</strong> ${data.details["طول (کیلومتر)"].toLocaleString()} کیلومتر`
+            html += `</div>`
+        }
+        
+        if (data.details["توضیح ارتقا"]) {
+            html += `<div style="background: #fef3c7; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; color: #92400e;">`
+            html += `<strong>⚠️ ${data.details["توضیح ارتقا"]}</strong>`
+            html += `</div>`
+        }
+        
+        // ============================================================
+        // تفکیک رشته‌های طراحی
+        // ============================================================
+        if (data.details["طراحی - تفکیک رشته‌ها"]) {
+            html += `<div style="background: #e8f5e9; padding: 12px; border-radius: 10px; margin-bottom: 15px;">`
+            html += `<div style="font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #4caf50; padding-bottom: 5px;">📐 هزینه طراحی</div>`
+            html += `<div style="margin-right: 10px;">`
+            html += `<table style="width: 100%; border-collapse: collapse; font-size: 13px;">`
+            html += `<tr style="background: #c8e6c9;">`
+            html += `<th style="padding: 6px; text-align: right;">رشته</th>`
+            html += `<th style="padding: 6px; text-align: center;">نرخ (ریال/متر)</th>`
+            html += `<th style="padding: 6px; text-align: left;">مبلغ (ریال)</th>`
+            html += `</tr>`
+            
+            const designDisciplines = data.details["طراحی - تفکیک رشته‌ها"]
+            for (const [name, info] of Object.entries(designDisciplines)) {
+                html += `<tr style="border-bottom: 1px solid #e0e0e0;">`
+                html += `<td style="padding: 5px;">${name}</td>`
+                html += `<td style="padding: 5px; text-align: center;">${info["نرخ هر متر مربع"].toLocaleString()}</td>`
+                html += `<td style="padding: 5px; text-align: left;">${info.مبلغ.toLocaleString()}</td>`
+                html += `</tr>`
+            }
+            html += `</table>`
+            html += `<div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #4caf50; text-align: left;"><strong>جمع طراحی ۴ رشته:</strong> ${data.details["جمع طراحی ۴ رشته"].toLocaleString()} ریال</div>`
+            html += `</div>`
+            html += `</div>`
+        }
+        
+        // ============================================================
+        // طراحی شهرسازی
+        // ============================================================
+        if (data.details["طراحی شهرسازی"]) {
+            const urban = data.details["طراحی شهرسازی"]
+            if (urban.مبلغ && urban.مبلغ > 0) {
+                html += `<div style="background: #e0f2fe; padding: 10px; border-radius: 8px; margin-bottom: 15px;">`
+                html += `<strong>🏙️ هزینه طراحی شهرسازی:</strong> ${urban.مبلغ.toLocaleString()} ریال`
+                if (urban["نرخ هر متر مربع"]) {
+                    html += `<span style="font-size: 11px; color: #666; margin-right: 10px;">(نرخ: ${urban["نرخ هر متر مربع"].toLocaleString()} ریال/متر)</span>`
+                }
+                html += `<div style="font-size: 12px;">${urban.وضعیت || ""}</div>`
+                html += `</div>`
+            } else if (urban.وضعیت) {
+                html += `<div style="background: #fef3c7; padding: 10px; border-radius: 8px; margin-bottom: 15px;">`
+                html += `<strong>🏙️ طراحی شهرسازی:</strong> ${urban.وضعیت}`
+                html += `</div>`
+            }
+        }
+        
+        // ============================================================
+        // جمع کل طراحی
+        // ============================================================
+        if (data.details["جمع کل طراحی"]) {
+            html += `<div style="background: #c8e6c9; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: left;">`
+            html += `<strong style="font-size: 15px;">💰 جمع کل طراحی:</strong> ${data.details["جمع کل طراحی"].toLocaleString()} ریال`
+            html += `</div>`
+        }
+        
+        // ============================================================
+        // تفکیک رشته‌های نظارت
+        // ============================================================
+        if (data.details["نظارت - تفکیک رشته‌ها"]) {
+            html += `<div style="background: #e3f2fd; padding: 12px; border-radius: 10px; margin-bottom: 15px;">`
+            html += `<div style="font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #2196f3; padding-bottom: 5px;">👷 هزینه نظارت</div>`
+            html += `<div style="margin-right: 10px;">`
+            html += `<table style="width: 100%; border-collapse: collapse; font-size: 13px;">`
+            html += `<tr style="background: #bbdefb;">`
+            html += `<th style="padding: 6px; text-align: right;">رشته</th>`
+            html += `<th style="padding: 6px; text-align: center;">نرخ (ریال/متر)</th>`
+            html += `<th style="padding: 6px; text-align: left;">مبلغ (ریال)</th>`
+            html += `<tr>`
+            
+            const supervisionDisciplines = data.details["نظارت - تفکیک رشته‌ها"]
+            for (const [name, info] of Object.entries(supervisionDisciplines)) {
+                html += `<tr style="border-bottom: 1px solid #e0e0e0;">`
+                html += `<td style="padding: 5px;">${name}</td>`
+                html += `<td style="padding: 5px; text-align: center;">${info["نرخ هر متر مربع"].toLocaleString()}</td>`
+                html += `<td style="padding: 5px; text-align: left;">${info.مبلغ.toLocaleString()}</td>`
+                html += `</tr>`
+            }
+            html += `</table>`
+            html += `<div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #2196f3; text-align: left;"><strong>جمع نظارت ۴ رشته:</strong> ${data.details["جمع نظارت ۴ رشته"].toLocaleString()} ریال</div>`
+            html += `</div>`
+            html += `</div>`
+        }
+        
+        // ============================================================
+        // نقشه‌برداری ساختمان
+        // ============================================================
+        if (data.details["نقشه‌برداری ساختمان"]) {
+            const surveying = data.details["نقشه‌برداری ساختمان"]
+            if (surveying.مبلغ && surveying.مبلغ > 0) {
+                html += `<div style="background: #e0f2fe; padding: 10px; border-radius: 8px; margin-bottom: 15px;">`
+                html += `<strong>🗺️ هزینه نقشه‌برداری ساختمان:</strong> ${surveying.مبلغ.toLocaleString()} ریال`
+                if (surveying["نرخ هر متر مربع"]) {
+                    html += `<span style="font-size: 11px; color: #666; margin-right: 10px;">(نرخ: ${surveying["نرخ هر متر مربع"].toLocaleString()} ریال/متر)</span>`
+                }
+                html += `<div style="font-size: 12px;">${surveying.وضعیت || ""}</div>`
+                html += `</div>`
+            } else if (surveying.وضعیت) {
+                html += `<div style="background: #fef3c7; padding: 10px; border-radius: 8px; margin-bottom: 15px;">`
+                html += `<strong>🗺️ نقشه‌برداری ساختمان:</strong> ${surveying.وضعیت}`
+                html += `</div>`
+            }
+        }
+        
+        // ============================================================
+        // جمع کل نظارت
+        // ============================================================
+        if (data.details["جمع کل نظارت"]) {
+            html += `<div style="background: #bbdefb; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: left;">`
+            html += `<strong style="font-size: 15px;">💰 جمع کل نظارت:</strong> ${data.details["جمع کل نظارت"].toLocaleString()} ریال`
+            html += `</div>`
+        }
+        
+        // ============================================================
+        // مبلغ نهایی (برای نقشه‌برداری ساده)
+        // ============================================================
+        if (data.base_amount && !data.details["جمع کل طراحی"] && !data.details["جمع کل نظارت"]) {
+            html += `<div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">`
+            html += `<strong style="font-size: 16px;">💰 مبلغ پایه:</strong> ${data.base_amount.toLocaleString()} ریال<br>`
+            html += `<strong>📊 مالیات (۱۰٪):</strong> ${data.vat.toLocaleString()} ریال<br>`
+            html += `<hr style="margin: 8px 0;">`
+            html += `<strong style="font-size: 18px; color: #2e7d32;">💰 مبلغ نهایی: ${data.total_amount.toLocaleString()} ریال</strong>`
+            html += `</div>`
+        }
+    }
+    
+    // ============================================================
+    // معادل تومانی
+    // ============================================================
+    const toman = data.total_amount / 10
+    html += `<div style="margin-top: 10px; font-size: 12px; color: #888; text-align: center;">`
+    html += `معادل تقریبی: ${Math.round(toman).toLocaleString()} تومان`
+    html += `</div>`
+    html += `</div>`
+    
+    resultElement.innerHTML = html
+}
+
+// ============================================================
+// تابع نمایش نتیجه مجموع خدمات (مهندسی)
+// ============================================================
+function displayEngineeringAllResult(resultElement, data) {
+    let html = `
+        <div class="result-box" style="animation: resultPop 0.3s ease;">
+            <div style="border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin-bottom: 15px;">
+                <strong style="font-size: 18px;">💰 برآورد کل هزینه‌های مهندسی ساختمان</strong>
+            </div>
+    `
+    
+    if (data.details) {
+        // اطلاعات پایه
+        if (data.details["گروه ساختمانی"]) {
+            html += `<div style="background: #f0f9ff; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px;">`
+            html += `<strong>🏢 گروه ساختمانی:</strong> ${data.details["گروه ساختمانی"]}<br>`
+            html += `<strong>📏 تعداد سقف:</strong> ${data.details["تعداد سقف"]}<br>`
+            html += `<strong>📐 متراژ:</strong> ${data.details["متراژ"].toLocaleString()} متر مربع`
+            html += `</div>`
+        }
+        
+        if (data.details["توضیح ارتقا"]) {
+            html += `<div style="background: #fef3c7; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; color: #92400e;">`
+            html += `<strong>⚠️ ${data.details["توضیح ارتقا"]}</strong>`
+            html += `</div>`
+        }
+        
+        // ============================================================
+        // بخش طراحی
+        // ============================================================
+        html += `<div style="background: #e8f5e9; padding: 12px; border-radius: 10px; margin-bottom: 15px;">`
+        html += `<div style="font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #4caf50; padding-bottom: 5px;">📐 هزینه طراحی</div>`
+        
+        if (data.details["طراحی - تفکیک رشته‌ها"]) {
+            html += `<div style="margin-right: 10px;">`
+            html += `<table style="width: 100%; border-collapse: collapse; font-size: 13px;">`
+            html += `<tr style="background: #c8e6c9;">`
+            html += `<th style="padding: 6px; text-align: right;">رشته</th>`
+            html += `<th style="padding: 6px; text-align: center;">نرخ (ریال/متر)</th>`
+            html += `<th style="padding: 6px; text-align: left;">مبلغ (ریال)</th>`
+            html += `</tr>`
+            
+            const designDisciplines = data.details["طراحی - تفکیک رشته‌ها"]
+            for (const [name, info] of Object.entries(designDisciplines)) {
+                html += `<tr style="border-bottom: 1px solid #e0e0e0;">`
+                html += `<td style="padding: 5px;">${name}</td>`
+                html += `<td style="padding: 5px; text-align: center;">${info["نرخ هر متر مربع"].toLocaleString()}</td>`
+                html += `<td style="padding: 5px; text-align: left;">${info.مبلغ.toLocaleString()}</td>`
+                html += `</tr>`
+            }
+            html += `</table>`
+            html += `<div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #4caf50; text-align: left;"><strong>جمع طراحی ۴ رشته:</strong> ${data.details["جمع طراحی ۴ رشته"].toLocaleString()} ریال</div>`
+            html += `</div>`
+        }
+        
+        if (data.details["طراحی شهرسازی"]) {
+            const urban = data.details["طراحی شهرسازی"]
+            if (urban.مبلغ && urban.مبلغ > 0) {
+                html += `<div style="margin-top: 8px; padding: 8px; background: #b2dfdb; border-radius: 6px;">`
+                html += `<strong>🏙️ طراحی شهرسازی:</strong> ${urban.مبلغ.toLocaleString()} ریال`
+                if (urban["نرخ هر متر مربع"]) {
+                    html += `<span style="font-size: 11px; color: #00695c; margin-right: 10px;">(نرخ: ${urban["نرخ هر متر مربع"].toLocaleString()} ریال/متر)</span>`
+                }
+                html += `</div>`
+            } else if (urban.وضعیت) {
+                html += `<div style="margin-top: 8px; padding: 8px; background: #fff3e0; border-radius: 6px; font-size: 12px;">`
+                html += `<strong>🏙️ طراحی شهرسازی:</strong> ${urban.وضعیت}`
+                html += `</div>`
+            }
+        }
+        
+        html += `<div style="margin-top: 10px; padding-top: 5px; border-top: 2px solid #4caf50; text-align: left;"><strong style="font-size: 15px;">💰 جمع کل طراحی:</strong> ${data.details["جمع کل طراحی"].toLocaleString()} ریال</div>`
+        html += `</div>`
+        
+        // ============================================================
+        // بخش نظارت
+        // ============================================================
+        html += `<div style="background: #e3f2fd; padding: 12px; border-radius: 10px; margin-bottom: 15px;">`
+        html += `<div style="font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #2196f3; padding-bottom: 5px;">👷 هزینه نظارت</div>`
+        
+        if (data.details["نظارت - تفکیک رشته‌ها"]) {
+            html += `<div style="margin-right: 10px;">`
+            html += `<table style="width: 100%; border-collapse: collapse; font-size: 13px;">`
+            html += `<tr style="background: #bbdefb;">`
+            html += `<th style="padding: 6px; text-align: right;">رشته</th>`
+            html += `<th style="padding: 6px; text-align: center;">نرخ (ریال/متر)</th>`
+            html += `<th style="padding: 6px; text-align: left;">مبلغ (ریال)</th>`
+            html += `</tr>`
+            
+            const supervisionDisciplines = data.details["نظارت - تفکیک رشته‌ها"]
+            for (const [name, info] of Object.entries(supervisionDisciplines)) {
+                html += `<tr style="border-bottom: 1px solid #e0e0e0;">`
+                html += `<td style="padding: 5px;">${name}</td>`
+                html += `<td style="padding: 5px; text-align: center;">${info["نرخ هر متر مربع"].toLocaleString()}</td>`
+                html += `<td style="padding: 5px; text-align: left;">${info.مبلغ.toLocaleString()}</td>`
+                html += `</tr>`
+            }
+            html += `</table>`
+            html += `<div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #2196f3; text-align: left;"><strong>جمع نظارت ۴ رشته:</strong> ${data.details["جمع نظارت ۴ رشته"].toLocaleString()} ریال</div>`
+            html += `</div>`
+        }
+        
+        if (data.details["نقشه‌برداری ساختمان"]) {
+            const surveying = data.details["نقشه‌برداری ساختمان"]
+            if (surveying.مبلغ && surveying.مبلغ > 0) {
+                html += `<div style="margin-top: 8px; padding: 8px; background: #b2dfdb; border-radius: 6px;">`
+                html += `<strong>🗺️ نقشه‌برداری ساختمان:</strong> ${surveying.مبلغ.toLocaleString()} ریال`
+                if (surveying["نرخ هر متر مربع"]) {
+                    html += `<span style="font-size: 11px; color: #00695c; margin-right: 10px;">(نرخ: ${surveying["نرخ هر متر مربع"].toLocaleString()} ریال/متر)</span>`
+                }
+                html += `<div style="font-size: 11px;">${surveying.وضعیت}</div>`
+                html += `</div>`
+            } else if (surveying.وضعیت) {
+                html += `<div style="margin-top: 8px; padding: 8px; background: #fff3e0; border-radius: 6px; font-size: 12px;">`
+                html += `<strong>🗺️ نقشه‌برداری ساختمان:</strong> ${surveying.وضعیت}`
+                html += `</div>`
+            }
+        }
+        
+        html += `<div style="margin-top: 10px; padding-top: 5px; border-top: 2px solid #2196f3; text-align: left;"><strong style="font-size: 15px;">💰 جمع کل نظارت:</strong> ${data.details["جمع کل نظارت"].toLocaleString()} ریال</div>`
+        html += `</div>`
+        
+        // ============================================================
+        // جمع کل نهایی
+        // ============================================================
+        html += `<div style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 15px; border-radius: 12px; text-align: center;">`
+        html += `<div style="font-size: 14px; opacity: 0.8;">جمع کل (طراحی + نظارت)</div>`
+        html += `<div style="font-size: 24px; font-weight: bold; margin-top: 5px;">${data.details["جمع کل (طراحی + نظارت)"].toLocaleString()} ریال</div>`
+        html += `<div style="font-size: 12px; margin-top: 5px;">معادل تقریبی: ${Math.round(data.details["جمع کل (طراحی + نظارت)"] / 10).toLocaleString()} تومان</div>`
+        html += `</div>`
+    }
+    
+    html += `</div>`
+    resultElement.innerHTML = html
+}
+
+// ============================================================
+// توابع کمکی
+// ============================================================
 function renderFields(container, config, selectedService) {
     const serviceConfig = config[selectedService]
     let html = ""
@@ -532,7 +790,20 @@ function initToolLogic(tool) {
         form.addEventListener("submit", async function(e) {
             e.preventDefault()
             const config = ENGINEERING_CONFIG[selectedService]
-            const payload = getPayload(config.fields, form, "")
+            
+            const area_m2 = Number(form.querySelector("#area_m2")?.value || 0)
+            const ceilings = Number(form.querySelector("#ceilings")?.value || 0)
+            
+            if (!area_m2 || area_m2 <= 0) {
+                displayError(result, "لطفاً متراژ را وارد کنید")
+                return
+            }
+            if (!ceilings || ceilings <= 0) {
+                displayError(result, "لطفاً تعداد سقف را وارد کنید")
+                return
+            }
+            
+            const payload = { area_m2, ceilings }
             
             result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>"
             
@@ -558,7 +829,7 @@ function initToolLogic(tool) {
     }
     
     // --------------------------------------------------------
-    // ابزار هزینه تاخیر نظارت (delay_penalty)
+    // ابزار هزینه تمدید نظارت (delay_penalty)
     // --------------------------------------------------------
     if (tool === "delay_penalty") {
         const form = document.getElementById("delayPenaltyForm")
@@ -570,15 +841,15 @@ function initToolLogic(tool) {
             e.preventDefault()
             
             const area_m2 = Number(document.getElementById("delay_area_m2")?.value || 0)
-            const floors = Number(document.getElementById("delay_floors")?.value || 0)
+            const ceilings = Number(document.getElementById("delay_ceilings")?.value || 0)
             const license_date = document.getElementById("delay_license_date")?.value || ""
             
             if (!area_m2 || area_m2 <= 0) {
                 displayError(result, "لطفاً متراژ را وارد کنید")
                 return
             }
-            if (!floors || floors <= 0) {
-                displayError(result, "لطفاً تعداد طبقات را وارد کنید")
+            if (!ceilings || ceilings <= 0) {
+                displayError(result, "لطفاً تعداد سقف را وارد کنید")
                 return
             }
             if (!license_date) {
@@ -592,7 +863,7 @@ function initToolLogic(tool) {
                 const response = await fetch("/tariff/engineering/delay_penalty", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ area_m2, floors, license_date })
+                    body: JSON.stringify({ area_m2, ceilings, license_date })
                 })
                 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`)
