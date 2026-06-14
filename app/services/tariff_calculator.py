@@ -38,7 +38,7 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"مساحت محاسبه شده": area_m2, "نوع محاسبه": "پلکانی"}
+            details={"مساحت محاسبه شده": area_m2, "نوع محاسبه": "پلکانی", "نوع متراژ": "زمین (عرصه)"}
         )
 
     def calculate_utm(self, area_m2: float) -> TariffResponse:
@@ -60,7 +60,7 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"مساحت": area_m2, "نوع محاسبه": "مقطوع تجمعی"}
+            details={"مساحت زمین (عرصه)": area_m2, "نوع محاسبه": "مقطوع تجمعی", "نوع متراژ": "زمین (عرصه)"}
         )
 
     def calculate_staking(self, num_points: int) -> TariffResponse:
@@ -98,7 +98,7 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"متراژ": area_m2, "نرخ هر متر": rate}
+            details={"متراژ زیربنا": area_m2, "نرخ هر متر": rate, "نوع متراژ": "زیربنا"}
         )
 
     def calculate_subdivision_with_history(self, area_m2: float) -> TariffResponse:
@@ -111,7 +111,7 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"متراژ": area_m2, "نرخ هر متر": rate}
+            details={"متراژ زیربنا": area_m2, "نرخ هر متر": rate, "نوع متراژ": "زیربنا"}
         )
 
     def calculate_subdivision_without_history(self, area_m2: float) -> TariffResponse:
@@ -124,7 +124,7 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"متراژ": area_m2, "نرخ هر متر": rate}
+            details={"متراژ زیربنا": area_m2, "نرخ هر متر": rate, "نوع متراژ": "زیربنا"}
         )
 
     def calculate_topography(self, area_m2: float) -> TariffResponse:
@@ -149,7 +149,7 @@ class TariffCalculator:
             base_amount=base,
             vat=vat,
             total_amount=total,
-            details={"مساحت": area_m2, "نوع محاسبه": "پلکانی تجمعی"}
+            details={"مساحت زمین (عرصه)": area_m2, "نوع محاسبه": "پلکانی تجمعی", "نوع متراژ": "زمین (عرصه)"}
         )
 
     def calculate_urban_block_map(self, area_m2: float) -> TariffResponse:
@@ -455,11 +455,8 @@ class TariffCalculator:
         return rates.get(group_key, 0)
 
     def _needs_surveyor(self, ceilings: int, area_m2: float) -> bool:
-        """
-        شرط نیاز به ناظر نقشه‌بردار (طبق شرط کاربر):
-        سقف > 5 OR متراژ > 1200
-        """
-        return ceilings > 5 or area_m2 > 1200
+        """شرط نیاز به ناظر نقشه‌بردار: سقف >= 5 OR متراژ >= 1200"""
+        return ceilings >= 5 or area_m2 >= 1200
 
     def _get_urban_design_rate(self, group_key: str) -> int:
         """
@@ -541,7 +538,7 @@ class TariffCalculator:
         details = {
             "گروه ساختمانی": group_name,
             "تعداد سقف": ceilings,
-            "متراژ": area_m2,
+            "متراژ زیربنا": area_m2,
             "طراحی - تفکیک رشته‌ها": design_breakdown,
             "جمع طراحی ۴ رشته": design_total,
             "طراحی شهرسازی": urban_details,
@@ -606,7 +603,8 @@ class TariffCalculator:
         details = {
             "گروه ساختمانی": group_name,
             "تعداد سقف": ceilings,
-            "متراژ": area_m2,
+            "متراژ زیربنا": area_m2,
+            "نوع متراژ": "زیربنا",
             "نظارت - تفکیک رشته‌ها": supervision_breakdown,
             "جمع نظارت ۴ رشته": supervision_total,
             "نقشه‌برداری ساختمان": surveying_details,
@@ -755,7 +753,8 @@ class TariffCalculator:
         details = {
             "گروه ساختمانی": group_name,
             "تعداد سقف": ceilings,
-            "متراژ": area_m2,
+            "متراژ زیربنا": area_m2,
+            "نوع متراژ": "زیربنا",
             
             "═══════════════════════════════════════": "📐 بخش طراحی",
             "طراحی - تفکیک رشته‌ها": design_breakdown,
