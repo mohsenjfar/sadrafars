@@ -95,11 +95,12 @@ const SERVICE_CONFIG = {
     staking_plus_utm: {
         label: "میخکوبی + جانمایی",
         fields: ["num_points", "area_m2"],
+        area_type: "زمین (عرصه)",  // جانمایی بر اساس متراژ زمین
         info: `
             <ul>
                 <li>محاسبه همزمان هزینه میخکوبی و جانمایی (UTM)</li>
-                <li>میخکوبی: بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
-                <li>جانمایی: بر اساس متراژ (حداقل 500 متر مربع)</li>
+                <li><strong>میخکوبی:</strong> بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
+                <li><strong>جانمایی:</strong> بر اساس متراژ زمین (حداقل 500 متر مربع)</li>
                 <li>مناسب برای پروژه‌هایی که نیاز به هر دو سرویس دارند</li>
             </ul>
         `,
@@ -109,11 +110,12 @@ const SERVICE_CONFIG = {
     staking_plus_topography: {
         label: "میخکوبی + توپوگرافی",
         fields: ["num_points", "area_m2"],
+        area_type: "زمین (عرصه)",  // توپوگرافی بر اساس متراژ زمین
         info: `
             <ul>
                 <li>محاسبه همزمان هزینه میخکوبی و توپوگرافی</li>
-                <li>میخکوبی: بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
-                <li>توپوگرافی: بر اساس متراژ (حداقل 500 متر مربع)</li>
+                <li><strong>میخکوبی:</strong> بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
+                <li><strong>توپوگرافی:</strong> بر اساس متراژ زمین (حداقل 500 متر مربع)</li>
                 <li>مناسب برای پروژه‌هایی که نیاز به هر دو سرویس دارند</li>
             </ul>
         `,
@@ -123,11 +125,12 @@ const SERVICE_CONFIG = {
     single_line_plus_land_survey: {
         label: "تک خطی + مساحی عرصه",
         fields: ["built_up_area", "land_area"],
+        area_type: "زیربنا + زمین (عرصه)",  // توضیح واضح
         info: `
             <ul>
                 <li>محاسبه همزمان هزینه تک خطی قابل دریافت و مساحی عرصه</li>
-                <li>تک خطی: بر اساس مساحت زیربنا (حداقل 500 متر مربع)</li>
-                <li>مساحی عرصه: بر اساس مساحت زمین (حداقل 500 متر مربع)</li>
+                <li><strong>تک خطی:</strong> بر اساس مساحت زیربنا (حداقل 500 متر مربع)</li>
+                <li><strong>مساحی عرصه:</strong> بر اساس مساحت زمین (حداقل 500 متر مربع)</li>
                 <li>مناسب برای پروانه‌های ساختمانی که نیاز به هر دو سرویس دارند</li>
             </ul>
         `,
@@ -205,12 +208,14 @@ const FIELD_TEMPLATES = {
         <div class="form-group">
             <label>مساحت زیربنا (متر مربع)</label>
             <input type="number" id="built_up_area" placeholder="مثال: 750" class="form-control">
+            <small style="display: block; color: #666; font-size: 11px;">متراژ کل زیربنای ساختمان</small>
         </div>
     `,
     land_area: `
         <div class="form-group">
             <label>مساحت زمین (متر مربع)</label>
             <input type="number" id="land_area" placeholder="مثال: 1200" class="form-control">
+            <small style="display: block; color: #666; font-size: 11px;">متراژ زمین یا عرصه ملک</small>
         </div>
     `
 }

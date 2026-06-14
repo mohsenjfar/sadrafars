@@ -852,16 +852,10 @@ class TariffCalculator:
         )
 
     def calculate_staking_plus_utm(self, num_points: int, area_m2: float) -> TariffResponse:
-        """
-        محاسبه مجموع هزینه میخکوبی و جانمایی (UTM)
-        """
-        # محاسبه میخکوبی
+        """محاسبه مجموع هزینه میخکوبی و جانمایی (UTM)"""
         staking_result = self.calculate_staking(num_points)
-        
-        # محاسبه جانمایی
         utm_result = self.calculate_utm(area_m2)
         
-        # جمع کل
         base_amount = staking_result.base_amount + utm_result.base_amount
         vat = staking_result.vat + utm_result.vat
         total_amount = staking_result.total_amount + utm_result.total_amount
@@ -871,6 +865,7 @@ class TariffCalculator:
             vat=vat,
             total_amount=total_amount,
             details={
+                "نوع متراژ": "زمین (عرصه)",  # اضافه شد
                 "میخکوبی": {
                     "تعداد نقاط": num_points,
                     "مبلغ پایه": staking_result.base_amount,
@@ -878,7 +873,7 @@ class TariffCalculator:
                     "مبلغ نهایی": staking_result.total_amount
                 },
                 "جانمایی": {
-                    "متراژ": area_m2,
+                    "متراژ زمین (عرصه)": area_m2,  # تغییر نام
                     "مبلغ پایه": utm_result.base_amount,
                     "مالیات": utm_result.vat,
                     "مبلغ نهایی": utm_result.total_amount
@@ -892,16 +887,10 @@ class TariffCalculator:
         )
 
     def calculate_staking_plus_topography(self, num_points: int, area_m2: float) -> TariffResponse:
-        """
-        محاسبه مجموع هزینه میخکوبی و توپوگرافی
-        """
-        # محاسبه میخکوبی
+        """محاسبه مجموع هزینه میخکوبی و توپوگرافی"""
         staking_result = self.calculate_staking(num_points)
-        
-        # محاسبه توپوگرافی
         topography_result = self.calculate_topography(area_m2)
         
-        # جمع کل
         base_amount = staking_result.base_amount + topography_result.base_amount
         vat = staking_result.vat + topography_result.vat
         total_amount = staking_result.total_amount + topography_result.total_amount
@@ -911,6 +900,7 @@ class TariffCalculator:
             vat=vat,
             total_amount=total_amount,
             details={
+                "نوع متراژ": "زمین (عرصه)",  # اضافه شد
                 "میخکوبی": {
                     "تعداد نقاط": num_points,
                     "مبلغ پایه": staking_result.base_amount,
@@ -918,7 +908,7 @@ class TariffCalculator:
                     "مبلغ نهایی": staking_result.total_amount
                 },
                 "توپوگرافی": {
-                    "متراژ": area_m2,
+                    "متراژ زمین (عرصه)": area_m2,  # تغییر نام
                     "مبلغ پایه": topography_result.base_amount,
                     "مالیات": topography_result.vat,
                     "مبلغ نهایی": topography_result.total_amount
@@ -932,16 +922,10 @@ class TariffCalculator:
         )
 
     def calculate_single_line_plus_land_survey(self, built_up_area: float, land_area: float) -> TariffResponse:
-        """
-        محاسبه مجموع هزینه تک خطی قابل دریافت و مساحی عرصه
-        """
-        # محاسبه تک خطی قابل دریافت (بر اساس زیربنا)
+        """محاسبه مجموع هزینه تک خطی قابل دریافت و مساحی عرصه"""
         single_line_result = self.calculate_single_line_receivable(built_up_area)
-        
-        # محاسبه مساحی عرصه (بر اساس مساحت زمین)
         land_survey_result = self.calculate_land_survey(land_area)
         
-        # جمع کل
         base_amount = single_line_result.base_amount + land_survey_result.base_amount
         vat = single_line_result.vat + land_survey_result.vat
         total_amount = single_line_result.total_amount + land_survey_result.total_amount
@@ -951,14 +935,17 @@ class TariffCalculator:
             vat=vat,
             total_amount=total_amount,
             details={
+                "نوع متراژ": "مخلوط (زیربنا + زمین)",  # اضافه شد
                 "تک خطی قابل دریافت": {
                     "مساحت زیربنا": built_up_area,
+                    "نوع متراژ": "زیربنا",  # اضافه شد
                     "مبلغ پایه": single_line_result.base_amount,
                     "مالیات": single_line_result.vat,
                     "مبلغ نهایی": single_line_result.total_amount
                 },
                 "مساحی عرصه": {
-                    "مساحت زمین": land_area,
+                    "مساحت زمین (عرصه)": land_area,
+                    "نوع متراژ": "زمین (عرصه)",  # اضافه شد
                     "مبلغ پایه": land_survey_result.base_amount,
                     "مالیات": land_survey_result.vat,
                     "مبلغ نهایی": land_survey_result.total_amount
