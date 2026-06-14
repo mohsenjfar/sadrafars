@@ -7,9 +7,11 @@ const SERVICE_CONFIG = {
     single_line_receivable: {
         label: "تک خطی",
         fields: ["area_m2"],
+        area_type: "زیربنا",  // ← اصلاح: زیربنا
         info: `
             <ul>
                 <li>مبنای محاسبه مجموع متراژ واحدها طبق پروانه یا عدم خلاف می باشد + پیش آمدگی های ملک.</li>
+                <li><strong>متراژ زیربنای کل</strong> ملاک محاسبه است.</li>
                 <li>حداقل متراژ قابل محاسبه 500 متر مربع میباشد</li>
                 <li>در صورتی که عرصه ملک بزرگ باشد، تعرفه مساحی عرصه نیز اضافه میگردد (به عنوان مثال باغشهر).</li>
             </ul>
@@ -19,9 +21,11 @@ const SERVICE_CONFIG = {
     subdivision_with_history: {
         label: "تفکیکی دارای سابقه",
         fields: ["area_m2"],
+        area_type: "زیربنا",  // ← اصلاح: زیربنا
         info: `
             <ul>
                 <li>منظور از تفکیکی دارای سابقه، درخواست های تفکیکی می باشد که قبلاً نقشه تک خطی پایانکار توسط سازمان نظام مهندسی ساختمان انجام شده است.</li>
+                <li><strong>متراژ زیربنای کل</strong> ملاک محاسبه است.</li>
                 <li>حداقل متراژ قابل محاسبه 500 متر مربع میباشد</li>
             </ul>
         `,
@@ -30,9 +34,11 @@ const SERVICE_CONFIG = {
     subdivision_without_history: {
         label: "تفکیکی فاقد سابقه",
         fields: ["area_m2"],
+        area_type: "زیربنا",  // ← اصلاح: زیربنا
         info: `
             <ul>
                 <li>منظور از تفکیکی فاقد سابقه، درخواست های تفکیکی می باشد که قبلاً نقشه تک خطی پایانکار توسط سازمان نظام مهندسی ساختمان انجام نشده باشد است.</li>
+                <li><strong>متراژ زیربنای کل</strong> ملاک محاسبه است.</li>
                 <li>حداقل متراژ قابل محاسبه 500 متر مربع میباشد</li>
             </ul>
         `,
@@ -41,6 +47,7 @@ const SERVICE_CONFIG = {
     staking: {
         label: "میخکوبی",
         fields: ["num_points"],
+        area_type: null,
         info: `
             <ul>
                 <li>در صورتی که درخواست صرفاً از نوع میخکوبی باشد، هزینه جانمایی نیز به خدمات اضافه می‌گردد.</li>
@@ -52,9 +59,11 @@ const SERVICE_CONFIG = {
     topography: {
         label: "توپوگرافی",
         fields: ["area_m2"],
+        area_type: "زمین (عرصه)",  // ← زمین
         info: `
             <ul>
                 <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
+                <li><strong>متراژ زمین (عرصه)</strong> ملاک محاسبه است.</li>
             </ul>
         `,
         api_url: "/tariff/topography"
@@ -62,9 +71,11 @@ const SERVICE_CONFIG = {
     land_survey: {
         label: "مساحی عرصه",
         fields: ["area_m2"],
+        area_type: "زمین (عرصه)",  // ← زمین
         info: `
             <ul>
                 <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
+                <li><strong>متراژ زمین (عرصه)</strong> ملاک محاسبه است.</li>
             </ul>
         `,
         api_url: "/tariff/land_survey"
@@ -72,9 +83,11 @@ const SERVICE_CONFIG = {
     utm: {
         label: "جانمایی",
         fields: ["area_m2"],
+        area_type: "زمین (عرصه)",  // ← زمین
         info: `
             <ul>
                 <li>حداقل متراژ مورد محاسبه 500 متر میباشد</li>
+                <li><strong>متراژ زمین (عرصه)</strong> ملاک محاسبه است.</li>
             </ul>
         `,
         api_url: "/tariff/utm"
