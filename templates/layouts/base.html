@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <!-- Main CSS (global styles) -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v={{ timestamp }}">
     
     {% block extra_css %}{% endblock %}
 </head>
@@ -23,7 +23,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <!-- Main JS -->
-    <script src="/static/js/tools.js"></script>
+    <script src="/static/js/tools.js?v={{ timestamp }}"></script>
     
     {% block extra_js %}{% endblock %}
 </body>

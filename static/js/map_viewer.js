@@ -1,515 +1,488 @@
 /* file_path: /static/js/map_viewer.js */
 
 let map;
-let currentLayers = [];
-let currentDistrictId = null;
-let districtsConfig = null;
-let currentHighlightedLayer = null;
-let allPiecesData = []; // ذخیره تمام قطعات برای جستجو
+let currentDistrictLayer = null;
+let currentPiecesData = [];
+let currentlyHighlighted = null;
 
 // ============================================================
 // مقداردهی اولیه نقشه
 // ============================================================
 async function initializeMap() {
-    // بارگذاری کانفیگ نواحی
-    await loadDistrictsConfig();
+    console.log("1. initializeMap شروع شد");
     
-    // ایجاد نقشه با مرکزیت شهر صدرا و زوم پیش‌فرض
-    map = L.map('map').setView(districtsConfig.city_center, districtsConfig.default_zoom);
+    map = L.map('map', {
+        inertia: true,
+        inertiaDeceleration: 3000,
+        inertiaMaxSpeed: 1500,
+        easeLinearity: 0.25,
+        zoomSnap: 0.5,
+        zoomDelta: 0.5,
+        wheelPxPerZoomLevel: 60,
+        touchZoom: true,
+        scrollWheelZoom: true
+    }).setView([29.80421, 52.49931], 13);
     
-    // اضافه کردن لایه نقشه پایه (خاکستری ملایم)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         subdomains: 'abcd',
         maxZoom: 19,
         minZoom: 10
     }).addTo(map);
     
-    // راه‌اندازی جستجو با تکمیل خودکار
-    setupSearchSuggestions();
-    
-    // بارگذاری تمام نواحی به صورت اولیه
-    await loadAllDistricts();
+    console.log("2. نقشه ساخته شد، در حال بارگذاری لیست نواحی");
+    await loadDistrictsList();
 }
 
 // ============================================================
-// بارگذاری کانفیگ نواحی
+// بارگذاری لیست نواحی
 // ============================================================
-async function loadDistrictsConfig() {
+async function loadDistrictsList() {
     try {
-        const response = await fetch('/static/data/districts_config.json');
-        districtsConfig = await response.json();
+        console.log("3. در حال فراخوانی /api/districts");
+        const response = await fetch('/api/districts');
+        const data = await response.json();
+        console.log("4. پاسخ دریافت شد:", data);
         
-        // پر کردن dropdown ناحیه‌ها
-        populateDistrictDropdown();
-        
-        return districtsConfig;
+        populateDistrictDropdown(data.districts);
     } catch (error) {
-        console.error('خطا در بارگذاری کانفیگ نواحی:', error);
+        console.error('خطا:', error);
+        showError('خطا در بارگذاری لیست نواحی');
     }
 }
 
 // ============================================================
-// پر کردن dropdown ناحیه‌ها
+// پر کردن dropdown نواحی
 // ============================================================
-function populateDistrictDropdown() {
-    const dropdown = document.getElementById('districtSelect');
-    if (!dropdown || !districtsConfig) return;
+function populateDistrictDropdown(districts) {
+    console.log("5. پر کردن dropdown نواحی با", districts.length, "ناحیه");
+    const dropdown = $('#districtSelect');
     
-    dropdown.innerHTML = '<option value="">همه نواحی</option>';
+    dropdown.empty();
+    dropdown.append('<option value="">-- انتخاب ناحیه --</option>');
     
-    districtsConfig.districts.forEach(district => {
-        const option = document.createElement('option');
-        option.value = district.id;
-        option.textContent = district.name_fa;
-        dropdown.appendChild(option);
+    districts.forEach(district => {
+        dropdown.append(`<option value="${district.id}">${district.name_fa}</option>`);
     });
     
-    dropdown.addEventListener('change', onDistrictChange);
+    dropdown.select2({
+        placeholder: 'جستجوی ناحیه...',
+        allowClear: true,
+        dir: 'rtl',
+        language: 'fa',
+        width: '250px'
+    });
+    
+    dropdown.off('change').on('change', function(e) {
+        console.log("6. ناحیه تغییر کرد، مقدار:", e.target.value);
+        onDistrictChange(e);
+    });
+    
+    console.log("7. dropdown نواحی آماده شد");
 }
 
 // ============================================================
-// تغییر ناحیه از dropdown
+// تغییر ناحیه
 // ============================================================
 async function onDistrictChange(event) {
     const districtId = event.target.value;
+    console.log("8. onDistrictChange فراخوانی شد، districtId:", districtId);
     
     if (!districtId) {
-        await loadAllDistricts();
-        map.setView(districtsConfig.city_center, districtsConfig.default_zoom);
-        updateSearchPlaceholder('همه نواحی');
+        clearDistrictFromMap();
+        hidePiecesDropdown();
         return;
     }
     
-    const district = districtsConfig.districts.find(d => d.id === districtId);
-    if (!district) return;
+    showLoading(true);
     
-    currentDistrictId = districtId;
-    
-    // پاک کردن لایه‌های قبلی
-    clearLayers();
-    
-    // بارگذاری فقط ناحیه انتخاب شده
-    await loadDistrict(district);
-    
-    // تنظیم view روی ناحیه (بدون تغییر زوم)
-    map.panTo(district.center);
-    
-    updateSearchPlaceholder(district.name_fa);
-}
-
-// ============================================================
-// بارگذاری تمام نواحی
-// ============================================================
-async function loadAllDistricts() {
-    clearLayers();
-    currentDistrictId = null;
-    allPiecesData = [];
-    
-    for (const district of districtsConfig.districts) {
-        await loadDistrict(district);
-    }
-    
-    updateSearchPlaceholder('همه نواحی');
-    
-    // به‌روزرسانی پیشنهادات جستجو
-    setupSearchSuggestions();
-}
-
-// ============================================================
-// بارگذاری یک ناحیه خاص (پشتیبانی از Polygon و MultiPolygon)
-// ============================================================
-async function loadDistrict(district) {
     try {
-        for (const filePath of district.layer_files) {
-            const response = await fetch(filePath);
-            const geoJsonData = await response.json();
-            
-            // پردازش ویژگی‌ها
-            if (geoJsonData.features) {
-                geoJsonData.features.forEach(feature => {
-                    // استخراج شماره قطعه (از فیلد Name)
-                    let pieceNumber = null;
-                    if (feature.properties) {
-                        pieceNumber = feature.properties.Name || 
-                                     feature.properties.name || 
-                                     feature.properties.piece_num ||
-                                     feature.properties.fid;
-                    }
-                    
-                    // استخراج مختصات مرکزی برای قطعه (از properties یا محاسبه از geometry)
-                    let centerLat = feature.properties.lat || null;
-                    let centerLng = feature.properties.lon || null;
-                    
-                    // ایجاد لایه بر اساس نوع geometry
-                    let layer = null;
-                    const geometry = feature.geometry;
-                    
-                    if (geometry.type === 'Polygon' || geometry.type === 'MultiPolygon') {
-                        // برای Polygon ها از L.geoJSON استفاده می‌کنیم
-                        layer = L.geoJSON(feature, {
-                            style: {
-                                color: '#3b82f6',
-                                weight: 2,
-                                opacity: 0.7,
-                                fillColor: '#3b82f6',
-                                fillOpacity: 0.1
-                            },
-                            onEachFeature: function(f, l) {
-                                l.feature = f;
-                                l.districtId = district.id;
-                                l.pieceNumber = pieceNumber;
-                                l.centerLat = centerLat;
-                                l.centerLng = centerLng;
-                                
-                                // محاسبه مرکز از geometry اگر در properties نبود
-                                if (!centerLat && l.getBounds && l.getBounds().isValid()) {
-                                    const bounds = l.getBounds();
-                                    const center = bounds.getCenter();
-                                    l.centerLat = center.lat;
-                                    l.centerLng = center.lng;
-                                }
-                                
-                                // اضافه کردن popup
-                                if (pieceNumber) {
-                                    l.bindPopup(`
-                                        <div style="text-align: center; font-family: Vazirmatn;">
-                                            <strong>قطعه شماره</strong><br>
-                                            <span style="font-size: 16px; color: #2563eb;">${pieceNumber}</span>
-                                            ${feature.properties.masahat ? `<br><span style="font-size: 11px;">مساحت: ${feature.properties.masahat} متر مربع</span>` : ''}
-                                        </div>
-                                    `);
-                                }
-                                
-                                l.on('click', function(e) {
-                                    highlightPiece(l, pieceNumber, district);
-                                });
-                            }
-                        });
-                    } else if (geometry.type === 'LineString' || geometry.type === 'MultiLineString') {
-                        // برای LineString ها (مثل قبل)
-                        layer = L.geoJSON(feature, {
-                            style: {
-                                color: '#3b82f6',
-                                weight: 2,
-                                opacity: 0.7
-                            },
-                            onEachFeature: function(f, l) {
-                                l.feature = f;
-                                l.districtId = district.id;
-                                l.pieceNumber = pieceNumber;
-                                
-                                if (pieceNumber) {
-                                    l.bindPopup(`
-                                        <div style="text-align: center; font-family: Vazirmatn;">
-                                            <strong>قطعه شماره</strong><br>
-                                            <span style="font-size: 16px; color: #2563eb;">${pieceNumber}</span>
-                                        </div>
-                                    `);
-                                }
-                                
-                                l.on('click', function(e) {
-                                    highlightPiece(l, pieceNumber, district);
-                                });
-                            }
-                        });
-                    } else if (geometry.type === 'Point') {
-                        // برای Point ها
-                        const coords = geometry.coordinates;
-                        layer = L.circleMarker([coords[1], coords[0]], {
-                            radius: 6,
-                            color: '#10b981',
-                            weight: 2,
-                            opacity: 0.8,
-                            fillColor: '#10b981',
-                            fillOpacity: 0.6
-                        });
-                        layer.feature = feature;
-                        layer.districtId = district.id;
-                        layer.pieceNumber = pieceNumber;
-                        layer.centerLat = coords[1];
-                        layer.centerLng = coords[0];
-                        
-                        if (pieceNumber) {
-                            layer.bindPopup(`
-                                <div style="text-align: center; font-family: Vazirmatn;">
-                                    <strong>قطعه شماره</strong><br>
-                                    <span style="font-size: 16px; color: #2563eb;">${pieceNumber}</span>
-                                </div>
-                            `);
-                        }
-                        
-                        layer.on('click', function(e) {
-                            highlightPiece(layer, pieceNumber, district);
-                        });
-                    }
-                    
-                    if (layer) {
-                        layer.addTo(map);
-                        currentLayers.push(layer);
-                        
-                        // ذخیره اطلاعات قطعه برای جستجو
-                        if (pieceNumber) {
-                            allPiecesData.push({
-                                number: pieceNumber,
-                                layer: layer,
-                                districtId: district.id,
-                                districtName: district.name_fa
-                            });
-                        }
-                    }
-                });
-            }
+        const url = `/api/districts/${districtId}/load`;
+        console.log("9. در حال فراخوانی:", url);
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log("10. پاسخ ناحیه دریافت شد");
+        console.log("10.1. تعداد قطعات:", data.pieces?.length);
+        console.log("10.2. مرکز ناحیه:", data.center);
+        
+        if (!response.ok) {
+            throw new Error(data.detail || 'خطا در بارگذاری');
         }
+        
+        // ذخیره داده قطعات در متغیر سراسری و window
+        currentPiecesData = data.pieces;
+        window.currentPiecesData = data.pieces; // برای دسترسی در onEachFeature
+        console.log("11. currentPiecesData ذخیره شد با", currentPiecesData.length, "قطعه");
+        
+        // ابتدا dropdown قطعه را نمایش بده
+        showAndPopulatePiecesDropdown(data.pieces);
+        console.log("12. showAndPopulatePiecesDropdown اجرا شد");
+        
+        // سپس نقشه را نمایش بده (بعد از اینکه data.pieces در دسترس است)
+        displayDistrictOnMap(data.geojson);
+        console.log("13. displayDistrictOnMap اجرا شد");
+        
+        // حرکت به مرکز ناحیه
+        map.flyTo([data.center[1], data.center[0]], 15, {
+            animate: true,
+            duration: 2.0,
+            easeLinearity: 0.25
+        });
+        
     } catch (error) {
-        console.error(`خطا در بارگذاری ناحیه ${district.name_fa}:`, error);
+        console.error('خطا:', error);
+        showError('خطا در بارگذاری ناحیه');
+    } finally {
+        showLoading(false);
     }
 }
 
 // ============================================================
-// پاک کردن لایه‌های فعلی
+// نمایش ناحیه روی نقشه
 // ============================================================
-function clearLayers() {
-    currentLayers.forEach(layer => {
-        map.removeLayer(layer);
-    });
-    currentLayers = [];
-    allPiecesData = [];
+function displayDistrictOnMap(geojson) {
+    console.log("14. displayDistrictOnMap شروع شد");
+    console.log("14.1. geojson features:", geojson.features?.length);
+    console.log("14.2. currentPiecesData در شروع displayDistrictOnMap:", currentPiecesData?.length);
+    console.log("14.3. window.currentPiecesData:", window.currentPiecesData?.length);
     
-    if (currentHighlightedLayer) {
-        resetLayerStyle(currentHighlightedLayer);
-        currentHighlightedLayer = null;
+    if (currentDistrictLayer) {
+        map.removeLayer(currentDistrictLayer);
     }
-}
-
-// ============================================================
-// بازنشانی استایل لایه
-// ============================================================
-function resetLayerStyle(layer) {
-    if (layer && layer.setStyle) {
-        layer.setStyle({
+    
+    // ذخیره یک کپی از داده قطعات برای استفاده در onEachFeature
+    const piecesDataForClosure = [...currentPiecesData];
+    
+    currentDistrictLayer = L.geoJSON(geojson, {
+        style: {
             color: '#3b82f6',
             weight: 2,
             opacity: 0.7,
             fillColor: '#3b82f6',
             fillOpacity: 0.1
-        });
-    } else if (layer && layer.setRadius) {
-        // برای circleMarker
-        layer.setStyle({
-            color: '#10b981',
-            weight: 2,
-            opacity: 0.8,
-            fillColor: '#10b981',
-            fillOpacity: 0.6
-        });
-    }
-}
-
-// ============================================================
-// هایلایت کردن قطعه انتخاب شده و زوم روی آن
-// ============================================================
-function highlightPiece(layer, pieceNumber, district) {
-    // بازنشانی استایل لایه قبلی
-    if (currentHighlightedLayer && currentHighlightedLayer !== layer) {
-        resetLayerStyle(currentHighlightedLayer);
-    }
-    
-    // تنظیم استایل جدید برای لایه انتخاب شده
-    if (layer.setStyle) {
-        layer.setStyle({
-            color: '#ef4444',
-            weight: 4,
-            opacity: 1,
-            fillColor: '#ef4444',
-            fillOpacity: 0.3
-        });
-    } else if (layer.setRadius) {
-        // برای circleMarker
-        layer.setStyle({
-            color: '#ef4444',
-            weight: 3,
-            opacity: 1,
-            fillColor: '#ef4444',
-            fillOpacity: 0.8
-        });
-        layer.setRadius(10);
-    }
-    
-    currentHighlightedLayer = layer;
-    
-    // زوم روی قطعه
-    if (layer.getBounds && layer.getBounds().isValid()) {
-        map.fitBounds(layer.getBounds(), {
-            padding: [50, 50],
-            maxZoom: districtsConfig.piece_zoom
-        });
-    } else if (layer.getLatLng) {
-        map.setView(layer.getLatLng(), districtsConfig.piece_zoom);
-    } else if (layer.centerLat && layer.centerLng) {
-        map.setView([layer.centerLat, layer.centerLng], districtsConfig.piece_zoom);
-    }
-    
-    // نمایش اطلاعات در پنل کناری
-    showInfoPanel(pieceNumber, district);
-}
-
-// ============================================================
-// نمایش پنل اطلاعات
-// ============================================================
-function showInfoPanel(pieceNumber, district) {
-    const panel = document.getElementById('infoPanel');
-    const infoPieceNum = document.getElementById('infoPieceNum');
-    const infoFullName = document.getElementById('infoFullName');
-    const infoCoords = document.getElementById('infoCoords');
-    
-    if (panel && infoPieceNum && infoFullName) {
-        infoPieceNum.textContent = pieceNumber || 'نامشخص';
-        infoFullName.textContent = district ? `${district.name_fa} - قطعه ${pieceNumber}` : `قطعه ${pieceNumber}`;
-        
-        const center = map.getCenter();
-        infoCoords.textContent = `${center.lat.toFixed(6)} , ${center.lng.toFixed(6)}`;
-        
-        panel.style.display = 'block';
-    }
-}
-
-// ============================================================
-// جستجوی قطعه
-// ============================================================
-async function searchPiece() {
-    const searchInput = document.getElementById('searchInput');
-    const query = searchInput.value.trim();
-    
-    if (!query) {
-        alert('لطفاً شماره قطعه را وارد کنید');
-        return;
-    }
-    
-    // جستجو در allPiecesData
-    const queryLower = query.toLowerCase();
-    const matches = allPiecesData.filter(p => 
-        String(p.number).toLowerCase().includes(queryLower)
-    );
-    
-    if (matches.length === 0) {
-        alert(`قطعه "${query}" یافت نشد`);
-        return;
-    }
-    
-    // اگر بیش از یک نتیجه بود، اولین را انتخاب کن
-    const match = matches[0];
-    
-    // اگر ناحیه متفاوت است، ابتدا آن ناحیه را بارگذاری کن
-    if (currentDistrictId !== match.districtId) {
-        const district = districtsConfig.districts.find(d => d.id === match.districtId);
-        if (district) {
-            // تغییر dropdown
-            const dropdown = document.getElementById('districtSelect');
-            dropdown.value = match.districtId;
+        },
+        onEachFeature: function(feature, layer) {
+            const pieceNumber = feature.properties?.Name || feature.properties?.name;
+            const area = feature.properties?.masahat;
+            console.log("15. پردازش feature با شماره قطعه:", pieceNumber);
             
-            // بارگذاری ناحیه
-            clearLayers();
-            await loadDistrict(district);
-            map.panTo(district.center);
-            currentDistrictId = match.districtId;
-            updateSearchPlaceholder(district.name_fa);
-            
-            // دوباره لایه را پیدا کن (چون reference عوض شده)
-            const newLayer = currentLayers.find(l => l.pieceNumber === match.number);
-            if (newLayer) {
-                highlightPiece(newLayer, match.number, district);
+            if (pieceNumber) {
+                // استفاده از piecesDataForClosure که در closure ذخیره شده
+                const pieceData = piecesDataForClosure.find(p => String(p.number) === String(pieceNumber));
+                console.log("15.1. pieceData یافت شد:", pieceData ? "بله" : "خیر");
+                
+                if (pieceData) {
+                    const centerLat = pieceData.center?.[1]?.toFixed(6) || 'نامشخص';
+                    const centerLng = pieceData.center?.[0]?.toFixed(6) || 'نامشخص';
+                    const centerText = `${centerLat} , ${centerLng}`;
+                    
+                    let popupContent = `
+                        <div style="text-align: center; font-family: Vazirmatn; direction: rtl; min-width: 200px;">
+                            <div style="font-size: 15px; font-weight: bold; color: #1e293b; margin-bottom: 8px;">
+                                🏠 قطعه شماره ${pieceNumber}
+                            </div>
+                            ${area ? `<div style="font-size: 12px; color: #475569; margin-bottom: 5px;">
+                                📐 مساحت: <span dir="ltr" style="font-family: monospace;">${area.toLocaleString()}</span> متر مربع
+                            </div>` : ''}
+                            <div style="font-size: 12px; color: #475569; margin-bottom: 8px;">
+                                📍 نقطه میانی:
+                            </div>
+                            <div style="background: #f8fafc; padding: 6px 10px; border-radius: 6px; font-size: 11px; direction: ltr; font-family: monospace; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                                <span style="color: #2563eb; font-weight: 500;">${centerText}</span>
+                                <button onclick="copyToClipboard('${centerText}')" style="background: #e2e8f0; border: none; border-radius: 4px; padding: 2px 8px; cursor: pointer; font-size: 11px; font-family: monospace;">
+                                    📋 کپی
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    layer.bindPopup(popupContent);
+                    layer.pieceNumber = String(pieceNumber);
+                    
+                    layer.on('click', function(e) {
+                        console.log("16. کلیک روی قطعه:", pieceNumber);
+                        selectPieceFromMap(String(pieceNumber));
+                    });
+                } else {
+                    console.log("15.2. خطا: pieceData برای قطعه", pieceNumber, "یافت نشد");
+                    // پاپ‌آپ ساده بدون مختصات
+                    let popupContent = `
+                        <div style="text-align: center; font-family: Vazirmatn; direction: rtl;">
+                            <strong>قطعه شماره ${pieceNumber}</strong>
+                            ${area ? `<br><span style="font-size: 11px;">مساحت: ${area.toLocaleString()} متر مربع</span>` : ''}
+                        </div>
+                    `;
+                    layer.bindPopup(popupContent);
+                    layer.pieceNumber = String(pieceNumber);
+                    
+                    layer.on('click', function(e) {
+                        selectPieceFromMap(String(pieceNumber));
+                    });
+                }
             }
         }
-    } else {
-        highlightPiece(match.layer, match.number, districtsConfig.districts.find(d => d.id === match.districtId));
-    }
+    }).addTo(map);
     
-    // بستن dropdown پیشنهادات
-    const suggestions = document.getElementById('suggestions');
-    if (suggestions) suggestions.style.display = 'none';
+    console.log("17. لایه به نقشه اضافه شد");
 }
 
 // ============================================================
-// راه‌اندازی جستجو با تکمیل خودکار
+// نمایش dropdown قطعه
 // ============================================================
-function setupSearchSuggestions() {
-    const searchInput = document.getElementById('searchInput');
-    const suggestionsDiv = document.getElementById('suggestions');
+function showAndPopulatePiecesDropdown(pieces) {
+    console.log("18. showAndPopulatePiecesDropdown با", pieces.length, "قطعه");
+    const container = $('#pieceSelectContainer');
+    const pieceSelect = $('#pieceSelect');
     
-    if (!searchInput || !suggestionsDiv) return;
+    if (pieceSelect.data('select2')) {
+        pieceSelect.select2('destroy');
+    }
     
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        
-        if (query.length < 2) {
-            suggestionsDiv.style.display = 'none';
-            return;
+    pieceSelect.empty();
+    pieceSelect.append('<option value="">-- انتخاب قطعه --</option>');
+    
+    const sortedPieces = [...pieces].sort((a, b) => {
+        const numA = parseFloat(a.number);
+        const numB = parseFloat(b.number);
+        return numA - numB;
+    });
+    
+    sortedPieces.forEach(piece => {
+        pieceSelect.append(`<option value="${piece.number}">قطعه ${piece.number}</option>`);
+    });
+    
+    pieceSelect.select2({
+        placeholder: 'جستجوی قطعه...',
+        allowClear: true,
+        dir: 'rtl',
+        language: 'fa',
+        width: '250px'
+    });
+    
+    // تنظیم موقعیت ضربدر
+    setTimeout(() => {
+        $('.select2-selection__clear').css({
+            'right': 'auto',
+            'left': '25px'
+        });
+    }, 100);
+    
+    pieceSelect.off('change').on('change', function(e) {
+        const selectedValue = e.target.value;
+        console.log("19. انتخاب از dropdown:", selectedValue);
+        if (selectedValue) {
+            onPieceChangeFromDropdown(selectedValue);
         }
-        
-        const queryLower = query.toLowerCase();
-        const matches = allPiecesData.filter(p => 
-            String(p.number).toLowerCase().includes(queryLower)
-        ).slice(0, 10);
-        
-        if (matches.length === 0) {
-            suggestionsDiv.style.display = 'none';
-            return;
-        }
-        
-        suggestionsDiv.innerHTML = '';
-        matches.forEach(match => {
-            const item = document.createElement('div');
-            item.className = 'suggestion-item';
-            item.textContent = `${match.number} (${match.districtName})`;
-            item.onclick = () => {
-                searchInput.value = match.number;
-                suggestionsDiv.style.display = 'none';
-                
-                // اگر ناحیه متفاوت است، ابتدا آن ناحیه را بارگذاری کن
-                if (currentDistrictId !== match.districtId) {
-                    const district = districtsConfig.districts.find(d => d.id === match.districtId);
-                    if (district) {
-                        const dropdown = document.getElementById('districtSelect');
-                        dropdown.value = match.districtId;
-                        onDistrictChange({ target: dropdown });
-                        setTimeout(() => {
-                            const newLayer = currentLayers.find(l => l.pieceNumber === match.number);
-                            if (newLayer) {
-                                highlightPiece(newLayer, match.number, district);
-                            }
-                        }, 500);
-                    }
-                } else {
-                    highlightPiece(match.layer, match.number, districtsConfig.districts.find(d => d.id === match.districtId));
-                }
-            };
-            suggestionsDiv.appendChild(item);
+    });
+    
+    container.show();
+    console.log("20. dropdown قطعه نمایش داده شد");
+}
+
+// ============================================================
+// مخفی کردن dropdown قطعه
+// ============================================================
+function hidePiecesDropdown() {
+    const container = $('#pieceSelectContainer');
+    const pieceSelect = $('#pieceSelect');
+    
+    if (pieceSelect.data('select2')) {
+        pieceSelect.select2('destroy');
+    }
+    
+    pieceSelect.empty();
+    container.hide();
+    currentPiecesData = [];
+    window.currentPiecesData = [];
+    if (currentlyHighlighted && currentDistrictLayer) {
+        currentDistrictLayer.resetStyle(currentlyHighlighted);
+        currentlyHighlighted = null;
+    }
+}
+
+// ============================================================
+// انتخاب قطعه از dropdown
+// ============================================================
+function onPieceChangeFromDropdown(pieceNumber) {
+    console.log("21. onPieceChangeFromDropdown:", pieceNumber);
+    if (!pieceNumber) return;
+    
+    const piece = currentPiecesData?.find(p => String(p.number) === String(pieceNumber));
+    console.log("22. piece یافت شده:", piece ? "بله" : "خیر");
+    
+    if (piece && piece.center) {
+        map.flyTo([piece.center[1], piece.center[0]], 18, {
+            animate: true,
+            duration: 2.0,
+            easeLinearity: 0.25
         });
         
-        suggestionsDiv.style.display = 'block';
-    });
-    
-    document.addEventListener('click', function(e) {
-        if (e.target !== searchInput) {
-            suggestionsDiv.style.display = 'none';
+        if (currentDistrictLayer) {
+            let targetLayer = null;
+            currentDistrictLayer.eachLayer(layer => {
+                if (layer.pieceNumber === String(pieceNumber)) {
+                    targetLayer = layer;
+                }
+            });
+            
+            if (targetLayer) {
+                if (currentlyHighlighted) {
+                    currentDistrictLayer.resetStyle(currentlyHighlighted);
+                }
+                
+                targetLayer.setStyle({
+                    color: '#ef4444',
+                    weight: 4,
+                    opacity: 1,
+                    fillColor: '#ef4444',
+                    fillOpacity: 0.3
+                });
+                
+                currentlyHighlighted = targetLayer;
+                
+                setTimeout(() => {
+                    targetLayer.openPopup();
+                }, 500);
+            }
         }
-    });
-}
-
-// ============================================================
-// به‌روزرسانی placeholder جستجو
-// ============================================================
-function updateSearchPlaceholder(districtName) {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.placeholder = `جستجو در ${districtName}...`;
     }
 }
 
 // ============================================================
-// بارگذاری اولیه هنگام load صفحه
+// انتخاب قطعه از نقشه
 // ============================================================
+function selectPieceFromMap(pieceNumber) {
+    console.log("23. selectPieceFromMap:", pieceNumber);
+    if (!pieceNumber) return;
+    
+    const piece = currentPiecesData?.find(p => String(p.number) === String(pieceNumber));
+    console.log("24. piece یافت شده:", piece ? "بله" : "خیر");
+    
+    if (piece && piece.center) {
+        map.flyTo([piece.center[1], piece.center[0]], 18, {
+            animate: true,
+            duration: 2.0,
+            easeLinearity: 0.25
+        });
+        
+        if (currentDistrictLayer) {
+            let targetLayer = null;
+            currentDistrictLayer.eachLayer(layer => {
+                if (layer.pieceNumber === String(pieceNumber)) {
+                    targetLayer = layer;
+                }
+            });
+            
+            if (targetLayer) {
+                if (currentlyHighlighted) {
+                    currentDistrictLayer.resetStyle(currentlyHighlighted);
+                }
+                
+                targetLayer.setStyle({
+                    color: '#ef4444',
+                    weight: 4,
+                    opacity: 1,
+                    fillColor: '#ef4444',
+                    fillOpacity: 0.3
+                });
+                
+                currentlyHighlighted = targetLayer;
+                
+                setTimeout(() => {
+                    targetLayer.openPopup();
+                }, 500);
+            }
+        }
+        
+        // همگام‌سازی dropdown
+        const pieceSelect = $('#pieceSelect');
+        if (pieceSelect.length && pieceSelect.data('select2')) {
+            pieceSelect.val(pieceNumber).trigger('change');
+        }
+    }
+}
+
+// ============================================================
+// پاک کردن ناحیه از نقشه
+// ============================================================
+function clearDistrictFromMap() {
+    if (currentDistrictLayer) {
+        map.removeLayer(currentDistrictLayer);
+        currentDistrictLayer = null;
+    }
+    if (currentlyHighlighted) {
+        currentlyHighlighted = null;
+    }
+}
+
+// ============================================================
+// کپی کردن
+// ============================================================
+window.copyToClipboard = function(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('✅ مختصات کپی شد!', 'success');
+    }).catch(() => {
+        showToast('❌ خطا در کپی', 'error');
+    });
+};
+
+// ============================================================
+// توست
+// ============================================================
+function showToast(message, type = 'success') {
+    const existingToast = document.querySelector('.toast-message');
+    if (existingToast) existingToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.className = 'toast-message';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+    toast.style.color = 'white';
+    toast.style.padding = '10px 20px';
+    toast.style.borderRadius = '8px';
+    toast.style.zIndex = '3000';
+    toast.style.fontFamily = 'Vazirmatn, sans-serif';
+    toast.style.fontSize = '13px';
+    toast.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+    toast.style.whiteSpace = 'nowrap';
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 2000);
+}
+
+function showError(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.backgroundColor = '#ef4444';
+    toast.style.color = 'white';
+    toast.style.padding = '10px 20px';
+    toast.style.borderRadius = '8px';
+    toast.style.zIndex = '2000';
+    toast.style.fontFamily = 'Vazirmatn, sans-serif';
+    toast.style.fontSize = '13px';
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+function showLoading(show) {
+    const loading = document.getElementById('loading');
+    if (loading) {
+        loading.style.display = show ? 'flex' : 'none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeMap();
 });

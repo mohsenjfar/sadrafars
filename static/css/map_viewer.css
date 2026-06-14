@@ -44,83 +44,90 @@
 }
 
 /* ============================================================
-   استایل ناحیه (dropdown)
+   تنظیم عرض یکسان برای dropdownها در هر حالت
    ============================================================ */
-.district-select {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    font-family: 'Vazirmatn', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    background: white;
-    width: 220px;
-    min-width: 180px;
-    outline: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    color: #1e293b;
+.district-select,
+.piece-select {
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
 }
 
-.district-select:hover {
-    border-color: #cbd5e1;
-    background: #f8fafc;
+/* اطمینان از عرض یکسان در حالت‌های مختلف */
+.select2-container {
+    width: 250px !important;
+    min-width: 250px !important;
 }
 
-.district-select:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+/* استایل برای کانتینر خارجی dropdown قطعه */
+.piece-select + .select2-container {
+    width: 250px !important;
+}
+
+/* استایل برای کانتینر خارجی dropdown ناحیه */
+.district-select + .select2-container {
+    width: 250px !important;
 }
 
 /* ============================================================
-   فیلد جستجوی قطعه
+   استایل Select2 برای راست‌چین شدن
    ============================================================ */
-.search-input {
-    padding: 8px 16px;
-    border-radius: 8px;
+.select2-container--default .select2-selection--single {
+    height: 42px;
+    padding: 5px;
     border: 1px solid #e2e8f0;
+    border-radius: 8px;
     font-family: 'Vazirmatn', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    background: white;
-    width: 150px;
-    outline: none;
-    transition: all 0.2s ease;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 32px;
+    padding-right: 20px;
     color: #1e293b;
 }
 
-.search-input:hover {
-    border-color: #cbd5e1;
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px;
+    left: 5px;
+    right: auto;
 }
 
-.search-input:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    right: auto;
+    left: 25px;
 }
 
-/* ============================================================
-   دکمه جستجو
-   ============================================================ */
-.search-btn {
-    padding: 8px 20px;
-    background: #2563eb;
-    color: white;
-    border: none;
+.select2-dropdown {
+    border-color: #e2e8f0;
     border-radius: 8px;
-    cursor: pointer;
     font-family: 'Vazirmatn', sans-serif;
+}
+
+.select2-search__field {
+    font-family: 'Vazirmatn', sans-serif;
+    border-radius: 6px !important;
+    border-color: #e2e8f0 !important;
+}
+
+.select2-results__option {
+    padding: 8px 12px;
     font-size: 13px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    white-space: nowrap;
 }
 
-.search-btn:hover {
-    background: #1d4ed8;
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #2563eb;
 }
 
-.search-btn:active {
-    transform: scale(0.98);
+/* استایل برای حالت غیرفعال */
+.select2-container--disabled .select2-selection--single {
+    background-color: #f1f5f9 !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.select2-container--default.select2-container--disabled .select2-selection--single {
+    background-color: #f1f5f9;
+    border-color: #e2e8f0;
 }
 
 /* ============================================================
@@ -160,44 +167,6 @@
 }
 
 /* ============================================================
-   پنل اطلاعات قطعه - شیشه‌ای
-   ============================================================ */
-.info-panel {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    padding: 14px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    z-index: 1000;
-    min-width: 240px;
-    border-right: 3px solid #2563eb;
-    font-family: 'Vazirmatn', sans-serif;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.info-panel h4 {
-    color: #1e293b;
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-top: 0;
-}
-
-.info-panel p {
-    font-size: 12px;
-    color: #475569;
-    margin: 6px 0;
-}
-
-.info-panel span {
-    color: #2563eb;
-    font-weight: 600;
-}
-
-/* ============================================================
    راهنما (Legend)
    ============================================================ */
 .legend {
@@ -234,52 +203,6 @@
 }
 
 /* ============================================================
-   لیست پیشنهادات جستجو
-   ============================================================ */
-.suggestion-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    max-height: 220px;
-    overflow-y: auto;
-    z-index: 1001;
-    width: 100%;
-    margin-top: 6px;
-    font-family: 'Vazirmatn', sans-serif;
-    border: 1px solid #e2e8f0;
-}
-
-.suggestion-item {
-    padding: 10px 14px;
-    cursor: pointer;
-    border-bottom: 1px solid #f1f5f9;
-    font-size: 13px;
-    transition: background 0.2s ease;
-    color: #334155;
-}
-
-.suggestion-item:hover {
-    background: #f8fafc;
-    color: #1e293b;
-}
-
-.suggestion-item:last-child {
-    border-bottom: none;
-}
-
-/* ============================================================
-   کانتینر جستجو
-   ============================================================ */
-.search-container {
-    position: relative;
-    display: flex;
-}
-
-/* ============================================================
    لودینگ
    ============================================================ */
 .loading {
@@ -296,6 +219,9 @@
     font-family: 'Vazirmatn', sans-serif;
     white-space: nowrap;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ============================================================
@@ -314,28 +240,14 @@
         margin-left: 0;
         justify-content: space-between;
         padding: 6px 12px;
+        flex-wrap: wrap;
     }
     
-    .district-select {
-        width: auto;
-        flex: 2;
-        min-width: 140px;
-        font-size: 13px;
-        padding: 7px 12px;
-    }
-    
-    .search-container {
-        flex: 1;
-    }
-    
-    .search-input {
-        width: 100%;
-        font-size: 12px;
-    }
-    
-    .search-btn {
-        padding: 7px 16px;
-        font-size: 12px;
+    .district-select,
+    .piece-select,
+    .select2-container {
+        width: 100% !important;
+        min-width: unset !important;
     }
     
     .back-btn {
@@ -343,17 +255,11 @@
         padding: 7px 16px;
     }
     
-    .info-panel {
-        bottom: 70px;
-        right: 10px;
-        left: 10px;
-        min-width: auto;
-        font-size: 12px;
-    }
-    
     .legend {
-        bottom: 70px;
+        bottom: 10px;
         left: 10px;
+        font-size: 10px;
+        padding: 6px 12px;
     }
     
     .loading {
@@ -363,22 +269,66 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
     .search-wrapper {
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 8px;
     }
     
-    .district-select {
-        width: 100%;
-        flex: auto;
+    .district-select,
+    .piece-select {
+        width: 100% !important;
+    }
+}
+
+/* اضافه کن به انتهای فایل map_viewer.css */
+
+/* ============================================================
+   رفع مشکل ضربدر (clear) که روی فلش قرار گرفته
+   ============================================================ */
+.select2-selection__clear {
+    position: absolute !important;
+    right: auto !important;
+    left: 25px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 18px !important;
+    z-index: 10 !important;
+    background: transparent !important;
+    color: #999 !important;
+}
+
+.select2-selection__clear:hover {
+    color: #ef4444 !important;
+}
+
+/* تنظیم موقعیت فلش */
+.select2-selection__arrow {
+    position: absolute !important;
+    left: 5px !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+/* تنظیم padding برای متن داخل dropdown */
+.select2-selection__rendered {
+    padding-right: 20px !important;
+    padding-left: 50px !important;
+}
+
+/* مخفی کردن کانتینر قطعه در ابتدا */
+#pieceSelectContainer {
+    display: none;
+}
+
+/* استایل برای نمایش در موبایل */
+@media (max-width: 768px) {
+    .select2-selection__clear {
+        left: 35px !important;
     }
     
-    .search-container {
-        width: 100%;
-    }
-    
-    .search-input {
-        width: calc(100% - 85px);
+    .select2-selection__rendered {
+        padding-left: 60px !important;
     }
 }
