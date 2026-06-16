@@ -281,8 +281,6 @@
     }
 }
 
-/* اضافه کن به انتهای فایل map_viewer.css */
-
 /* ============================================================
    رفع مشکل ضربدر (clear) که روی فلش قرار گرفته
    ============================================================ */
@@ -322,7 +320,77 @@
     display: none;
 }
 
-/* استایل برای نمایش در موبایل */
+/* ============================================================
+   رفع مشکل نمایش متن در Select2 - اضافه شده
+   ============================================================ */
+
+/* 1. اطمینان از نمایش متن انتخاب شده */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #1e293b !important;
+    font-size: 13px !important;
+    font-family: 'Vazirmatn', sans-serif !important;
+    line-height: 40px !important;
+    padding-right: 15px !important;
+    padding-left: 35px !important;
+    direction: rtl !important;
+    text-align: right !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
+/* 2. اطمینان از نمایش placeholder */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 3. اطمینان از اینکه کادر خالی نیست */
+.select2-container--default .select2-selection--single {
+    background-color: #fff !important;
+    min-height: 42px !important;
+}
+
+/* 4. اطمینان از اینکه متن در حالت انتخاب شده قابل مشاهده است */
+.select2-container--default .select2-selection--single .select2-selection__rendered:not(.select2-selection__placeholder) {
+    color: #1e293b !important;
+}
+
+/* 5. برای اطمینان از راست‌چین بودن */
+.select2-container {
+    direction: rtl !important;
+}
+
+/* 6. اطمینان از اینکه فلش و ضربدر تداخل ندارند */
+.select2-selection__clear {
+    position: absolute !important;
+    right: auto !important;
+    left: 30px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 18px !important;
+    z-index: 10 !important;
+    background: transparent !important;
+    color: #999 !important;
+    cursor: pointer !important;
+}
+
+.select2-selection__arrow {
+    position: absolute !important;
+    left: 8px !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 10 !important;
+}
+
+/* ============================================================
+   استایل برای نمایش در موبایل
+   ============================================================ */
 @media (max-width: 768px) {
     .select2-selection__clear {
         left: 35px !important;
