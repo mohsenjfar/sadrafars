@@ -307,47 +307,75 @@ function onPieceChangeFromDropdown(pieceNumber) {
     console.log("21. onPieceChangeFromDropdown:", pieceNumber);
     if (!pieceNumber) return;
     
+    // ========================================
+    // مرحله 1: پیدا کردن قطعه در داده‌ها
+    // ========================================
     const piece = currentPiecesData?.find(p => String(p.number) === String(pieceNumber));
     console.log("22. piece یافت شده:", piece ? "بله" : "خیر");
     
-    if (piece && piece.center) {
-        map.flyTo([piece.center[1], piece.center[0]], 18, {
-            animate: true,
-            duration: 2.0,
-            easeLinearity: 0.25
+    if (!piece || !piece.center) {
+        showError(`قطعه ${pieceNumber} یافت نشد`);
+        return;
+    }
+    
+    // ========================================
+    // مرحله 2: حرکت نقشه به مرکز قطعه
+    // ========================================
+    map.flyTo([piece.center[1], piece.center[0]], 18, {
+        animate: true,
+        duration: 2.0,
+        easeLinearity: 0.25
+    });
+    
+    // ========================================
+    // مرحله 3: هایلایت کردن قطعه روی نقشه
+    // ========================================
+    if (currentDistrictLayer) {
+        let targetLayer = null;
+        
+        // پیدا کردن لایه مربوط به قطعه
+        currentDistrictLayer.eachLayer(layer => {
+            if (layer.pieceNumber === String(pieceNumber)) {
+                targetLayer = layer;
+            }
         });
         
-        if (currentDistrictLayer) {
-            let targetLayer = null;
-            currentDistrictLayer.eachLayer(layer => {
-                if (layer.pieceNumber === String(pieceNumber)) {
-                    targetLayer = layer;
-                }
+        // ریست کردن هایلایت قبلی
+        if (currentlyHighlighted) {
+            currentDistrictLayer.resetStyle(currentlyHighlighted);
+        }
+        
+        // هایلایت کردن قطعه جدید
+        if (targetLayer) {
+            targetLayer.setStyle({
+                color: '#ef4444',
+                weight: 4,
+                opacity: 1,
+                fillColor: '#ef4444',
+                fillOpacity: 0.3
             });
             
-            if (targetLayer) {
-                if (currentlyHighlighted) {
-                    currentDistrictLayer.resetStyle(currentlyHighlighted);
-                }
-                
-                targetLayer.setStyle({
-                    color: '#ef4444',
-                    weight: 4,
-                    opacity: 1,
-                    fillColor: '#ef4444',
-                    fillOpacity: 0.3
-                });
-                
-                currentlyHighlighted = targetLayer;
-                
-                setTimeout(() => {
-                    targetLayer.openPopup();
-                }, 500);
-            }
+            currentlyHighlighted = targetLayer;
+            
+            // باز کردن popup
+            setTimeout(() => {
+                targetLayer.openPopup();
+            }, 500);
         }
     }
+    
+    // ========================================
+    // مرحله 4: ✅ نمایش انتخاب در Select2
+    // ========================================
+    const pieceSelect = $('#pieceSelect');
+    if (pieceSelect.length && pieceSelect.data('select2')) {
+        // مقدار را در Select2 تنظیم کن
+        pieceSelect.val(String(pieceNumber)).trigger('change.select2');
+    } else if (pieceSelect.length) {
+        // اگر Select2 فعال نیست، فقط مقدار dropdown را تنظیم کن
+        pieceSelect.val(String(pieceNumber));
+    }
 }
-
 // ============================================================
 // انتخاب قطعه از نقشه
 // ============================================================
