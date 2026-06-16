@@ -1,0 +1,16 @@
+{% block map_header %}
+<div class="map-header">
+    <h1>
+        <span>🗺️</span>
+        نقشه قطعات شهر صدرا
+    </h1>
+    <div style="position: relative;">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="جستجوی شماره قطعه..." autocomplete="off">
+            <button onclick="searchPiece()">🔍 جستجو</button>
+        </div>
+        <div id="suggestions" class="suggestion-list" style="display: none;"></div>
+    </div>
+    <a href="/" class="back-btn">← بازگشت</a>
+</div>
+{% endblock %}

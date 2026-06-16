@@ -91,6 +91,51 @@ const SERVICE_CONFIG = {
             </ul>
         `,
         api_url: "/tariff/utm"
+    },
+    staking_plus_utm: {
+        label: "میخکوبی + جانمایی",
+        fields: ["num_points", "area_m2"],
+        area_type: "زمین (عرصه)",  // جانمایی بر اساس متراژ زمین
+        info: `
+            <ul>
+                <li>محاسبه همزمان هزینه میخکوبی و جانمایی (UTM)</li>
+                <li><strong>میخکوبی:</strong> بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
+                <li><strong>جانمایی:</strong> بر اساس متراژ زمین (حداقل 500 متر مربع)</li>
+                <li>مناسب برای پروژه‌هایی که نیاز به هر دو سرویس دارند</li>
+            </ul>
+        `,
+        infoClass: "info-box",
+        api_url: "/tariff/staking_plus_utm"
+    },
+    staking_plus_topography: {
+        label: "میخکوبی + توپوگرافی",
+        fields: ["num_points", "area_m2"],
+        area_type: "زمین (عرصه)",  // توپوگرافی بر اساس متراژ زمین
+        info: `
+            <ul>
+                <li>محاسبه همزمان هزینه میخکوبی و توپوگرافی</li>
+                <li><strong>میخکوبی:</strong> بر اساس تعداد نقاط (حداقل 8 نقطه)</li>
+                <li><strong>توپوگرافی:</strong> بر اساس متراژ زمین (حداقل 500 متر مربع)</li>
+                <li>مناسب برای پروژه‌هایی که نیاز به هر دو سرویس دارند</li>
+            </ul>
+        `,
+        infoClass: "info-box",
+        api_url: "/tariff/staking_plus_topography"
+    },
+    single_line_plus_land_survey: {
+        label: "تک خطی + مساحی عرصه",
+        fields: ["built_up_area", "land_area"],
+        area_type: "زیربنا + زمین (عرصه)",  // توضیح واضح
+        info: `
+            <ul>
+                <li>محاسبه همزمان هزینه تک خطی قابل دریافت و مساحی عرصه</li>
+                <li><strong>تک خطی:</strong> بر اساس مساحت زیربنا (حداقل 500 متر مربع)</li>
+                <li><strong>مساحی عرصه:</strong> بر اساس مساحت زمین (حداقل 500 متر مربع)</li>
+                <li>مناسب برای پروانه‌های ساختمانی که نیاز به هر دو سرویس دارند</li>
+            </ul>
+        `,
+        infoClass: "info-box",
+        api_url: "/tariff/single_line_plus_land_survey"
     }
 }
 
@@ -157,6 +202,20 @@ const FIELD_TEMPLATES = {
         <div class="form-group">
             <label>تعداد نقاط</label>
             <input type="number" id="num_points" placeholder="مثال: 10" min="1" class="form-control">
+        </div>
+    `,
+    built_up_area: `
+        <div class="form-group">
+            <label>مساحت زیربنا (متر مربع)</label>
+            <input type="number" id="built_up_area" placeholder="مثال: 750" class="form-control">
+            <small style="display: block; color: #666; font-size: 11px;">متراژ کل زیربنای ساختمان</small>
+        </div>
+    `,
+    land_area: `
+        <div class="form-group">
+            <label>مساحت زمین (متر مربع)</label>
+            <input type="number" id="land_area" placeholder="مثال: 1200" class="form-control">
+            <small style="display: block; color: #666; font-size: 11px;">متراژ زمین یا عرصه ملک</small>
         </div>
     `
 }
@@ -236,15 +295,12 @@ const tools = {
         `
     },
     map: {
-        title: "مشاهده قطعه و ناحیه بر روی نقشه",
+        title: "مشاهده قطعه و ناحیه",
         type: "map",
-        html: `
-            <div style="text-align: center; padding: 40px; color: #666;">
-                <span style="font-size: 48px;">🗺️</span>
-                <p style="margin-top: 15px;">این ابزار به زودی فعال خواهد شد</p>
-                <p style="font-size: 12px; color: #999;">امکان مشاهده قطعه و ناحیه بر روی نقشه</p>
-            </div>
-        `
+        html: `<div style="text-align: center; padding: 20px;">
+            <div style="font-size: 48px;">🗺️</div>
+            <p style="margin-top: 15px;">در حال انتقال به صفحه نقشه...</p>
+        </div>`
     }
 }
 
@@ -632,28 +688,44 @@ function renderFields(container, config, selectedService) {
     let html = ""
     
     if (serviceConfig.info) {
-        html += `<div class="info-box">${serviceConfig.info}</div>`
+        html += `<div class="${serviceConfig.infoClass || 'info-box'}">${serviceConfig.info}</div>`
     }
     
-    html += `<div class="form-row">`
-    serviceConfig.fields.forEach(f => {
-        if (FIELD_TEMPLATES[f]) {
-            html += FIELD_TEMPLATES[f]
-        }
-    })
-    html += `</div>`
+    if (selectedService === "single_line_plus_land_survey") {
+        html += `<div class="form-row">`
+        html += FIELD_TEMPLATES.built_up_area
+        html += FIELD_TEMPLATES.land_area
+        html += `</div>`
+    } else {
+        html += `<div class="form-row">`
+        serviceConfig.fields.forEach(f => {
+            if (FIELD_TEMPLATES[f]) {
+                html += FIELD_TEMPLATES[f]
+            }
+        })
+        html += `</div>`
+    }
     
     container.innerHTML = html
 }
 
-function getPayload(fields, formElement, prefix = "") {
+function getPayload(fields, formElement, selectedService = "") {
     let payload = {}
-    fields.forEach(f => {
-        const el = formElement.querySelector(`#${prefix}${f}`)
-        if (el) {
-            payload[f] = Number(el.value) || 0
-        }
-    })
+    
+    if (selectedService === "single_line_plus_land_survey") {
+        const builtUpArea = formElement.querySelector("#built_up_area")
+        const landArea = formElement.querySelector("#land_area")
+        if (builtUpArea) payload.built_up_area = Number(builtUpArea.value) || 0
+        if (landArea) payload.land_area = Number(landArea.value) || 0
+    } else {
+        fields.forEach(f => {
+            const el = formElement.querySelector(`#${f}`)
+            if (el) {
+                payload[f] = Number(el.value) || 0
+            }
+        })
+    }
+    
     return payload
 }
 
@@ -689,7 +761,7 @@ function initToolLogic(tool) {
         form.addEventListener("submit", async function(e) {
             e.preventDefault()
             const config = SERVICE_CONFIG[selectedService]
-            const payload = getPayload(config.fields, form, "")
+            const payload = getPayload(config.fields, form, selectedService)
             
             result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>"
             

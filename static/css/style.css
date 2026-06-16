@@ -405,6 +405,36 @@ footer {
 }
 
 /* ============================================================
+   اخبار
+   ============================================================ */
+.news-section { background: #f1f5f9; padding: 80px 10%; }
+.news-grid {
+display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;
+}
+.news-card {
+background: white; border-radius: 16px; overflow: hidden;
+box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.news-img { width: 100%; height: 200px; background: #ddd; object-fit: cover; }
+.news-content { padding: 20px; }
+.news-content span { color: var(--primary); font-size: 12px; font-weight: bold; }
+.news-content h3 { font-size: 18px; margin: 10px 0; }
+
+.modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(8px);
+    z-index:2000;
+}
+
+/* ============================================================
    ریسپانسیو
    ============================================================ */
 @media (max-width: 900px) {

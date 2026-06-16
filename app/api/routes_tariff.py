@@ -113,3 +113,27 @@ def calculate_delay_penalty(payload: DelayPenaltyRequest):
         payload.ceilings,
         payload.license_date
     )
+
+@router.post("/staking_plus_utm", response_model=TariffResponse)
+def calculate_staking_plus_utm(payload: StakingPlusUtmRequest):
+    """محاسبه مجموع هزینه میخکوبی و جانمایی"""
+    return calc.calculate_staking_plus_utm(
+        payload.num_points,
+        payload.area_m2
+    )
+
+@router.post("/staking_plus_topography", response_model=TariffResponse)
+def calculate_staking_plus_topography(payload: StakingPlusTopographyRequest):
+    """محاسبه مجموع هزینه میخکوبی و توپوگرافی"""
+    return calc.calculate_staking_plus_topography(
+        payload.num_points,
+        payload.area_m2
+    )
+
+@router.post("/single_line_plus_land_survey", response_model=TariffResponse)
+def calculate_single_line_plus_land_survey(payload: SingleLinePlusLandSurveyRequest):
+    """محاسبه مجموع هزینه تک خطی قابل دریافت و مساحی عرصه"""
+    return calc.calculate_single_line_plus_land_survey(
+        payload.built_up_area,
+        payload.land_area
+    )
