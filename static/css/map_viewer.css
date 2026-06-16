@@ -400,3 +400,74 @@
         padding-left: 60px !important;
     }
 }
+/* اضافه کن به انتهای فایل map_viewer.css */
+
+/* ============================================================
+   نمایش نام ناحیه انتخاب شده در dropdown
+   ============================================================ */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* استایل برای آیتم انتخاب شده */
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+}
+
+/* وقتی چیزی انتخاب شده */
+.select2-container--default.select2-container--open .select2-selection--single {
+    border-color: #2563eb;
+}
+
+/* استایل برای متن placeholder */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #94a3b8;
+}
+
+/* اطمینان از راست‌چین بودن کامل */
+.select2-container--default .select2-results>.select2-results__options {
+    direction: rtl;
+    text-align: right;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    direction: rtl;
+    text-align: right;
+}
+
+/* اضافه کن به انتهای فایل map_viewer.css */
+
+/* بهبود نمایش Select2 برای اعداد فارسی */
+.select2-container--default .select2-results__option {
+    font-family: 'Vazirmatn', monospace;
+    font-size: 13px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    font-family: 'Vazirmatn', monospace;
+    font-size: 13px;
+}
+
+/* هایلایت جستجو */
+.select2-results__option--highlighted {
+    background-color: #2563eb !important;
+}
+
+/* اطمینان از نمایش کامل متن در موبایل */
+@media (max-width: 768px) {
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        font-size: 12px;
+        padding-right: 8px !important;
+    }
+    
+    .select2-container--default .select2-selection--single {
+        height: 38px;
+    }
+}
+
+/* استایل برای آیتم انتخاب شده در dropdown قطعه */
+.select2-results__option {
+    padding: 10px 12px !important;
+}
