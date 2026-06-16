@@ -4,160 +4,62 @@
    تنظیمات کلی
    ============================================================ */
 * {
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+body {
+    direction: rtl;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
 /* ============================================================
-   هدر نقشه - شیشه‌ای سفید
+   اصلاح Leaflet برای RTL
    ============================================================ */
-.map-header {
-    background: rgba(80, 112, 117, 0.63);
+.leaflet-control-container,
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    direction: ltr !important;
+}
+
+/* ============================================================
+   هدر - ارتفاع ثابت
+   ============================================================ */
+.custom-header {
+    height: 72px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
-    color: #1e293b;
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    position: relative;
-    z-index: 10;
-}
-
-/* ============================================================
-   کادر جستجو - شیشه‌ای با گوشه تیزتر
-   ============================================================ */
-.search-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 6px 16px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border: 1px solid #e2e8f0;
-    margin-left: auto;
+    padding: 0 16px;
 }
 
 /* ============================================================
-   تنظیم عرض یکسان برای dropdownها در هر حالت
+   کانتینر نقشه - بقیه صفحه
    ============================================================ */
-.district-select,
-.piece-select {
-    width: 250px !important;
-    min-width: 250px !important;
-    max-width: 250px !important;
-}
-
-/* اطمینان از عرض یکسان در حالت‌های مختلف */
-.select2-container {
-    width: 250px !important;
-    min-width: 250px !important;
-}
-
-/* استایل برای کانتینر خارجی dropdown قطعه */
-.piece-select + .select2-container {
-    width: 250px !important;
-}
-
-/* استایل برای کانتینر خارجی dropdown ناحیه */
-.district-select + .select2-container {
-    width: 250px !important;
-}
-
-/* ============================================================
-   استایل Select2 برای راست‌چین شدن
-   ============================================================ */
-.select2-container--default .select2-selection--single {
-    height: 42px;
-    padding: 5px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-family: 'Vazirmatn', sans-serif;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 32px;
-    padding-right: 20px;
-    color: #1e293b;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 40px;
-    left: 5px;
-    right: auto;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__clear {
-    right: auto;
-    left: 25px;
-}
-
-.select2-dropdown {
-    border-color: #e2e8f0;
-    border-radius: 8px;
-    font-family: 'Vazirmatn', sans-serif;
-}
-
-.select2-search__field {
-    font-family: 'Vazirmatn', sans-serif;
-    border-radius: 6px !important;
-    border-color: #e2e8f0 !important;
-}
-
-.select2-results__option {
-    padding: 8px 12px;
-    font-size: 13px;
-}
-
-.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
-    background-color: #2563eb;
-}
-
-/* استایل برای حالت غیرفعال */
-.select2-container--disabled .select2-selection--single {
-    background-color: #f1f5f9 !important;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.select2-container--default.select2-container--disabled .select2-selection--single {
-    background-color: #f1f5f9;
-    border-color: #e2e8f0;
-}
-
-/* ============================================================
-   دکمه بازگشت
-   ============================================================ */
-.back-btn {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    color: #1e293b;
-    padding: 8px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 13px;
-    font-family: 'Vazirmatn', sans-serif;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.back-btn:hover {
-    background: #e2e8f0;
-}
-
-/* ============================================================
-   کانتینر نقشه
-   ============================================================ */
-.map-container {
+.map-wrapper {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100vh - 72px);
     width: 100%;
-    height: calc(100vh - 70px);
-    position: relative;
+    overflow: hidden;
 }
 
 #map {
@@ -167,307 +69,271 @@
 }
 
 /* ============================================================
-   راهنما (Legend)
+   استایل Dropdown سفارشی
    ============================================================ */
-.legend {
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.custom-dropdown-input {
+    width: 100%;
+    padding: 8px 14px;
+    padding-left: 60px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+    color: #1e293b;
+    transition: all 0.2s ease;
+    direction: rtl;
+    text-align: right;
+    cursor: pointer;
+}
+
+.custom-dropdown-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.custom-dropdown-input::placeholder {
+    color: #94a3b8;
+}
+
+/* ============================================================
+   دکمه ضربدر (Clear)
+   ============================================================ */
+.custom-dropdown-clear {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px);
-    padding: 10px 16px;
+    left: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: none;
+    z-index: 5;
+    background: none;
+    border: none;
+    padding: 2px 4px;
+    line-height: 1;
+}
+
+.custom-dropdown-clear:hover {
+    color: #ef4444;
+    transform: translateY(-50%) scale(1.2);
+}
+
+.custom-dropdown-clear.visible {
+    display: block;
+}
+
+/* ============================================================
+   آیکون فلش
+   ============================================================ */
+.custom-dropdown-arrow {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+    font-size: 10px;
+    transition: transform 0.2s ease;
+    z-index: 2;
+}
+
+.custom-dropdown.open .custom-dropdown-arrow {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* ============================================================
+   لیست dropdown
+   ============================================================ */
+.custom-dropdown-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    direction: rtl;
+    text-align: right;
+}
+
+.custom-dropdown.open .custom-dropdown-list {
+    display: block;
+}
+
+/* آیتم‌های لیست */
+.custom-dropdown-item {
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #1e293b;
+    transition: background 0.15s;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.custom-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.custom-dropdown-item:hover {
+    background: #f1f5f9;
+}
+
+.custom-dropdown-item.active {
+    background: #2563eb;
+    color: white;
+}
+
+.custom-dropdown-item .highlight {
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.custom-dropdown-item.active .highlight {
+    color: #93c5fd;
+}
+
+/* ============================================================
+   اسکرولبار
+   ============================================================ */
+.custom-dropdown-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-dropdown-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
     border-radius: 10px;
-    font-size: 11px;
-    z-index: 1000;
-    font-family: 'Vazirmatn', sans-serif;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.legend div {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    gap: 6px;
+.custom-dropdown-list::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 10px;
 }
 
-.legend div:last-child {
-    margin-bottom: 0;
-}
-
-.legend span {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
+.custom-dropdown-list::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
 }
 
 /* ============================================================
    لودینگ
    ============================================================ */
-.loading {
-    position: absolute;
+.custom-loading {
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
     z-index: 2000;
     font-size: 13px;
     font-family: 'Vazirmatn', sans-serif;
-    white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: none;
     align-items: center;
-    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.custom-loading.show {
+    display: flex;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    width: 20px;
+    height: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* ============================================================
    ریسپانسیو
    ============================================================ */
 @media (max-width: 768px) {
-    .map-header {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 12px 16px;
-        gap: 10px;
+    .custom-header {
+        height: auto;
+        min-height: 72px;
+        padding: 8px 12px;
     }
     
-    .search-wrapper {
-        width: 100%;
-        margin-left: 0;
-        justify-content: space-between;
+    .map-wrapper {
+        top: 72px;
+        height: calc(100vh - 72px);
+    }
+    
+    .custom-dropdown {
+        max-width: 100%;
+    }
+    
+    .custom-dropdown-input {
+        padding-left: 55px;
+        font-size: 12px;
+    }
+    
+    .custom-dropdown-clear {
+        left: 32px;
+        font-size: 14px;
+    }
+    
+    .custom-dropdown-arrow {
+        font-size: 9px;
+    }
+    
+    .custom-dropdown-item {
         padding: 6px 12px;
-        flex-wrap: wrap;
-    }
-    
-    .district-select,
-    .piece-select,
-    .select2-container {
-        width: 100% !important;
-        min-width: unset !important;
-    }
-    
-    .back-btn {
-        text-align: center;
-        padding: 7px 16px;
-    }
-    
-    .legend {
-        bottom: 10px;
-        left: 10px;
-        font-size: 10px;
-        padding: 6px 12px;
-    }
-    
-    .loading {
-        white-space: normal;
-        text-align: center;
-        max-width: 80%;
+        font-size: 12px;
     }
 }
 
 @media (max-width: 480px) {
-    .search-wrapper {
-        flex-direction: column;
-        gap: 8px;
+    .custom-header {
+        min-height: 64px;
+        padding: 6px 8px;
     }
     
-    .district-select,
-    .piece-select {
-        width: 100% !important;
-    }
-}
-
-/* ============================================================
-   رفع مشکل ضربدر (clear) که روی فلش قرار گرفته
-   ============================================================ */
-.select2-selection__clear {
-    position: absolute !important;
-    right: auto !important;
-    left: 25px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    font-size: 18px !important;
-    z-index: 10 !important;
-    background: transparent !important;
-    color: #999 !important;
-}
-
-.select2-selection__clear:hover {
-    color: #ef4444 !important;
-}
-
-/* تنظیم موقعیت فلش */
-.select2-selection__arrow {
-    position: absolute !important;
-    left: 5px !important;
-    right: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-}
-
-/* تنظیم padding برای متن داخل dropdown */
-.select2-selection__rendered {
-    padding-right: 20px !important;
-    padding-left: 50px !important;
-}
-
-/* مخفی کردن کانتینر قطعه در ابتدا */
-#pieceSelectContainer {
-    display: none;
-}
-
-/* ============================================================
-   رفع مشکل نمایش متن در Select2 - اضافه شده
-   ============================================================ */
-
-/* 1. اطمینان از نمایش متن انتخاب شده */
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #1e293b !important;
-    font-size: 13px !important;
-    font-family: 'Vazirmatn', sans-serif !important;
-    line-height: 40px !important;
-    padding-right: 15px !important;
-    padding-left: 35px !important;
-    direction: rtl !important;
-    text-align: right !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-}
-
-/* 2. اطمینان از نمایش placeholder */
-.select2-container--default .select2-selection--single .select2-selection__placeholder {
-    color: #94a3b8 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* 3. اطمینان از اینکه کادر خالی نیست */
-.select2-container--default .select2-selection--single {
-    background-color: #fff !important;
-    min-height: 42px !important;
-}
-
-/* 4. اطمینان از اینکه متن در حالت انتخاب شده قابل مشاهده است */
-.select2-container--default .select2-selection--single .select2-selection__rendered:not(.select2-selection__placeholder) {
-    color: #1e293b !important;
-}
-
-/* 5. برای اطمینان از راست‌چین بودن */
-.select2-container {
-    direction: rtl !important;
-}
-
-/* 6. اطمینان از اینکه فلش و ضربدر تداخل ندارند */
-.select2-selection__clear {
-    position: absolute !important;
-    right: auto !important;
-    left: 30px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    font-size: 18px !important;
-    z-index: 10 !important;
-    background: transparent !important;
-    color: #999 !important;
-    cursor: pointer !important;
-}
-
-.select2-selection__arrow {
-    position: absolute !important;
-    left: 8px !important;
-    right: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 10 !important;
-}
-
-/* ============================================================
-   استایل برای نمایش در موبایل
-   ============================================================ */
-@media (max-width: 768px) {
-    .select2-selection__clear {
-        left: 35px !important;
+    .map-wrapper {
+        top: 64px;
+        height: calc(100vh - 64px);
     }
     
-    .select2-selection__rendered {
-        padding-left: 60px !important;
+    .custom-dropdown-input {
+        padding: 6px 10px;
+        padding-left: 50px;
+        font-size: 11px;
     }
-}
-/* اضافه کن به انتهای فایل map_viewer.css */
-
-/* ============================================================
-   نمایش نام ناحیه انتخاب شده در dropdown
-   ============================================================ */
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #1e293b;
-    font-weight: 500;
-}
-
-/* استایل برای آیتم انتخاب شده */
-.select2-container--default .select2-selection--single {
-    background-color: #fff;
-    border: 1px solid #e2e8f0;
-}
-
-/* وقتی چیزی انتخاب شده */
-.select2-container--default.select2-container--open .select2-selection--single {
-    border-color: #2563eb;
-}
-
-/* استایل برای متن placeholder */
-.select2-container--default .select2-selection--single .select2-selection__placeholder {
-    color: #94a3b8;
-}
-
-/* اطمینان از راست‌چین بودن کامل */
-.select2-container--default .select2-results>.select2-results__options {
-    direction: rtl;
-    text-align: right;
-}
-
-.select2-container--default .select2-search--dropdown .select2-search__field {
-    direction: rtl;
-    text-align: right;
-}
-
-/* اضافه کن به انتهای فایل map_viewer.css */
-
-/* بهبود نمایش Select2 برای اعداد فارسی */
-.select2-container--default .select2-results__option {
-    font-family: 'Vazirmatn', monospace;
-    font-size: 13px;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    font-family: 'Vazirmatn', monospace;
-    font-size: 13px;
-}
-
-/* هایلایت جستجو */
-.select2-results__option--highlighted {
-    background-color: #2563eb !important;
-}
-
-/* اطمینان از نمایش کامل متن در موبایل */
-@media (max-width: 768px) {
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    
+    .custom-dropdown-clear {
+        left: 28px;
         font-size: 12px;
-        padding-right: 8px !important;
     }
     
-    .select2-container--default .select2-selection--single {
-        height: 38px;
+    .custom-dropdown-arrow {
+        left: 8px;
+        font-size: 8px;
     }
-}
-
-/* استایل برای آیتم انتخاب شده در dropdown قطعه */
-.select2-results__option {
-    padding: 10px 12px !important;
+    
+    .custom-dropdown-item {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+    
+    .custom-dropdown-list {
+        max-height: 150px;
+    }
 }
