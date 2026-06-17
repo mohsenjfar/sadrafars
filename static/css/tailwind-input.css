@@ -16,12 +16,10 @@
         @apply cursor-pointer rounded-xl border-2 p-3.5 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1.5;
     }
     
-    /* ✅ استایل‌های کارت غیرفعال */
     .service-card:not(.active) {
         @apply border-gray-200 hover:border-teal-300 hover:bg-teal-50/40;
     }
     
-    /* ✅ استایل‌های کارت فعال */
     .service-card.active {
         @apply border-teal-500 bg-gradient-to-br from-teal-50 to-cyan-50 shadow-md ring-2 ring-teal-200/50;
     }

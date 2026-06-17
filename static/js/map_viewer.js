@@ -14,12 +14,70 @@ let districtsData = [];
 async function initializeMap() {
     map = L.map('map').setView([29.80421, 52.49931], 13);
     
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        subdomains: 'abcd',
-        maxZoom: 19,
-        minZoom: 10
-    }).addTo(map);
+    const layers = {
+        street: L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            maxZoom: 20,
+            minZoom: 10
+        }),
+        satellite: L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            maxZoom: 20,
+            minZoom: 10
+        }),
+        hybrid: L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            maxZoom: 20,
+            minZoom: 10
+        })
+    };
+    
+    // اضافه کردن لایه پیش‌فرض
+    layers.street.addTo(map);
+    
+    // اضافه کردن کنترلر با دکمه‌های سفارشی
+    const control = L.control({ position: 'topright' });
+    control.onAdd = function() {
+        const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        div.style.background = 'white';
+        div.style.padding = '5px';
+        div.style.borderRadius = '4px';
+        div.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+        
+        const buttons = [
+            { id: 'street', label: '🗺️', layer: layers.street },
+            { id: 'satellite', label: '🛰️', layer: layers.satellite },
+            { id: 'hybrid', label: '🌍', layer: layers.hybrid }
+        ];
+        
+        buttons.forEach(btn => {
+            const button = document.createElement('button');
+            button.textContent = btn.label;
+            button.style.display = 'block';
+            button.style.width = '100%';
+            button.style.padding = '5px 10px';
+            button.style.margin = '2px 0';
+            button.style.border = '1px solid #ccc';
+            button.style.borderRadius = '3px';
+            button.style.background = '#fff';
+            button.style.cursor = 'pointer';
+            button.style.fontSize = '12px';
+            
+            button.onclick = function() {
+                map.eachLayer(layer => {
+                    if (layer instanceof L.TileLayer) {
+                        map.removeLayer(layer);
+                    }
+                });
+                btn.layer.addTo(map);
+            };
+            
+            div.appendChild(button);
+        });
+        
+        return div;
+    };
+    control.addTo(map);
     
     await loadDistrictsList();
 }
