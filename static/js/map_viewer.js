@@ -50,7 +50,7 @@ function populateDistrictDropdown(districts) {
     if (!input.length || !list.length || !dropdown.length || !clearBtn.length) return;
     
     function renderList(filter = '') {
-        list.empty();
+        list.empty().removeClass('hidden');
         
         let filtered = districts;
         if (filter.trim() !== '') {
@@ -58,7 +58,7 @@ function populateDistrictDropdown(districts) {
         }
         
         if (filtered.length === 0) {
-            list.append(`<div class="custom-dropdown-item text-gray-400 text-center" style="padding: 8px 14px; text-align: center; color: #94a3b8;">❌ ناحیه‌ای یافت نشد</div>`);
+            list.append(`<div class="px-3.5 py-2 text-center text-gray-400 text-sm">❌ ناحیه‌ای یافت نشد</div>`);
             return;
         }
         
@@ -66,20 +66,18 @@ function populateDistrictDropdown(districts) {
             let displayText = district.name_fa;
             if (filter.trim() !== '') {
                 const regex = new RegExp(filter, 'gi');
-                displayText = district.name_fa.replace(regex, match => `<span style="color: #2563eb; font-weight: bold;">${match}</span>`);
+                displayText = district.name_fa.replace(regex, match => `<span class="text-blue-600 font-bold">${match}</span>`);
             }
             
             const item = $(`
-                <div class="custom-dropdown-item" data-id="${district.id}" style="padding: 8px 14px; cursor: pointer; font-size: 13px; color: #1e293b; transition: background 0.15s; border-bottom: 1px solid #f1f5f9;">
+                <div class="px-3.5 py-2 cursor-pointer text-sm text-gray-800 transition-colors duration-150 border-b border-gray-100 last:border-none hover:bg-gray-100" data-id="${district.id}">
                     ${displayText}
                 </div>
             `);
             
-            item.on('mouseenter', function() { $(this).css('background', '#f1f5f9'); });
-            item.on('mouseleave', function() { $(this).css('background', 'transparent'); });
             item.on('click', function() {
                 input.val(district.name_fa);
-                list.empty();
+                list.empty().addClass('hidden');
                 dropdown.removeClass('open');
                 updateClearButtonVisibility(input, clearBtn);
                 if (district.id !== currentDistrictId) {
@@ -93,18 +91,18 @@ function populateDistrictDropdown(districts) {
     
     function updateClearButtonVisibility(inputElement, buttonElement) {
         if (inputElement.val().trim() !== '') {
-            buttonElement.addClass('visible');
+            buttonElement.removeClass('hidden').addClass('visible');
         } else {
-            buttonElement.removeClass('visible');
+            buttonElement.addClass('hidden').removeClass('visible');
         }
     }
     
     clearBtn.off('click').on('click', function(e) {
         e.stopPropagation();
         input.val('');
-        list.empty();
+        list.empty().addClass('hidden');
         dropdown.removeClass('open');
-        $(this).removeClass('visible');
+        $(this).addClass('hidden').removeClass('visible');
         clearDistrictFromMap();
         hidePiecesDropdown();
         currentDistrictId = null;
@@ -115,9 +113,11 @@ function populateDistrictDropdown(districts) {
         e.stopPropagation();
         if (dropdown.hasClass('open')) {
             dropdown.removeClass('open');
+            list.addClass('hidden');
         } else {
             renderList('');
             dropdown.addClass('open');
+            list.removeClass('hidden');
         }
     });
     
@@ -130,11 +130,13 @@ function populateDistrictDropdown(districts) {
             currentDistrictId = null;
             if (dropdown.hasClass('open')) {
                 renderList('');
+                list.removeClass('hidden');
             }
         } else {
             renderList(val);
             if (!dropdown.hasClass('open')) {
                 dropdown.addClass('open');
+                list.removeClass('hidden');
             }
         }
     });
@@ -142,17 +144,18 @@ function populateDistrictDropdown(districts) {
     $(document).off('click.district').on('click.district', function(e) {
         if (!dropdown.is(e.target) && !dropdown.has(e.target).length) {
             dropdown.removeClass('open');
+            list.addClass('hidden');
         }
     });
     
     input.off('keydown').on('keydown', function(e) {
         if (e.key === 'Enter') {
-            const firstItem = list.find('.custom-dropdown-item').first();
+            const firstItem = list.find('div[data-id]').first();
             if (firstItem.length && firstItem.data('id')) {
                 const district = districts.find(d => d.id === firstItem.data('id'));
                 if (district && district.id !== currentDistrictId) {
                     input.val(district.name_fa);
-                    list.empty();
+                    list.empty().addClass('hidden');
                     dropdown.removeClass('open');
                     updateClearButtonVisibility(input, clearBtn);
                     onDistrictChange(district.id);
@@ -241,18 +244,18 @@ function displayDistrictOnMap(geojson) {
                 
                 if (pieceData && pieceData.center) {
                     const centerText = `${pieceData.center[1]?.toFixed(6)} , ${pieceData.center[0]?.toFixed(6)}`;
-                    layer.bindPopup(`
-                        <div style="text-align: center; font-family: Vazirmatn; direction: rtl; min-width: 220px;">
-                            <div style="font-size: 15px; font-weight: bold;">🏠 قطعه شماره ${pieceNumber}</div>
-                            ${pieceData.area ? `<div>📐 مساحت: ${pieceData.area.toLocaleString()} متر مربع</div>` : ''}
-                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; margin-top: 8px;">
-                                <code style="font-size: 11px;">${centerText}</code>
-                                <button onclick="copyToClipboard('${centerText}')" style="margin-top: 6px; background: #2563eb; color: white; border: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; width: 100%;">
-                                    📋 کپی مختصات
-                                </button>
-                            </div>
+                layer.bindPopup(`
+                    <div class="text-center font-vazir rtl min-w-[220px]">
+                        <div class="text-[15px] font-bold">🏠 قطعه شماره ${pieceNumber}</div>
+                        ${pieceData.area ? `<div>📐 مساحت: ${pieceData.area.toLocaleString()} متر مربع</div>` : ''}
+                        <div class="bg-slate-100 p-2 rounded-lg mt-2">
+                            <code class="text-[11px]">${centerText}</code>
+                            <button onclick="copyToClipboard('${centerText}')" class="mt-1.5 bg-blue-600 text-white border-none rounded-lg px-3 py-1 cursor-pointer w-full text-sm">
+                                📋 کپی مختصات
+                            </button>
                         </div>
-                    `);
+                    </div>
+                `);
                 } else {
                     layer.bindPopup(`<div style="text-align: center;"><strong>قطعه شماره ${pieceNumber}</strong></div>`);
                 }
@@ -280,7 +283,7 @@ function populatePiecesDropdown(pieces) {
     const sortedPieces = [...pieces].sort((a, b) => parseFloat(a.number) - parseFloat(b.number));
     
     function renderList(filter = '') {
-        list.empty();
+        list.empty().removeClass('hidden');
         
         let filtered = sortedPieces;
         if (filter.trim() !== '') {
@@ -288,7 +291,7 @@ function populatePiecesDropdown(pieces) {
         }
         
         if (filtered.length === 0) {
-            list.append(`<div class="custom-dropdown-item text-gray-400 text-center" style="padding: 8px 14px; text-align: center; color: #94a3b8;">❌ قطعه‌ای یافت نشد</div>`);
+            list.append(`<div class="px-3.5 py-2 text-center text-gray-400 text-sm">❌ قطعه‌ای یافت نشد</div>`);
             return;
         }
         
@@ -296,20 +299,18 @@ function populatePiecesDropdown(pieces) {
             let displayText = `قطعه ${piece.number}`;
             if (filter.trim() !== '') {
                 const regex = new RegExp(filter, 'gi');
-                displayText = `قطعه ${piece.number}`.replace(regex, match => `<span style="color: #2563eb; font-weight: bold;">${match}</span>`);
+                displayText = `قطعه ${piece.number}`.replace(regex, match => `<span class="text-blue-600 font-bold">${match}</span>`);
             }
             
             const item = $(`
-                <div class="custom-dropdown-item" data-id="${piece.number}" style="padding: 8px 14px; cursor: pointer; font-size: 13px; color: #1e293b; transition: background 0.15s; border-bottom: 1px solid #f1f5f9;">
+                <div class="px-3.5 py-2 cursor-pointer text-sm text-gray-800 transition-colors duration-150 border-b border-gray-100 last:border-none hover:bg-gray-100" data-id="${piece.number}">
                     ${displayText}
                 </div>
             `);
             
-            item.on('mouseenter', function() { $(this).css('background', '#f1f5f9'); });
-            item.on('mouseleave', function() { $(this).css('background', 'transparent'); });
             item.on('click', function() {
                 input.val(`قطعه ${piece.number}`);
-                list.empty();
+                list.empty().addClass('hidden');
                 container.removeClass('open');
                 updateClearButtonVisibility(input, clearBtn);
                 onPieceChangeFromDropdown(piece.number);
@@ -321,18 +322,18 @@ function populatePiecesDropdown(pieces) {
     
     function updateClearButtonVisibility(inputElement, buttonElement) {
         if (inputElement.val().trim() !== '') {
-            buttonElement.addClass('visible');
+            buttonElement.removeClass('hidden').addClass('visible');
         } else {
-            buttonElement.removeClass('visible');
+            buttonElement.addClass('hidden').removeClass('visible');
         }
     }
     
     clearBtn.off('click').on('click', function(e) {
         e.stopPropagation();
         input.val('');
-        list.empty();
+        list.empty().addClass('hidden');
         container.removeClass('open');
-        $(this).removeClass('visible');
+        $(this).addClass('hidden').removeClass('visible');
         
         if (currentDistrictLayer) {
             currentDistrictLayer.eachLayer(function(layer) {
@@ -349,9 +350,11 @@ function populatePiecesDropdown(pieces) {
         e.stopPropagation();
         if (container.hasClass('open')) {
             container.removeClass('open');
+            list.addClass('hidden');
         } else {
             renderList('');
             container.addClass('open');
+            list.removeClass('hidden');
         }
     });
     
@@ -361,11 +364,13 @@ function populatePiecesDropdown(pieces) {
         if (val === '') {
             if (container.hasClass('open')) {
                 renderList('');
+                list.removeClass('hidden');
             }
         } else {
             renderList(val);
             if (!container.hasClass('open')) {
                 container.addClass('open');
+                list.removeClass('hidden');
             }
         }
     });
@@ -373,16 +378,17 @@ function populatePiecesDropdown(pieces) {
     $(document).off('click.piece').on('click.piece', function(e) {
         if (!container.is(e.target) && !container.has(e.target).length) {
             container.removeClass('open');
+            list.addClass('hidden');
         }
     });
     
     input.off('keydown').on('keydown', function(e) {
         if (e.key === 'Enter') {
-            const firstItem = list.find('.custom-dropdown-item').first();
+            const firstItem = list.find('div[data-id]').first();
             if (firstItem.length && firstItem.data('id')) {
                 const pieceNumber = firstItem.data('id');
                 input.val(`قطعه ${pieceNumber}`);
-                list.empty();
+                list.empty().addClass('hidden');
                 container.removeClass('open');
                 updateClearButtonVisibility(input, clearBtn);
                 onPieceChangeFromDropdown(pieceNumber);
@@ -404,8 +410,8 @@ function hidePiecesDropdown() {
     
     container.addClass('hidden').removeClass('open');
     input.val('');
-    clearBtn.removeClass('visible');
-    list.empty();
+    clearBtn.addClass('hidden').removeClass('visible');
+    list.empty().addClass('hidden');
     
     if (currentlyHighlighted && currentDistrictLayer) {
         currentDistrictLayer.eachLayer(function(layer) {
@@ -456,7 +462,7 @@ function onPieceChangeFromDropdown(pieceNumber) {
     const input = $('#pieceInput');
     const clearBtn = $('#pieceClearBtn');
     input.val(`قطعه ${pieceNumberStr}`);
-    clearBtn.addClass('visible');
+    clearBtn.removeClass('hidden').addClass('visible');
 }
 
 // ============================================================
@@ -500,7 +506,7 @@ function selectPieceFromMap(pieceNumber) {
     const input = $('#pieceInput');
     const clearBtn = $('#pieceClearBtn');
     input.val(`قطعه ${pieceNumberStr}`);
-    clearBtn.addClass('visible');
+    clearBtn.removeClass('hidden').addClass('visible');
 }
 
 // ============================================================
@@ -535,8 +541,9 @@ window.copyToClipboard = function(text) {
 function showToast(message, type = 'success') {
     $('.toast-message').remove();
     
+    const bgColor = type === 'success' ? 'bg-emerald-500' : 'bg-red-500';
     const toast = $(`
-        <div class="toast-message" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: ${type === 'success' ? '#10b981' : '#ef4444'}; color: white; padding: 10px 20px; border-radius: 8px; z-index: 3000; font-family: Vazirmatn, sans-serif; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); white-space: nowrap;">
+        <div class="toast-message fixed bottom-5 left-1/2 -translate-x-1/2 ${bgColor} text-white px-5 py-2.5 rounded-lg z-[3000] font-vazir text-sm shadow-md whitespace-nowrap">
             ${message}
         </div>
     `);

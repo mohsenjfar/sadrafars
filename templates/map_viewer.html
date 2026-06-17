@@ -6,57 +6,42 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<link rel="stylesheet" href="/static/css/map_viewer.css?v={{ timestamp }}" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    'vazir': ['Vazirmatn', 'sans-serif'],
-                }
-            }
-        }
-    }
-</script>
+<link rel="stylesheet" href="/static/css/tailwind.css?v={{ timestamp }}" />
 <link rel="icon" type="image/png" href="/static/images/favicon.png">
 {% endblock %}
 
 {% block content %}
-<!-- ============================================================
-     هدر
-     ============================================================ -->
-<header class="custom-header">
+<header class="fixed top-0 left-0 right-0 z-[1000] h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm flex items-center px-4">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-2 w-full max-w-7xl mx-auto">
         
         <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
             
             <!-- Dropdown ناحیه -->
-            <div class="custom-dropdown w-full sm:w-56" id="districtDropdown">
+            <div class="relative w-full sm:w-56" id="districtDropdown">
                 <input 
                     type="text" 
                     id="districtInput" 
-                    class="custom-dropdown-input"
+                    class="w-full py-2 px-3.5 pr-14 border border-gray-200 rounded-lg text-sm bg-white text-gray-800 transition-all duration-200 focus:outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-600/10 text-right cursor-pointer"
                     placeholder="جستجوی ناحیه..."
                     autocomplete="off"
                 >
-                <button type="button" class="custom-dropdown-clear" id="districtClearBtn" title="پاک کردن">✕</button>
-                <span class="custom-dropdown-arrow">▼</span>
-                <div class="custom-dropdown-list" id="districtList"></div>
+                <button type="button" class="absolute left-9 top-1/2 -translate-y-1/2 text-gray-400 text-base cursor-pointer transition-all duration-200 hover:text-red-500 hover:scale-110 hidden z-[5] bg-transparent border-none p-0.5 leading-none" id="districtClearBtn" title="پاک کردن">✕</button>
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] transition-transform duration-200 z-[2]">▼</span>
+                <div class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg max-h-[200px] overflow-y-auto z-[9999] shadow-md text-right" id="districtList"></div>
             </div>
             
             <!-- Dropdown قطعه -->
-            <div id="pieceSelectContainer" class="custom-dropdown w-full sm:w-56 hidden">
+            <div id="pieceSelectContainer" class="relative w-full sm:w-56 hidden">
                 <input 
                     type="text" 
                     id="pieceInput" 
-                    class="custom-dropdown-input"
+                    class="w-full py-2 px-3.5 pr-14 border border-gray-200 rounded-lg text-sm bg-white text-gray-800 transition-all duration-200 focus:outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-600/10 text-right cursor-pointer"
                     placeholder="جستجوی قطعه..."
                     autocomplete="off"
                 >
-                <button type="button" class="custom-dropdown-clear" id="pieceClearBtn" title="پاک کردن">✕</button>
-                <span class="custom-dropdown-arrow">▼</span>
-                <div class="custom-dropdown-list" id="pieceList"></div>
+                <button type="button" class="absolute left-9 top-1/2 -translate-y-1/2 text-gray-400 text-base cursor-pointer transition-all duration-200 hover:text-red-500 hover:scale-110 hidden z-[5] bg-transparent border-none p-0.5 leading-none" id="pieceClearBtn" title="پاک کردن">✕</button>
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] transition-transform duration-200 z-[2]">▼</span>
+                <div class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg max-h-[200px] overflow-y-auto z-[9999] shadow-md text-right" id="pieceList"></div>
             </div>
         </div>
         
@@ -71,15 +56,15 @@
 <!-- ============================================================
      نقشه
      ============================================================ -->
-<div class="map-wrapper">
-    <div id="map"></div>
+<div class="fixed top-[72px] left-0 right-0 bottom-0 w-full overflow-hidden">
+    <div id="map" class="w-full h-full bg-slate-100"></div>
 </div>
 
 <!-- ============================================================
      لودینگ
      ============================================================ -->
-<div id="loading" class="custom-loading">
-    <svg class="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+<div id="loading" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white py-3 px-6 rounded-xl z-[2000] text-sm font-vazir hidden items-center gap-3 shadow-lg">
+    <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>

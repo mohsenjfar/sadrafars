@@ -3,107 +3,155 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>صدرافارس | پورتال تخصصی مهندسی و ساختمان</title>
-<link rel="icon" type="image/png" href="/static/images/favicon.png">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"/>
-<link rel="stylesheet" href="/static/css/style.css?v={{ timestamp }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صدرافارس | پورتال تخصصی مهندسی و ساختمان</title>
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"/>
+    <!-- ✅ فقط Tailwind CSS -->
+    <link rel="stylesheet" href="/static/css/tailwind.css?v={{ timestamp }}">
 </head>
 <body>
 
-<header class="header">
-  <nav class="nav-links">
-    <a href="#">صفحه اصلی</a>
-    <a href="#tools">ابزارها</a>
-    <a href="#news">اخبار ساختمان</a>
-    <a href="#">درباره ما</a>
-  </nav>
+<!-- ============================================================
+     هدر با Tailwind
+     ============================================================ -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+    <nav class="flex items-center justify-center gap-2 h-[70px] max-w-7xl mx-auto px-4">
+        <a href="#" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">صفحه اصلی</a>
+        <a href="#tools" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">ابزارها</a>
+        <a href="#news" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">اخبار ساختمان</a>
+        <a href="#" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">درباره ما</a>
+    </nav>
 </header>
 
-<section class="hero">
-  <div class="hero-text">
-    <h1>پورتال جامع<br><span style="color:var(--primary)">خدمات مهندسی</span> شهر صدرا</h1>
-    <p>دسترسی سریع به محاسبات تعرفه ۱۴۰۵، نقشه‌های ثبتی و آخرین اخبار شهر صدرا در یک قاب.</p>
-    <div style="display:flex; gap:15px;">
-      <a href="#tools" style="background:var(--dark); color:white; padding:15px 30px; border-radius:12px; text-decoration:none; display:inline-block;">
-        مشاهده ابزارها
-      </a>
-      <a href="#news" style="background:white; color:var(--dark); padding:15px 30px; border-radius:12px; border:1px solid #ddd; text-decoration:none; display:inline-block;">
-        آخرین اخبار
-      </a>
+<!-- ============================================================
+     بخش Hero با Tailwind
+     ============================================================ -->
+<section class="flex flex-col md:flex-row items-center justify-between gap-10 px-[5%] pt-[120px] pb-16 bg-gradient-to-br from-blue-50 to-white min-h-[90vh]">
+    
+    <div class="flex-1 text-center md:text-right">
+        <h1 class="text-[32px] md:text-[42px] font-bold text-gray-900 leading-[1.4] mb-5">
+            پورتال جامع<br>
+            <span class="text-blue-600">خدمات مهندسی</span> شهر صدرا
+        </h1>
+        <p class="text-lg md:text-xl text-gray-500 mb-8 max-w-2xl mx-auto md:mx-0">
+            دسترسی سریع به محاسبات تعرفه ۱۴۰۵، نقشه‌های ثبتی و آخرین اخبار شهر صدرا در یک قاب.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <a href="#tools" class="bg-gray-900 text-white px-8 py-4 rounded-xl text-center no-underline hover:bg-gray-800 transition-all duration-300 shadow-md hover:shadow-lg">
+                مشاهده ابزارها
+            </a>
+            <a href="#news" class="bg-white text-gray-900 px-8 py-4 rounded-xl border border-gray-200 text-center no-underline hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 shadow-sm">
+                آخرین اخبار
+            </a>
+        </div>
     </div>
-  </div>
-  <div class="hero-image">
-    <img src="/static/images/bg.png" alt="Banner">
-  </div>
+    
+    <div class="flex-1 text-center">
+        <img src="/static/images/bg.png" alt="Banner" class="w-[90%] max-w-[500px] rounded-3xl shadow-2xl mx-auto">
+    </div>
 </section>
 
-<section id="tools">
-  <div class="section-title">
-    <h2>پنل ابزارهای محاسباتی</h2>
-    <p>دقیق، سریع و بر اساس آخرین بخشنامه‌ها</p>
-  </div>
-  <div class="tools-grid">
-    <div class="tool-card" onclick="openTool('tariff')">
-      <div class="tool-icon">📐</div>
-      <h3>محاسبه تعرفه نقشه‌برداری</h3>
-      <p>محاسبه آنلاین ردیف‌های ۱۰ گانه تعرفه سال ۱۴۰۵ با دقت بالا.</p>
+<!-- ============================================================
+     بخش ابزارها با Tailwind
+     ============================================================ -->
+<section id="tools" class="py-16 px-[5%] bg-white">
+    <div class="text-center mb-10">
+        <h2 class="text-[28px] md:text-[32px] font-bold text-gray-900">پنل ابزارهای محاسباتی</h2>
+        <p class="text-gray-500 text-base mt-2">دقیق، سریع و بر اساس آخرین بخشنامه‌ها</p>
     </div>
-    <div class="tool-card" onclick="openTool('engineering')">
-      <div class="tool-icon">🏗️</div>
-      <h3>محاسبه هزینه طراحی و نظارت</h3>
-      <p>برآورد هزینه‌های نظارت، طراحی و اجرا بر اساس متراژ و گروه ساختمانی.</p>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        
+        <!-- کارت 1 -->
+        <div onclick="openTool('tariff')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
+            <div class="w-[70px] h-[70px] bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl text-blue-600">
+                📐
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">محاسبه تعرفه نقشه‌برداری</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">محاسبه آنلاین ردیف‌های ۱۰ گانه تعرفه سال ۱۴۰۵ با دقت بالا.</p>
+        </div>
+        
+        <!-- کارت 2 -->
+        <div onclick="openTool('engineering')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
+            <div class="w-[70px] h-[70px] bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl text-blue-600">
+                🏗️
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">محاسبه هزینه طراحی و نظارت</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">برآورد هزینه‌های نظارت، طراحی و اجرا بر اساس متراژ و گروه ساختمانی.</p>
+        </div>
+        
+        <!-- کارت 3 -->
+        <div onclick="openTool('delay_penalty')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
+            <div class="w-[70px] h-[70px] bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl text-blue-600">
+                ⏰
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">هزینه تمدید نظارت</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">محاسبه مابه‌التفاوت تمدید نظارت بعد از ۱۸ ماه بر اساس تاریخ صدور پروانه.</p>
+        </div>
+        
+        <!-- کارت 4 -->
+        <div onclick="openTool('map')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
+            <div class="w-[70px] h-[70px] bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl text-blue-600">
+                📍
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">مشاهده قطعه و ناحیه</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">استعلام موقعیت روی نقشه و انطباق با حریم‌های قانونی.</p>
+        </div>
+        
     </div>
-    <div class="tool-card" onclick="openTool('delay_penalty')">
-      <div class="tool-icon">⏰</div>
-      <h3>هزینه تمدید نظارت</h3>
-      <p>محاسبه مابه‌التفاوت تمدید نظارت بعد از ۱۸ ماه بر اساس تاریخ صدور پروانه.</p>
-    </div>
-    <div class="tool-card" onclick="openTool('map')">
-      <div class="tool-icon">📍</div>
-      <h3>مشاهده قطعه و ناحیه</h3>
-      <p>استعلام موقعیت روی نقشه و انطباق با حریم‌های قانونی.</p>
-    </div>
-  </div>
 </section>
 
-<section class="news-section" id="news">
-  <div class="section-title">
-    <h2>مجله اطلاع‌رسانی صدرا فارس</h2>
-  </div>
-  <div class="news-grid">
-    <div class="news-card">
-      <div class="news-img"></div>
-      <div class="news-content">
-        <span>۱۷ خرداد ۱۴۰۵</span>
-        <h3>تغییرات جدید در قانون نظام مهندسی ساختمان</h3>
-        <p>بررسی ابعاد اصلاحیه جدید مجلس در خصوص مسئولیت مهندسین ناظر...</p>
-      </div>
+<!-- ============================================================
+     بخش اخبار با Tailwind
+     ============================================================ -->
+<section id="news" class="py-16 px-[5%] bg-gray-50">
+    <div class="text-center mb-10">
+        <h2 class="text-[28px] md:text-[32px] font-bold text-gray-900">مجله اطلاع‌رسانی صدرا فارس</h2>
     </div>
-    <div class="news-card">
-      <div class="news-img"></div>
-      <div class="news-content">
-        <span>۱۵ خرداد ۱۴۰۵</span>
-        <h3>گزارش بازار مسکن در بهار امسال</h3>
-        <p>تحلیل روند قیمت‌ها در پروژه‌های نهضت ملی مسکن و پیش‌بینی فصل تابستان...</p>
-      </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="w-full h-[200px] bg-gray-200"></div>
+            <div class="p-5">
+                <span class="text-blue-600 text-xs font-bold">۱۷ خرداد ۱۴۰۵</span>
+                <h3 class="text-lg font-bold text-gray-900 mt-2.5 mb-2">تغییرات جدید در قانون نظام مهندسی ساختمان</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">بررسی ابعاد اصلاحیه جدید مجلس در خصوص مسئولیت مهندسین ناظر...</p>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="w-full h-[200px] bg-gray-200"></div>
+            <div class="p-5">
+                <span class="text-blue-600 text-xs font-bold">۱۵ خرداد ۱۴۰۵</span>
+                <h3 class="text-lg font-bold text-gray-900 mt-2.5 mb-2">گزارش بازار مسکن در بهار امسال</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">تحلیل روند قیمت‌ها در پروژه‌های نهضت ملی مسکن و پیش‌بینی فصل تابستان...</p>
+            </div>
+        </div>
+        
     </div>
-  </div>
 </section>
 
-<footer style="background:var(--dark); color:white; padding:40px; text-align:center;">
-  <p>© تمام حقوق برای صدرا فارس محفوظ است</p>
+<!-- ============================================================
+     فوتر با Tailwind
+     ============================================================ -->
+<footer class="bg-gray-900 text-white py-10 text-center">
+    <p class="text-sm opacity-80">© تمام حقوق برای صدرا فارس محفوظ است</p>
 </footer>
 
-<div id="toolModal" class="modal">
-  <div class="modal-container">
-    <div class="modal-header">
-      <h2 id="modalTitle"></h2>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+<!-- ============================================================
+     مودال با Tailwind
+     ============================================================ -->
+<div id="toolModal" class="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm z-[2000] hidden">
+    <div class="bg-white rounded-2xl shadow-2xl w-[650px] max-w-[92%] overflow-hidden animate-[modalOpen_0.3s_ease]">
+        <div class="flex justify-between items-center px-6 py-5 border-b border-gray-100">
+            <h2 id="modalTitle" class="text-xl font-bold text-gray-900"></h2>
+            <button class="bg-transparent border-none text-2xl cursor-pointer text-gray-500 hover:text-gray-900 hover:scale-110 transition-all duration-200" onclick="closeModal()">✕</button>
+        </div>
+        <div class="p-6 max-h-[70vh] overflow-y-auto" id="modalBody"></div>
     </div>
-    <div class="modal-body" id="modalBody"></div>
-  </div>
 </div>
 
 <script src="/static/js/tools.js?v={{ timestamp }}"></script>
