@@ -289,7 +289,7 @@ function displayDistrictOnMap(geojson) {
           const lng = pieceData.center[0];
 
           layer.bindPopup(`
-        <div class="text-center font-vazir rtl min-w-[220px]">
+        <div class="text-center font-vazir rtl min-w-[150px]">
             <div class="text-[15px] font-bold">🏠 قطعه شماره ${pieceNumber}</div>
             ${pieceData.area ? `<div>📐 مساحت: ${pieceData.area.toLocaleString()} متر مربع</div>` : ""}
             <div class="bg-slate-100 p-2 rounded-lg mt-2">
@@ -299,7 +299,7 @@ function displayDistrictOnMap(geojson) {
                 </button>
                 <button onclick="window.open('https://www.google.com/maps?q=${lat},${lng}', '_blank')" 
                         class="mt-1.5 bg-red-600 text-white border-none rounded-lg px-3 py-1 cursor-pointer w-full text-sm hover:bg-red-700 transition-colors">
-                    🌍 باز کردن در گوگل مپ
+                    🌍 مسیریابی در گوگل
                 </button>
             </div>
         </div>
