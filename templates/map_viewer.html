@@ -5,17 +5,13 @@ endblock %} {% block extra_css %}
 <link rel="icon" type="image/png" href="/static/images/favicon.png" />
 {% endblock %} {% block content %}
 
-<header
-  class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm"
->
-  <nav
-    class="header-nav flex items-center justify-between max-w-7xl mx-auto px-4 gap-4"
-    style="height: 70px"
-  >
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+  <nav class="flex flex-col sm:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-2 sm:py-0 sm:h-[70px] gap-2 sm:gap-4">
+    
     <!-- dropdownها - سمت چپ -->
-    <div class="header-controls flex items-center gap-2 order-1">
+    <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto order-1">
       <!-- Dropdown ناحیه -->
-      <div class="relative w-56" id="districtDropdown">
+      <div class="relative w-full sm:w-56" id="districtDropdown">
         <input
           type="text"
           id="districtInput"
@@ -31,18 +27,12 @@ endblock %} {% block extra_css %}
         >
           ✕
         </button>
-        <span
-          class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] transition-transform duration-200 z-[2]"
-          >▼</span
-        >
-        <div
-          class="hidden absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg max-h-[200px] overflow-y-auto z-[9999] shadow-md text-right"
-          id="districtList"
-        ></div>
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] transition-transform duration-200 z-[2]">▼</span>
+        <div class="hidden absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg max-h-[200px] overflow-y-auto z-[9999] shadow-md text-right" id="districtList"></div>
       </div>
 
       <!-- Dropdown قطعه -->
-      <div id="pieceSelectContainer" class="relative w-56 hidden">
+      <div id="pieceSelectContainer" class="relative w-full sm:w-56 hidden">
         <input
           type="text"
           id="pieceInput"
@@ -58,65 +48,39 @@ endblock %} {% block extra_css %}
         >
           ✕
         </button>
-        <span
-          class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] transition-transform duration-200 z-[2]"
-          >▼</span
-        >
-        <div
-          class="hidden absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg max-h-[200px] overflow-y-auto z-[9999] shadow-md text-right"
-          id="pieceList"
-        ></div>
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] transition-transform duration-200 z-[2]">▼</span>
+        <div class="hidden absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg max-h-[200px] overflow-y-auto z-[9999] shadow-md text-right" id="pieceList"></div>
       </div>
     </div>
 
     <!-- دکمه بازگشت - سمت راست -->
     <a
       href="/"
-      class="header-back-btn inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-white/80 backdrop-blur-sm hover:bg-white/95 text-gray-700 text-xs font-medium transition-all duration-200 border border-gray-200/50 hover:border-gray-300 whitespace-nowrap flex-shrink-0 order-2"
+      class="inline-flex items-center justify-center gap-1.5 px-5 py-2 rounded-lg bg-white/80 backdrop-blur-sm hover:bg-white/95 text-gray-700 text-xs font-medium transition-all duration-200 border border-gray-200/50 hover:border-gray-300 whitespace-nowrap w-full sm:w-auto order-2"
     >
       <span>←</span>
       بازگشت
     </a>
+    
   </nav>
 </header>
 
 <!-- ============================================================
      نقشه - کل صفحه
      ============================================================ -->
-<div
-  id="map"
-  class="fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-slate-100"
-></div>
+<div id="map" class="fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-slate-100"></div>
 
 <!-- ============================================================
      لودینگ
      ============================================================ -->
-<div
-  id="loading"
-  class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white py-3 px-6 rounded-xl z-[2000] text-sm font-vazir hidden items-center gap-3 shadow-lg"
->
-  <svg
-    class="animate-spin w-5 h-5"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-  >
-    <circle
-      class="opacity-25"
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="currentColor"
-      stroke-width="4"
-    ></circle>
-    <path
-      class="opacity-75"
-      fill="currentColor"
-      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-    ></path>
+<div id="loading" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white py-3 px-6 rounded-xl z-[2000] text-sm font-vazir hidden items-center gap-3 shadow-lg">
+  <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
   </svg>
   <span>⏳ در حال بارگذاری...</span>
 </div>
+
 {% endblock %} {% block extra_js %}
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/leaflet.js"></script>
