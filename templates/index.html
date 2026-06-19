@@ -19,7 +19,7 @@
     <nav class="flex items-center justify-center gap-2 h-[70px] max-w-7xl mx-auto px-4">
         <a href="#" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">صفحه اصلی</a>
         <a href="#tools" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">ابزارها</a>
-        <a href="#news" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">اخبار ساختمان</a>
+        <!-- <a href="#news" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">اخبار ساختمان</a> -->
         <a href="#" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">درباره ما</a>
     </nav>
 </header>
@@ -64,12 +64,12 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
         
         <!-- کارت 1 -->
-        <div onclick="openTool('tariff')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
+        <div onclick="openTool('map')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
             <div class="w-[70px] h-[70px] bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl text-blue-600">
-                📐
+                📍
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">محاسبه تعرفه نقشه‌برداری</h3>
-            <p class="text-sm text-gray-500 leading-relaxed">محاسبه آنلاین ردیف‌های ۱۰ گانه تعرفه سال ۱۴۰۵ با دقت بالا.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">مشاهده قطعه و ناحیه</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">استعلام موقعیت روی نقشه و انطباق با حریم‌های قانونی.</p>
         </div>
         
         <!-- کارت 2 -->
@@ -91,12 +91,12 @@
         </div>
         
         <!-- کارت 4 -->
-        <div onclick="openTool('map')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
+        <div onclick="openTool('tariff')" class="bg-white rounded-2xl p-8 text-center border border-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:border-blue-600 hover:shadow-[0_20px_30px_rgba(37,99,235,0.1)]">
             <div class="w-[70px] h-[70px] bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl text-blue-600">
-                📍
+                📐
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">مشاهده قطعه و ناحیه</h3>
-            <p class="text-sm text-gray-500 leading-relaxed">استعلام موقعیت روی نقشه و انطباق با حریم‌های قانونی.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">محاسبه تعرفه نقشه‌برداری</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">محاسبه آنلاین ردیف‌های ۱۰ گانه تعرفه سال ۱۴۰۵ با دقت بالا.</p>
         </div>
         
     </div>
@@ -105,7 +105,7 @@
 <!-- ============================================================
      بخش اخبار با Tailwind
      ============================================================ -->
-<section id="news" class="py-16 px-[5%] bg-gray-50">
+<!-- <section id="news" class="py-16 px-[5%] bg-gray-50">
     <div class="text-center mb-10">
         <h2 class="text-[28px] md:text-[32px] font-bold text-gray-900">مجله اطلاع‌رسانی صدرا فارس</h2>
     </div>
@@ -131,7 +131,7 @@
         </div>
         
     </div>
-</section>
+</section> -->
 
 <!-- ============================================================
      فوتر با Tailwind
