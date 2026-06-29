@@ -1,5 +1,5 @@
 services:
-  sadrafars-prod:
+  sadrafars:
     build:
       context: .
       dockerfile: Dockerfile
