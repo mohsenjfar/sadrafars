@@ -1,23 +1,10 @@
 services:
-  sadrafars-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: sadrafars:dev
-    container_name: sadrafars-dev
-    restart: unless-stopped
-    networks:
-      - external-net
-    dns:
-      - 217.218.127.127
-      - 1.1.1.1
-
   sadrafars-prod:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sadrafars:prod
-    container_name: sadrafars-prod
+    image: sadrafars:latest
+    container_name: sadrafars
     restart: unless-stopped
     networks:
       - external-net
