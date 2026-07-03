@@ -82,7 +82,7 @@ function populateDistrictDropdown(districts) {
 
     let filtered = districts;
     if (filter.trim() !== "") {
-      filtered = districts.filter((d) => d.name_fa.includes(filter));
+      filtered = districts.filter((d) => d.name.includes(filter));
     }
 
     if (filtered.length === 0) {
@@ -93,10 +93,10 @@ function populateDistrictDropdown(districts) {
     }
 
     filtered.forEach((district) => {
-      let displayText = district.name_fa;
+      let displayText = district.name;
       if (filter.trim() !== "") {
         const regex = new RegExp(filter, "gi");
-        displayText = district.name_fa.replace(
+        displayText = district.name.replace(
           regex,
           (match) => `<span class="text-blue-600 font-bold">${match}</span>`,
         );
@@ -109,7 +109,7 @@ function populateDistrictDropdown(districts) {
             `);
 
       item.on("click", function () {
-        input.val(district.name_fa);
+        input.val(district.name);
         list.empty().addClass("hidden");
         dropdown.removeClass("open");
         updateClearButtonVisibility(input, clearBtn);
@@ -189,7 +189,7 @@ function populateDistrictDropdown(districts) {
       if (firstItem.length && firstItem.data("id")) {
         const district = districts.find((d) => d.id === firstItem.data("id"));
         if (district && district.id !== currentDistrictId) {
-          input.val(district.name_fa);
+          input.val(district.name);
           list.empty().addClass("hidden");
           dropdown.removeClass("open");
           updateClearButtonVisibility(input, clearBtn);
@@ -202,7 +202,7 @@ function populateDistrictDropdown(districts) {
   if (currentDistrictId) {
     const district = districts.find((d) => d.id === currentDistrictId);
     if (district) {
-      input.val(district.name_fa);
+      input.val(district.name);
       updateClearButtonVisibility(input, clearBtn);
     }
   }
@@ -512,12 +512,12 @@ function onPieceChangeFromDropdown(pieceNumber) {
     (p) => String(p.number) === pieceNumberStr,
   );
 
-  if (!piece || !piece.center) {
+  if (!piece || !piece.centroid) {
     showError(`قطعه ${pieceNumber} یافت نشد`);
     return;
   }
 
-  map.flyTo([piece.center[1], piece.center[0]], 18, {
+  map.flyTo([piece.centroid[1], piece.centroid[0]], 18, {
     animate: true,
     duration: 2.0,
     easeLinearity: 0.25,
@@ -605,8 +605,8 @@ function selectPieceFromMap(pieceNumber) {
   const piece = currentPiecesData?.find(
     (p) => String(p.number) === pieceNumberStr,
   );
-  if (piece && piece.center) {
-    map.flyTo([piece.center[1], piece.center[0]], 18, { duration: 1 });
+  if (piece && piece.centroid) {
+    map.flyTo([piece.centroid[1], piece.centroid[0]], 18, { duration: 1 });
   }
 
   if (targetLayer) {
