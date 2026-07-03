@@ -278,7 +278,7 @@ function displayDistrictOnMap(geojson) {
       if (pieceNumber) {
         const pieceNumberStr = String(pieceNumber);
         const pieceData = piecesDataForClosure.find(
-          (p) => String(p.number) === pieceNumberStr,
+          (p) => String(p.name) === pieceNumberStr,
         );
         layer.pieceNumber = pieceNumberStr;
 
@@ -286,10 +286,10 @@ function displayDistrictOnMap(geojson) {
           selectPieceFromMap(pieceNumberStr);
         });
 
-        if (pieceData && pieceData.center) {
-          const centerText = `${pieceData.center[1]?.toFixed(6)} , ${pieceData.center[0]?.toFixed(6)}`;
-          const lat = pieceData.center[1];
-          const lng = pieceData.center[0];
+        if (pieceData && pieceData.centroid) {
+          const centerText = `${pieceData.centroid[1]?.toFixed(6)} , ${pieceData.centroid[0]?.toFixed(6)}`;
+          const lat = pieceData.centroid[1];
+          const lng = pieceData.centroid[0];
 
           // ✅ تغییر: استفاده از area_m2 به جای area
           const areaValue = pieceData.area_m2 || pieceData.area || 0;
@@ -338,7 +338,7 @@ function populatePiecesDropdown(pieces) {
   }
 
   const sortedPieces = [...pieces].sort(
-    (a, b) => parseFloat(a.number) - parseFloat(b.number),
+    (a, b) => parseFloat(a.name) - parseFloat(b.name),
   );
 
   function renderList(filter = "") {
@@ -346,7 +346,7 @@ function populatePiecesDropdown(pieces) {
 
     let filtered = sortedPieces;
     if (filter.trim() !== "") {
-      filtered = sortedPieces.filter((p) => String(p.number).includes(filter));
+      filtered = sortedPieces.filter((p) => String(p.name).includes(filter));
     }
 
     if (filtered.length === 0) {
@@ -357,27 +357,27 @@ function populatePiecesDropdown(pieces) {
     }
 
     filtered.forEach((piece) => {
-      let displayText = `قطعه ${piece.number}`;
+      let displayText = `قطعه ${piece.name}`;
       if (filter.trim() !== "") {
         const regex = new RegExp(filter, "gi");
-        displayText = `قطعه ${piece.number}`.replace(
+        displayText = `قطعه ${piece.name}`.replace(
           regex,
           (match) => `<span class="text-blue-600 font-bold">${match}</span>`,
         );
       }
 
       const item = $(`
-                <div class="px-3.5 py-2 cursor-pointer text-sm text-gray-800 transition-colors duration-150 border-b border-gray-100 last:border-none hover:bg-gray-100" data-id="${piece.number}">
+                <div class="px-3.5 py-2 cursor-pointer text-sm text-gray-800 transition-colors duration-150 border-b border-gray-100 last:border-none hover:bg-gray-100" data-id="${piece.name}">
                     ${displayText}
                 </div>
             `);
 
       item.on("click", function () {
-        input.val(`قطعه ${piece.number}`);
+        input.val(`قطعه ${piece.name}`);
         list.empty().addClass("hidden");
         container.removeClass("open");
         updateClearButtonVisibility(input, clearBtn);
-        onPieceChangeFromDropdown(piece.number);
+        onPieceChangeFromDropdown(piece.name);
       });
 
       list.append(item);
@@ -509,7 +509,7 @@ function onPieceChangeFromDropdown(pieceNumber) {
 
   const pieceNumberStr = String(pieceNumber);
   const piece = currentPiecesData?.find(
-    (p) => String(p.number) === pieceNumberStr,
+    (p) => String(p.name) === pieceNumberStr,
   );
 
   if (!piece || !piece.centroid) {
@@ -603,7 +603,7 @@ function selectPieceFromMap(pieceNumber) {
   currentlyHighlighted = targetLayer;
 
   const piece = currentPiecesData?.find(
-    (p) => String(p.number) === pieceNumberStr,
+    (p) => String(p.name) === pieceNumberStr,
   );
   if (piece && piece.centroid) {
     map.flyTo([piece.centroid[1], piece.centroid[0]], 18, { duration: 1 });
