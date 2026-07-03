@@ -286,10 +286,10 @@ function displayDistrictOnMap(geojson) {
           selectPieceFromMap(pieceNumberStr);
         });
 
-        if (pieceData && pieceData.center) {
-          const centerText = `${pieceData.center[1]?.toFixed(6)} , ${pieceData.center[0]?.toFixed(6)}`;
-          const lat = pieceData.center[1];
-          const lng = pieceData.center[0];
+        if (pieceData && pieceData.centroid) {
+          const centerText = `${pieceData.centroid[1]?.toFixed(6)} , ${pieceData.centroid[0]?.toFixed(6)}`;
+          const lat = pieceData.centroid[1];
+          const lng = pieceData.centroid[0];
 
           // ✅ تغییر: استفاده از area_m2 به جای area
           const areaValue = pieceData.area_m2 || pieceData.area || 0;
