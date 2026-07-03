@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException
 from pathlib import Path
 import json
-from typing import List, Dict, Any
+from typing import List, Dict
 
 router = APIRouter(prefix="/api/districts", tags=["Districts"])
 
@@ -22,18 +22,18 @@ def get_district_files() -> List[Dict[str, str]]:
                 data = json.load(f)
                 
             district_id = file_path.stem  # نام فایل بدون پسوند
-            # اولویت: name_fa از فایل، سپس نام فایل
-            name_fa = data.get("name_fa", district_id)
+            # اولویت: name از فایل، سپس نام فایل
+            name = data.get("name", district_id)
             
             districts.append({
                 "id": district_id,
-                "name_fa": name_fa
+                "name": name
             })
         except Exception as e:
             print(f"خطا در خواندن {file_path}: {e}")
     
     # مرتب‌سازی بر اساس نام فارسی
-    districts.sort(key=lambda x: x["name_fa"])
+    districts.sort(key=lambda x: x["name"])
     
     return districts
 
@@ -60,72 +60,24 @@ async def load_district(district_id: str):
         
         # استخراج لیست قطعات از ویژگی‌ها
         pieces = []
-        center = geo_json.get("center", [52.532017731377202, 29.786731343898762])
-        name_fa = geo_json.get("name_fa", district_id)
+        centroid = geo_json.get("centroid", [52.532017731377202, 29.786731343898762])
+        name = geo_json.get("name", district_id)
         
         for feature in geo_json.get("features", []):
-            props = feature.get("properties", {})
-            # پشتیبانی از کلیدهای مختلف برای شماره قطعه
-            piece_num = props.get("Name") or props.get("name") or props.get("piece_num")
-            
-            if piece_num:
-                # محاسبه مرکز قطعه (از geometry)
-                piece_center = calculate_piece_center(feature.get("geometry"))
-                # محاسبه مساحت
-                area = calculate_polygon_area(feature.get("geometry"))
-                
-                pieces.append({
-                    "number": str(piece_num),
-                    "center": piece_center,
-                    "area": area or props.get("masahat", 0)
-                })
+            props = feature.get("properties", {})         
+            pieces.append({
+                "name": props.get("name"),
+                "centroid": props.get("centroid", []),
+                "area_m2": props.get("area_m2", 0)
+            })
         
         return {
             "district_id": district_id,
-            "name_fa": name_fa,
-            "center": center,
+            "name": name,
+            "centroid": centroid,
             "pieces": pieces,
             "geojson": geo_json
         }
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"خطا در خواندن فایل: {str(e)}")
-
-def calculate_piece_center(geometry: Dict[str, Any]) -> List[float]:
-    """محاسبه نقطه مرکزی یک قطعه"""
-    try:
-        if geometry["type"] == "Polygon":
-            coords = geometry["coordinates"][0]
-            lng_sum = sum(p[0] for p in coords)
-            lat_sum = sum(p[1] for p in coords)
-            count = len(coords)
-            return [lng_sum / count, lat_sum / count]
-        
-        elif geometry["type"] == "MultiPolygon":
-            coords = geometry["coordinates"][0][0]
-            lng_sum = sum(p[0] for p in coords)
-            lat_sum = sum(p[1] for p in coords)
-            count = len(coords)
-            return [lng_sum / count, lat_sum / count]
-        
-        return [52.532017731377202, 29.786731343898762]
-    except:
-        return [52.532017731377202, 29.786731343898762]
-
-def calculate_polygon_area(geometry: Dict[str, Any]) -> float:
-    """محاسبه تقریبی مساحت چندضلعی (در صورت نیاز)"""
-    try:
-        if geometry["type"] == "Polygon":
-            coords = geometry["coordinates"][0]
-            area = 0
-            for i in range(len(coords)):
-                j = (i + 1) % len(coords)
-                area += coords[i][0] * coords[j][1]
-                area -= coords[j][0] * coords[i][1]
-            area = abs(area) / 2
-            # مقیاس تقریبی (در دنیای واقعی هر درجه ~111 کیلومتر است)
-            # این فقط برای تخمین است
-            return area * 111000 * 111000 * 0.0001
-        return 0
-    except:
-        return 0
