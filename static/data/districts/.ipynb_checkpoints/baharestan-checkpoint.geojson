@@ -1,11 +1,11 @@
 {
   "type": "FeatureCollection",
-  "Name": "baharestan",
-  "Name_fa": "بهارستان",
+  "name": "baharestan",
+  "name_fa": "بهارستان",
   "crs": {
-    "type": "Name",
+    "type": "name",
     "properties": {
-      "Name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
     }
   },
   "features": [
