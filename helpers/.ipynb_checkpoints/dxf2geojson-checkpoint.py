@@ -93,7 +93,7 @@ def extract_texts(msp):
             text_value = entity.dxf.text.strip()
             if text_value:
                 texts.append({
-                    'text': text_value[::-1],
+                    'text': text_value,#[::-1],
                     'geometry': Point(float(x), float(y))
                 })
         except:
