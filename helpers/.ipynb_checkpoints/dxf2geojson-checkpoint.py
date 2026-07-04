@@ -144,18 +144,48 @@ def convert_to_wgs84(poly_gdf):
     return poly_gdf
 
 # =============================================
-# 8. Function: Save to GeoJSON with district name (STANDARDIZED)
+# 8. NEW: Extract region boundary points
+# =============================================
+def extract_region_boundary(poly_gdf):
+    """
+    Extract boundary points of the entire region (union of all pieces).
+    """
+    # Combine all polygons
+    from shapely.ops import unary_union as union_all
+    all_polygons = union_all(poly_gdf.geometry.tolist())
+    
+    if all_polygons.is_empty:
+        return []
+    
+    # Get outer boundary
+    if all_polygons.geom_type == 'Polygon':
+        boundary = all_polygons.exterior
+    elif all_polygons.geom_type == 'MultiPolygon':
+        # If multiple islands, take convex hull or union boundary
+        boundary = all_polygons.convex_hull.exterior
+    else:
+        return []
+    
+    # Extract boundary points
+    boundary_points = []
+    for coord in list(boundary.coords):
+        # Round to 6 decimal places
+        boundary_points.append([round(coord[0], 6), round(coord[1], 6)])
+    
+    return boundary_points
+
+# =============================================
+# 9. Function: Save to GeoJSON with district name (STANDARDIZED)
 # =============================================
 def save_as_geojson(poly_gdf, district_name, dxf_path):
     output_gdf = poly_gdf[['name', 'area_m2', 'centroid', 'geometry']].copy()
     output_gdf = output_gdf.dropna(subset=['name', 'geometry'])
     
     # =============================================
-    # NEW: Calculate region-level centroid
+    # Calculate region-level centroid
     # =============================================
     region_centroid = None
     if not output_gdf.empty:
-        # Combine all polygons to get region centroid
         from shapely.ops import unary_union as union_all
         all_polygons = union_all(output_gdf.geometry.tolist())
         if not all_polygons.is_empty:
@@ -163,13 +193,20 @@ def save_as_geojson(poly_gdf, district_name, dxf_path):
             region_centroid = [round(centroid_point.x, 6), round(centroid_point.y, 6)]
     
     # =============================================
+    # NEW: Extract region boundary points
+    # =============================================
+    boundary_points = extract_region_boundary(output_gdf)
+    
+    # =============================================
     # Build STANDARDIZED GeoJSON structure
     # =============================================
     geojson_data = {
         "type": "FeatureCollection",
-        "name": district_name,  # District name in Persian
-        "centroid": region_centroid,  # NEW: Region-level centroid
-        "crs": {  # NEW: CRS definition
+        "name": district_name,
+        "centroid": region_centroid,
+        "boundary": boundary_points,  # ← NEW: List of boundary points
+        "boundary_count": len(boundary_points),  # ← NEW: Number of boundary points
+        "crs": {
             "type": "name",
             "properties": {
                 "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
@@ -179,7 +216,6 @@ def save_as_geojson(poly_gdf, district_name, dxf_path):
     }
     
     for _, row in output_gdf.iterrows():
-        # Round centroid coordinates to 6 decimal places
         centroid_coords = row['centroid']
         if centroid_coords:
             centroid_coords = [round(centroid_coords[0], 6), round(centroid_coords[1], 6)]
@@ -188,9 +224,9 @@ def save_as_geojson(poly_gdf, district_name, dxf_path):
             "type": "Feature",
             "geometry": row['geometry'].__geo_interface__,
             "properties": {
-                "name": str(row['name']),  # Piece name/number
-                "area_m2": round(float(row['area_m2']), 2),  # Area in square meters
-                "centroid": centroid_coords  # Piece centroid
+                "name": str(row['name']),
+                "area_m2": round(float(row['area_m2']), 2),
+                "centroid": centroid_coords
             }
         }
         geojson_data['features'].append(feature)
@@ -206,6 +242,7 @@ def save_as_geojson(poly_gdf, district_name, dxf_path):
     print(output_path)
     print(f"   - Features: {len(geojson_data['features'])}")
     print(f"   - Region centroid: {region_centroid}")
+    print(f"   - Boundary points: {len(boundary_points)}")
     return output_path
 
 # =============================================
@@ -256,7 +293,6 @@ def run_pipeline(dxf_path, district_name):
 # Execute
 # =============================================
 if __name__ == "__main__":
-    # Check if file exists before running pipeline
     if not os.path.exists(dxf_path):
         print(f"❌ Error: File '{dxf_path}' not found!")
         print(f"Please make sure '{dxf_path}' exists in the current directory.")
