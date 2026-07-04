@@ -81,3 +81,46 @@ async def load_district(district_id: str):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"خطا در خواندن فایل: {str(e)}")
+
+@router.get("/all")
+async def get_all_districts():
+    """دریافت تمام نواحی با اطلاعات کامل در یک درخواست"""
+    districts = []
+    
+    if not DISTRICTS_DIR.exists():
+        return {"districts": []}
+    
+    for file_path in DISTRICTS_DIR.glob("*.geojson"):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            district_id = file_path.stem
+            name = data.get("name", district_id)
+            centroid = data.get("centroid", [0, 0])
+            boundary = data.get("boundary", [])
+            features = data.get("features", [])
+            
+            # استخراج قطعات با اطلاعات کامل
+            pieces = []
+            for feature in features:
+                props = feature.get("properties", {})
+                pieces.append({
+                    "name": props.get("name"),
+                    "centroid": props.get("centroid", []),
+                    "area_m2": props.get("area_m2", 0)
+                })
+            
+            districts.append({
+                "id": district_id,
+                "name": name,
+                "centroid": centroid,
+                "boundary": boundary,
+                "pieces": pieces
+            })
+        except Exception as e:
+            print(f"خطا در خواندن {file_path}: {e}")
+    
+    districts.sort(key=lambda x: x["name"])
+    
+    return {"districts": districts}
