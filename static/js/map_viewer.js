@@ -29,21 +29,14 @@ function getDistrictColor(index) {
 async function initializeMap() {
     map = L.map("map").setView([29.80421, 52.49931], 13);
 
-    const layerStreet = L.tileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
-        subdomains: ["mt0", "mt1", "mt2", "mt3"],
+    const layerStreet = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: "abcd",
         maxZoom: 20,
-        minZoom: 10,
-        attribution: 'Google Maps'
+        minZoom: 10
     });
 
     const layerSatellite = L.tileLayer("https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
-        subdomains: ["mt0", "mt1", "mt2", "mt3"],
-        maxZoom: 20,
-        minZoom: 10,
-        attribution: 'Google Maps'
-    });
-
-    const layerHybrid = L.tileLayer("https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}", {
         subdomains: ["mt0", "mt1", "mt2", "mt3"],
         maxZoom: 20,
         minZoom: 10,
@@ -54,8 +47,7 @@ async function initializeMap() {
 
     const baseMaps = {
         "🗺️ معمولی": layerStreet,
-        "🛰️ ماهواره‌ای": layerSatellite,
-        "🌍 ترکیبی": layerHybrid
+        "🛰️ ماهواره‌ای": layerSatellite
     };
 
     L.control.layers(baseMaps, null, {
