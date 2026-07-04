@@ -5,8 +5,38 @@ let currentDistrictLayer = null;
 let currentPiecesData = [];
 let currentlyHighlighted = null;
 let currentDistrictId = null;
+let allDistrictsLayer = null; // لایه برای نمایش همه نواحی
+let allDistrictsData = []; // ذخیره داده‌های همه نواحی
 
 let districtsData = [];
+
+// ============================================================
+// پالت رنگی برای نواحی
+// ============================================================
+const COLORS = [
+    '#FF6B6B', // قرمز
+    '#4ECDC4', // فیروزه‌ای
+    '#45B7D1', // آبی
+    '#96CEB4', // سبز روشن
+    '#FFEAA7', // زرد
+    '#DDA0DD', // بنفش روشن
+    '#FF8A5C', // نارنجی
+    '#A29BFE', // بنفش آبی
+    '#FD79A8', // صورتی
+    '#00B894', // سبز
+    '#E17055', // قرمز آجری
+    '#74B9FF', // آبی روشن
+    '#55EFC4', // سبز نعنایی
+    '#FDCB6E', // زرد طلایی
+    '#E84393', // صورتی تند
+    '#6C5CE7', // بنفش
+    '#00CEC9', // فیروزه‌ای تند
+    '#FD79A8', // صورتی
+];
+
+function getDistrictColor(index) {
+    return COLORS[index % COLORS.length];
+}
 
 // ============================================================
 // مقداردهی اولیه نقشه
@@ -49,6 +79,11 @@ async function initializeMap() {
     }).addTo(map);
 
     await loadDistrictsList();
+    
+    // ============================================================
+    // NEW: بارگذاری همه نواحی بعد از لیست
+    // ============================================================
+    await loadAllDistricts();
 }
 
 // ============================================================
@@ -66,7 +101,184 @@ async function loadDistrictsList() {
 }
 
 // ============================================================
-// پر کردن dropdown ناحیه
+// NEW: بارگذاری همه نواحی روی نقشه
+// ============================================================
+async function loadAllDistricts() {
+    // حذف لایه قبلی اگر وجود دارد
+    if (allDistrictsLayer) {
+        map.removeLayer(allDistrictsLayer);
+        allDistrictsLayer = null;
+    }
+
+    allDistrictsData = [];
+    
+    // یک FeatureGroup برای جمع کردن همه لایه‌ها
+    const featureGroup = L.featureGroup();
+    
+    for (let i = 0; i < districtsData.length; i++) {
+        const district = districtsData[i];
+        const color = getDistrictColor(i);
+        
+        try {
+            // بارگذاری فایل GeoJSON ناحیه
+            const response = await fetch(`/api/districts/${district.id}/load`);
+            const data = await response.json();
+            
+            if (!response.ok) continue;
+            
+            const geoJson = data.geojson;
+            const boundary = geoJson.boundary || [];
+            const centroid = geoJson.centroid || [0, 0];
+            const name = geoJson.name || district.id;
+            
+            // ذخیره داده برای استفاده بعدی
+            allDistrictsData.push({
+                id: district.id,
+                name: name,
+                centroid: centroid,
+                boundary: boundary,
+                color: color,
+                geoJson: geoJson
+            });
+            
+            // ============================================================
+            // رسم مرز ناحیه (boundary)
+            // ============================================================
+            if (boundary.length >= 3) {
+                // تبدیل نقاط مرزی به فرمت Leaflet
+                const latLngs = boundary.map(p => [p[1], p[0]]);
+                
+                // رسم چندضلعی مرز
+                const polygon = L.polygon(latLngs, {
+                    color: color,
+                    weight: 4,
+                    opacity: 0.9,
+                    fillColor: color,
+                    fillOpacity: 0.15,
+                    smoothFactor: 1,
+                    className: 'district-boundary'
+                });
+                
+                // ============================================================
+                // رویداد کلیک روی ناحیه
+                // ============================================================
+                polygon.on('click', function(e) {
+                    zoomToDistrict(district.id);
+                });
+                
+                // ============================================================
+                // افزودن اسم ناحیه روی نقشه (با استفاده از tooltip)
+                // ============================================================
+                // محاسبه مرکز برای نمایش نام
+                const centerLat = centroid[1] || latLngs.reduce((sum, p) => sum + p[0], 0) / latLngs.length;
+                const centerLng = centroid[0] || latLngs.reduce((sum, p) => sum + p[1], 0) / latLngs.length;
+                
+                const label = L.marker([centerLat, centerLng], {
+                    icon: L.divIcon({
+                        className: 'district-label',
+                        html: `<div class="text-xs font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-md shadow-sm border border-gray-200" style="color: ${color};">${name}</div>`,
+                        iconSize: [0, 0],
+                        iconAnchor: [0, 0]
+                    }),
+                    interactive: false,
+                    zIndexOffset: 1000
+                });
+                
+                // اضافه کردن به گروه
+                featureGroup.addLayer(polygon);
+                featureGroup.addLayer(label);
+            } else {
+                console.warn(`⚠️ ناحیه ${name} مرز معتبری ندارد`);
+            }
+            
+        } catch (error) {
+            console.error(`❌ خطا در بارگذاری ناحیه ${district.id}:`, error);
+        }
+    }
+    
+    // افزودن همه لایه‌ها به نقشه
+    allDistrictsLayer = featureGroup;
+    map.addLayer(allDistrictsLayer);
+    
+    // زوم روی محدوده همه نواحی
+    if (allDistrictsData.length > 0) {
+        const bounds = getDistrictsBounds(allDistrictsData);
+        if (bounds) {
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+    }
+    
+    console.log(`✅ ${allDistrictsData.length} ناحیه روی نقشه نمایش داده شد`);
+}
+
+// ============================================================
+// NEW: محاسبه محدوده همه نواحی
+// ============================================================
+function getDistrictsBounds(districts) {
+    let allPoints = [];
+    districts.forEach(d => {
+        if (d.boundary && d.boundary.length > 0) {
+            d.boundary.forEach(p => {
+                allPoints.push([p[1], p[0]]);
+            });
+        }
+    });
+    
+    if (allPoints.length === 0) return null;
+    
+    const lats = allPoints.map(p => p[0]);
+    const lngs = allPoints.map(p => p[1]);
+    
+    return [
+        [Math.min(...lats), Math.min(...lngs)],
+        [Math.max(...lats), Math.max(...lngs)]
+    ];
+}
+
+// ============================================================
+// NEW: زوم روی یک ناحیه خاص
+// ============================================================
+function zoomToDistrict(districtId) {
+    // پیدا کردن ناحیه در داده‌های بارگذاری شده
+    const district = allDistrictsData.find(d => d.id === districtId);
+    if (!district) {
+        showError("ناحیه یافت نشد");
+        return;
+    }
+    
+    // محاسبه محدوده ناحیه برای زوم مناسب
+    if (district.boundary && district.boundary.length > 0) {
+        const points = district.boundary.map(p => [p[1], p[0]]);
+        const bounds = L.latLngBounds(points);
+        map.flyToBounds(bounds, {
+            padding: [50, 50],
+            duration: 1.5,
+            maxZoom: 17
+        });
+    } else if (district.centroid && district.centroid.length === 2) {
+        map.flyTo([district.centroid[1], district.centroid[0]], 15, {
+            animate: true,
+            duration: 1.5
+        });
+    } else {
+        map.flyTo([29.80421, 52.49931], 13);
+    }
+    
+    // پس از زوم، قطعات ناحیه را نمایش بده
+    setTimeout(() => {
+        // حذف لایه همه نواحی
+        if (allDistrictsLayer) {
+            map.removeLayer(allDistrictsLayer);
+            allDistrictsLayer = null;
+        }
+        
+        // بارگذاری قطعات ناحیه
+        onDistrictChange(districtId);
+    }, 800);
+}
+
+// ============================================================
+// پر کردن dropdown ناحیه (اصلاح شده برای استفاده از name)
 // ============================================================
 function populateDistrictDropdown(districts) {
   const input = $("#districtInput");
@@ -114,7 +326,14 @@ function populateDistrictDropdown(districts) {
         dropdown.removeClass("open");
         updateClearButtonVisibility(input, clearBtn);
         if (district.id !== currentDistrictId) {
-          onDistrictChange(district.id);
+          // اگر ناحیه‌ای انتخاب شده، به آن زوم کن
+          if (allDistrictsLayer) {
+            // اگر در حالت نمایش همه نواحی هستیم
+            zoomToDistrict(district.id);
+          } else {
+            // اگر در حالت نمایش یک ناحیه هستیم
+            onDistrictChange(district.id);
+          }
         }
       });
 
@@ -137,7 +356,6 @@ function populateDistrictDropdown(districts) {
     dropdown.removeClass("open");
     $(this).addClass("hidden").removeClass("visible");
     clearDistrictFromMap();
-    hidePiecesDropdown();
     currentDistrictId = null;
     input.focus();
   });
@@ -159,7 +377,6 @@ function populateDistrictDropdown(districts) {
     const val = $(this).val();
     if (val === "") {
       clearDistrictFromMap();
-      hidePiecesDropdown();
       currentDistrictId = null;
       if (dropdown.hasClass("open")) {
         renderList("");
@@ -193,7 +410,11 @@ function populateDistrictDropdown(districts) {
           list.empty().addClass("hidden");
           dropdown.removeClass("open");
           updateClearButtonVisibility(input, clearBtn);
-          onDistrictChange(district.id);
+          if (allDistrictsLayer) {
+            zoomToDistrict(district.id);
+          } else {
+            onDistrictChange(district.id);
+          }
         }
       }
     }
@@ -209,7 +430,7 @@ function populateDistrictDropdown(districts) {
 }
 
 // ============================================================
-// تغییر ناحیه
+// تغییر ناحیه (نمایش قطعات)
 // ============================================================
 async function onDistrictChange(districtId) {
   if (!districtId) return;
@@ -231,7 +452,13 @@ async function onDistrictChange(districtId) {
     populatePiecesDropdown(currentPiecesData);
     displayDistrictOnMap(data.geojson);
 
-    // ✅ تغییر: استفاده از centroid به جای center
+    // اگر لایه همه نواحی هنوز وجود دارد، حذف کن
+    if (allDistrictsLayer) {
+      map.removeLayer(allDistrictsLayer);
+      allDistrictsLayer = null;
+    }
+
+    // زوم روی centroid ناحیه
     if (data.centroid && data.centroid.length === 2) {
       map.flyTo([data.centroid[1], data.centroid[0]], 15, {
         animate: true,
@@ -247,7 +474,7 @@ async function onDistrictChange(districtId) {
 }
 
 // ============================================================
-// نمایش ناحیه روی نقشه
+// نمایش ناحیه روی نقشه (قطعات)
 // ============================================================
 function displayDistrictOnMap(geojson) {
   if (currentDistrictLayer) {
@@ -258,7 +485,6 @@ function displayDistrictOnMap(geojson) {
 
   currentDistrictLayer = L.geoJSON(geojson, {
     style: function (feature) {
-      // ✅ تغییر: استفاده از name به جای Name
       const pieceNumber = feature.properties?.name || feature.properties?.Name;
       const isHighlighted =
         currentlyHighlighted &&
@@ -273,7 +499,6 @@ function displayDistrictOnMap(geojson) {
       };
     },
     onEachFeature: function (feature, layer) {
-      // ✅ تغییر: استفاده از name به جای Name
       const pieceNumber = feature.properties?.name || feature.properties?.Name;
       if (pieceNumber) {
         const pieceNumberStr = String(pieceNumber);
@@ -291,7 +516,6 @@ function displayDistrictOnMap(geojson) {
           const lat = pieceData.centroid[1];
           const lng = pieceData.centroid[0];
 
-          // ✅ تغییر: استفاده از area_m2 به جای area
           const areaValue = pieceData.area_m2 || pieceData.area || 0;
 
           layer.bindPopup(`
@@ -620,18 +844,29 @@ function selectPieceFromMap(pieceNumber) {
 }
 
 // ============================================================
-// پاک کردن ناحیه از نقشه
+// پاک کردن ناحیه از نقشه (برگشت به حالت اولیه)
 // ============================================================
 function clearDistrictFromMap() {
+  // حذف لایه قطعات
   if (currentDistrictLayer) {
     map.removeLayer(currentDistrictLayer);
     currentDistrictLayer = null;
   }
+  
   if (currentlyHighlighted) {
     currentlyHighlighted = null;
   }
+  
   currentPiecesData = [];
   currentDistrictId = null;
+  
+  // پاک کردن dropdown قطعه
+  hidePiecesDropdown();
+  
+  // نمایش دوباره همه نواحی
+  loadAllDistricts();
+  
+  console.log("↩️ برگشت به حالت نمایش همه نواحی");
 }
 
 // ============================================================
