@@ -3,7 +3,7 @@
   "name": "آموزش و پرورش",
   "centroid": [
     52.431369,
-    29.826482
+    29.826488
   ],
   "crs": {
     "type": "name",
@@ -50,7 +50,7 @@
         ]
       },
       "properties": {
-        "name": "C1",
+        "name": "1C",
         "area_m2": 507.53,
         "centroid": [
           52.433866,
@@ -298,7 +298,7 @@
         ]
       },
       "properties": {
-        "name": "C5",
+        "name": "5C",
         "area_m2": 283.13,
         "centroid": [
           52.433609,
@@ -336,7 +336,7 @@
         ]
       },
       "properties": {
-        "name": "25",
+        "name": "52",
         "area_m2": 199.4,
         "centroid": [
           52.433713,
@@ -374,7 +374,7 @@
         ]
       },
       "properties": {
-        "name": "26",
+        "name": "62",
         "area_m2": 199.4,
         "centroid": [
           52.433801,
@@ -412,7 +412,7 @@
         ]
       },
       "properties": {
-        "name": "27",
+        "name": "72",
         "area_m2": 199.4,
         "centroid": [
           52.433888,
@@ -462,7 +462,7 @@
         ]
       },
       "properties": {
-        "name": "28",
+        "name": "82",
         "area_m2": 199.4,
         "centroid": [
           52.433976,
@@ -500,7 +500,7 @@
         ]
       },
       "properties": {
-        "name": "29",
+        "name": "92",
         "area_m2": 218.56,
         "centroid": [
           52.434077,
@@ -538,7 +538,7 @@
         ]
       },
       "properties": {
-        "name": "10",
+        "name": "01",
         "area_m2": 214.38,
         "centroid": [
           52.434176,
@@ -614,7 +614,7 @@
         ]
       },
       "properties": {
-        "name": "12",
+        "name": "21",
         "area_m2": 199.4,
         "centroid": [
           52.433999,
@@ -652,7 +652,7 @@
         ]
       },
       "properties": {
-        "name": "13",
+        "name": "31",
         "area_m2": 199.4,
         "centroid": [
           52.433912,
@@ -690,7 +690,7 @@
         ]
       },
       "properties": {
-        "name": "14",
+        "name": "41",
         "area_m2": 199.4,
         "centroid": [
           52.433824,
@@ -732,7 +732,7 @@
         ]
       },
       "properties": {
-        "name": "C3",
+        "name": "3C",
         "area_m2": 329.71,
         "centroid": [
           52.433709,
@@ -774,7 +774,7 @@
         ]
       },
       "properties": {
-        "name": "C9",
+        "name": "9C",
         "area_m2": 270.91,
         "centroid": [
           52.433367,
@@ -812,7 +812,7 @@
         ]
       },
       "properties": {
-        "name": "45",
+        "name": "54",
         "area_m2": 199.4,
         "centroid": [
           52.433469,
@@ -850,7 +850,7 @@
         ]
       },
       "properties": {
-        "name": "46",
+        "name": "64",
         "area_m2": 199.4,
         "centroid": [
           52.433557,
@@ -888,7 +888,7 @@
         ]
       },
       "properties": {
-        "name": "47",
+        "name": "74",
         "area_m2": 199.4,
         "centroid": [
           52.433644,
@@ -926,7 +926,7 @@
         ]
       },
       "properties": {
-        "name": "48",
+        "name": "84",
         "area_m2": 199.4,
         "centroid": [
           52.433731,
@@ -964,7 +964,7 @@
         ]
       },
       "properties": {
-        "name": "49",
+        "name": "94",
         "area_m2": 244.34,
         "centroid": [
           52.433828,
@@ -1002,7 +1002,7 @@
         ]
       },
       "properties": {
-        "name": "30",
+        "name": "03",
         "area_m2": 214.38,
         "centroid": [
           52.433932,
@@ -1040,7 +1040,7 @@
         ]
       },
       "properties": {
-        "name": "31",
+        "name": "13",
         "area_m2": 199.4,
         "centroid": [
           52.433842,
@@ -1078,7 +1078,7 @@
         ]
       },
       "properties": {
-        "name": "32",
+        "name": "23",
         "area_m2": 199.4,
         "centroid": [
           52.433755,
@@ -1154,7 +1154,7 @@
         ]
       },
       "properties": {
-        "name": "34",
+        "name": "43",
         "area_m2": 199.4,
         "centroid": [
           52.43358,
@@ -1196,7 +1196,7 @@
         ]
       },
       "properties": {
-        "name": "C7",
+        "name": "7C",
         "area_m2": 300.88,
         "centroid": [
           52.433471,
@@ -1238,7 +1238,7 @@
         ]
       },
       "properties": {
-        "name": "C13",
+        "name": "31C",
         "area_m2": 302.44,
         "centroid": [
           52.433037,
@@ -1276,7 +1276,7 @@
         ]
       },
       "properties": {
-        "name": "65",
+        "name": "56",
         "area_m2": 189.39,
         "centroid": [
           52.43315,
@@ -1352,7 +1352,7 @@
         ]
       },
       "properties": {
-        "name": "67",
+        "name": "76",
         "area_m2": 189.39,
         "centroid": [
           52.433325,
@@ -1402,7 +1402,7 @@
         ]
       },
       "properties": {
-        "name": "68",
+        "name": "86",
         "area_m2": 189.39,
         "centroid": [
           52.433412,
@@ -1440,7 +1440,7 @@
         ]
       },
       "properties": {
-        "name": "69",
+        "name": "96",
         "area_m2": 205.7,
         "centroid": [
           52.433514,
@@ -1478,7 +1478,7 @@
         ]
       },
       "properties": {
-        "name": "50",
+        "name": "05",
         "area_m2": 214.35,
         "centroid": [
           52.433609,
@@ -1516,7 +1516,7 @@
         ]
       },
       "properties": {
-        "name": "51",
+        "name": "15",
         "area_m2": 199.37,
         "centroid": [
           52.43352,
@@ -1554,7 +1554,7 @@
         ]
       },
       "properties": {
-        "name": "52",
+        "name": "25",
         "area_m2": 199.37,
         "centroid": [
           52.433433,
@@ -1592,7 +1592,7 @@
         ]
       },
       "properties": {
-        "name": "53",
+        "name": "35",
         "area_m2": 199.37,
         "centroid": [
           52.433345,
@@ -1630,7 +1630,7 @@
         ]
       },
       "properties": {
-        "name": "54",
+        "name": "45",
         "area_m2": 199.37,
         "centroid": [
           52.433258,
@@ -1672,7 +1672,7 @@
         ]
       },
       "properties": {
-        "name": "C11",
+        "name": "11C",
         "area_m2": 325.51,
         "centroid": [
           52.433143,
@@ -1718,7 +1718,7 @@
         ]
       },
       "properties": {
-        "name": "RG15",
+        "name": "51GR",
         "area_m2": 1214.11,
         "centroid": [
           52.429675,
@@ -1756,7 +1756,7 @@
         ]
       },
       "properties": {
-        "name": "RG12",
+        "name": "21GR",
         "area_m2": 1000.9,
         "centroid": [
           52.430383,
@@ -1794,7 +1794,7 @@
         ]
       },
       "properties": {
-        "name": "RG11",
+        "name": "11GR",
         "area_m2": 1071.25,
         "centroid": [
           52.4306,
@@ -1832,7 +1832,7 @@
         ]
       },
       "properties": {
-        "name": "RG10",
+        "name": "01GR",
         "area_m2": 1141.61,
         "centroid": [
           52.430818,
@@ -1902,7 +1902,7 @@
         ]
       },
       "properties": {
-        "name": "RG9",
+        "name": "9GR",
         "area_m2": 1209.99,
         "centroid": [
           52.431036,
@@ -1940,7 +1940,7 @@
         ]
       },
       "properties": {
-        "name": "RG4",
+        "name": "4GR",
         "area_m2": 802.06,
         "centroid": [
           52.432324,
@@ -1978,7 +1978,7 @@
         ]
       },
       "properties": {
-        "name": "RG3",
+        "name": "3GR",
         "area_m2": 853.33,
         "centroid": [
           52.432505,
@@ -2028,7 +2028,7 @@
         ]
       },
       "properties": {
-        "name": "RG2",
+        "name": "2GR",
         "area_m2": 717.9,
         "centroid": [
           52.432668,
@@ -2110,7 +2110,7 @@
         ]
       },
       "properties": {
-        "name": "RG1",
+        "name": "1GR",
         "area_m2": 877.03,
         "centroid": [
           52.432796,
@@ -2172,7 +2172,7 @@
         ]
       },
       "properties": {
-        "name": "19",
+        "name": "91",
         "area_m2": 199.4,
         "centroid": [
           52.43281,
@@ -2218,7 +2218,7 @@
         ]
       },
       "properties": {
-        "name": "20",
+        "name": "02",
         "area_m2": 189.42,
         "centroid": [
           52.432702,
@@ -2272,7 +2272,7 @@
         ]
       },
       "properties": {
-        "name": "21",
+        "name": "12",
         "area_m2": 199.4,
         "centroid": [
           52.432787,
@@ -2348,7 +2348,7 @@
         ]
       },
       "properties": {
-        "name": "23",
+        "name": "32",
         "area_m2": 199.4,
         "centroid": [
           52.432962,
@@ -2386,7 +2386,7 @@
         ]
       },
       "properties": {
-        "name": "24",
+        "name": "42",
         "area_m2": 199.4,
         "centroid": [
           52.433049,
@@ -2428,7 +2428,7 @@
         ]
       },
       "properties": {
-        "name": "C6",
+        "name": "6C",
         "area_m2": 426.99,
         "centroid": [
           52.433186,
@@ -2478,7 +2478,7 @@
         ]
       },
       "properties": {
-        "name": "38",
+        "name": "83",
         "area_m2": 199.4,
         "centroid": [
           52.432621,
@@ -2516,7 +2516,7 @@
         ]
       },
       "properties": {
-        "name": "37",
+        "name": "73",
         "area_m2": 199.4,
         "centroid": [
           52.432708,
@@ -2554,7 +2554,7 @@
         ]
       },
       "properties": {
-        "name": "36",
+        "name": "63",
         "area_m2": 199.4,
         "centroid": [
           52.432796,
@@ -2592,7 +2592,7 @@
         ]
       },
       "properties": {
-        "name": "35",
+        "name": "53",
         "area_m2": 199.4,
         "centroid": [
           52.432883,
@@ -2634,7 +2634,7 @@
         ]
       },
       "properties": {
-        "name": "C8",
+        "name": "8C",
         "area_m2": 485.67,
         "centroid": [
           52.433032,
@@ -2718,7 +2718,7 @@
         ]
       },
       "properties": {
-        "name": "C10",
+        "name": "01C",
         "area_m2": 494.03,
         "centroid": [
           52.432926,
@@ -2756,7 +2756,7 @@
         ]
       },
       "properties": {
-        "name": "43",
+        "name": "34",
         "area_m2": 199.39,
         "centroid": [
           52.432685,
@@ -2794,7 +2794,7 @@
         ]
       },
       "properties": {
-        "name": "42",
+        "name": "24",
         "area_m2": 199.39,
         "centroid": [
           52.432598,
@@ -2832,7 +2832,7 @@
         ]
       },
       "properties": {
-        "name": "41",
+        "name": "14",
         "area_m2": 199.39,
         "centroid": [
           52.43251,
@@ -2882,7 +2882,7 @@
         ]
       },
       "properties": {
-        "name": "RG29",
+        "name": "92GR",
         "area_m2": 1069.69,
         "centroid": [
           52.43228,
@@ -2920,7 +2920,7 @@
         ]
       },
       "properties": {
-        "name": "40",
+        "name": "04",
         "area_m2": 199.39,
         "centroid": [
           52.432423,
@@ -2970,7 +2970,7 @@
         ]
       },
       "properties": {
-        "name": "39",
+        "name": "93",
         "area_m2": 189.42,
         "centroid": [
           52.432531,
@@ -3008,7 +3008,7 @@
         ]
       },
       "properties": {
-        "name": "RG30",
+        "name": "03GR",
         "area_m2": 950.76,
         "centroid": [
           52.43202,
@@ -3246,7 +3246,7 @@
         ]
       },
       "properties": {
-        "name": "RG28",
+        "name": "82GR",
         "area_m2": 1087.36,
         "centroid": [
           52.432476,
@@ -3292,7 +3292,7 @@
         ]
       },
       "properties": {
-        "name": "RG27",
+        "name": "72GR",
         "area_m2": 950.76,
         "centroid": [
           52.432208,
@@ -3330,7 +3330,7 @@
         ]
       },
       "properties": {
-        "name": "RG31",
+        "name": "13GR",
         "area_m2": 950.76,
         "centroid": [
           52.431775,
@@ -3368,7 +3368,7 @@
         ]
       },
       "properties": {
-        "name": "RG32",
+        "name": "23GR",
         "area_m2": 950.75,
         "centroid": [
           52.431531,
@@ -3406,7 +3406,7 @@
         ]
       },
       "properties": {
-        "name": "RG33",
+        "name": "33GR",
         "area_m2": 950.76,
         "centroid": [
           52.431286,
@@ -3448,7 +3448,7 @@
         ]
       },
       "properties": {
-        "name": "RG24",
+        "name": "42GR",
         "area_m2": 950.76,
         "centroid": [
           52.431474,
@@ -3486,7 +3486,7 @@
         ]
       },
       "properties": {
-        "name": "RG26",
+        "name": "62GR",
         "area_m2": 950.76,
         "centroid": [
           52.431964,
@@ -3524,7 +3524,7 @@
         ]
       },
       "properties": {
-        "name": "RG25",
+        "name": "52GR",
         "area_m2": 950.75,
         "centroid": [
           52.431719,
@@ -3566,7 +3566,7 @@
         ]
       },
       "properties": {
-        "name": "RG23",
+        "name": "32GR",
         "area_m2": 965.76,
         "centroid": [
           52.431227,
@@ -3608,7 +3608,7 @@
         ]
       },
       "properties": {
-        "name": "RG34",
+        "name": "43GR",
         "area_m2": 965.76,
         "centroid": [
           52.431039,
@@ -3650,7 +3650,7 @@
         ]
       },
       "properties": {
-        "name": "C4",
+        "name": "4C",
         "area_m2": 379.15,
         "centroid": [
           52.433286,
@@ -3688,7 +3688,7 @@
         ]
       },
       "properties": {
-        "name": "15",
+        "name": "51",
         "area_m2": 199.4,
         "centroid": [
           52.43316,
@@ -3726,7 +3726,7 @@
         ]
       },
       "properties": {
-        "name": "16",
+        "name": "61",
         "area_m2": 199.4,
         "centroid": [
           52.433073,
@@ -3764,7 +3764,7 @@
         ]
       },
       "properties": {
-        "name": "17",
+        "name": "71",
         "area_m2": 199.4,
         "centroid": [
           52.432985,
@@ -3806,7 +3806,7 @@
         ]
       },
       "properties": {
-        "name": "18",
+        "name": "81",
         "area_m2": 199.4,
         "centroid": [
           52.432898,
@@ -3990,7 +3990,7 @@
         ]
       },
       "properties": {
-        "name": "C2",
+        "name": "2C",
         "area_m2": 372.01,
         "centroid": [
           52.433431,
@@ -4070,7 +4070,7 @@
         ]
       },
       "properties": {
-        "name": "RG5",
+        "name": "5GR",
         "area_m2": 901.94,
         "centroid": [
           52.432125,
@@ -4112,7 +4112,7 @@
         ]
       },
       "properties": {
-        "name": "RG6",
+        "name": "6GR",
         "area_m2": 899.11,
         "centroid": [
           52.431898,
@@ -4158,7 +4158,7 @@
         ]
       },
       "properties": {
-        "name": "RG7",
+        "name": "7GR",
         "area_m2": 900.8,
         "centroid": [
           52.431649,
@@ -4196,7 +4196,7 @@
         ]
       },
       "properties": {
-        "name": "RG8",
+        "name": "8GR",
         "area_m2": 898.94,
         "centroid": [
           52.43137,
@@ -4262,7 +4262,7 @@
         ]
       },
       "properties": {
-        "name": "RG13",
+        "name": "31GR",
         "area_m2": 900.87,
         "centroid": [
           52.430168,
@@ -4304,7 +4304,7 @@
         ]
       },
       "properties": {
-        "name": "RG14",
+        "name": "41GR",
         "area_m2": 907.09,
         "centroid": [
           52.429948,
@@ -4490,7 +4490,7 @@
         ]
       },
       "properties": {
-        "name": "C15",
+        "name": "51C",
         "area_m2": 602.15,
         "centroid": [
           52.43282,
@@ -4528,7 +4528,7 @@
         ]
       },
       "properties": {
-        "name": "85",
+        "name": "58",
         "area_m2": 208.37,
         "centroid": [
           52.432886,
@@ -4566,7 +4566,7 @@
         ]
       },
       "properties": {
-        "name": "86",
+        "name": "68",
         "area_m2": 208.37,
         "centroid": [
           52.432982,
@@ -4604,7 +4604,7 @@
         ]
       },
       "properties": {
-        "name": "87",
+        "name": "78",
         "area_m2": 208.37,
         "centroid": [
           52.433078,
@@ -4684,7 +4684,7 @@
         ]
       },
       "properties": {
-        "name": "89",
+        "name": "98",
         "area_m2": 204.46,
         "centroid": [
           52.43328,
@@ -4722,7 +4722,7 @@
         ]
       },
       "properties": {
-        "name": "70",
+        "name": "07",
         "area_m2": 202.9,
         "centroid": [
           52.433373,
@@ -4760,7 +4760,7 @@
         ]
       },
       "properties": {
-        "name": "71",
+        "name": "17",
         "area_m2": 208.37,
         "centroid": [
           52.433279,
@@ -4798,7 +4798,7 @@
         ]
       },
       "properties": {
-        "name": "72",
+        "name": "27",
         "area_m2": 208.37,
         "centroid": [
           52.433183,
@@ -4836,7 +4836,7 @@
         ]
       },
       "properties": {
-        "name": "73",
+        "name": "37",
         "area_m2": 208.37,
         "centroid": [
           52.433087,
@@ -4874,7 +4874,7 @@
         ]
       },
       "properties": {
-        "name": "74",
+        "name": "47",
         "area_m2": 208.37,
         "centroid": [
           52.432991,
@@ -5060,7 +5060,7 @@
         ]
       },
       "properties": {
-        "name": "C19",
+        "name": "91C",
         "area_m2": 735.19,
         "centroid": [
           52.432551,
@@ -5098,7 +5098,7 @@
         ]
       },
       "properties": {
-        "name": "105",
+        "name": "501",
         "area_m2": 208.37,
         "centroid": [
           52.432634,
@@ -5136,7 +5136,7 @@
         ]
       },
       "properties": {
-        "name": "106",
+        "name": "601",
         "area_m2": 208.37,
         "centroid": [
           52.43273,
@@ -5174,7 +5174,7 @@
         ]
       },
       "properties": {
-        "name": "107",
+        "name": "701",
         "area_m2": 208.37,
         "centroid": [
           52.432826,
@@ -5220,7 +5220,7 @@
         ]
       },
       "properties": {
-        "name": "108",
+        "name": "801",
         "area_m2": 208.37,
         "centroid": [
           52.432922,
@@ -5258,7 +5258,7 @@
         ]
       },
       "properties": {
-        "name": "109",
+        "name": "901",
         "area_m2": 238.4,
         "centroid": [
           52.433037,
@@ -5296,7 +5296,7 @@
         ]
       },
       "properties": {
-        "name": "90",
+        "name": "09",
         "area_m2": 240.89,
         "centroid": [
           52.43313,
@@ -5334,7 +5334,7 @@
         ]
       },
       "properties": {
-        "name": "91",
+        "name": "19",
         "area_m2": 208.37,
         "centroid": [
           52.433027,
@@ -5372,7 +5372,7 @@
         ]
       },
       "properties": {
-        "name": "92",
+        "name": "29",
         "area_m2": 208.37,
         "centroid": [
           52.432931,
@@ -5410,7 +5410,7 @@
         ]
       },
       "properties": {
-        "name": "93",
+        "name": "39",
         "area_m2": 208.37,
         "centroid": [
           52.432835,
@@ -5452,7 +5452,7 @@
         ]
       },
       "properties": {
-        "name": "94",
+        "name": "49",
         "area_m2": 208.37,
         "centroid": [
           52.432739,
@@ -5494,7 +5494,7 @@
         ]
       },
       "properties": {
-        "name": "C25",
+        "name": "52C",
         "area_m2": 381.39,
         "centroid": [
           52.432196,
@@ -5532,7 +5532,7 @@
         ]
       },
       "properties": {
-        "name": "126",
+        "name": "621",
         "area_m2": 200.72,
         "centroid": [
           52.432331,
@@ -5570,7 +5570,7 @@
         ]
       },
       "properties": {
-        "name": "127",
+        "name": "721",
         "area_m2": 200.72,
         "centroid": [
           52.432424,
@@ -5608,7 +5608,7 @@
         ]
       },
       "properties": {
-        "name": "128",
+        "name": "821",
         "area_m2": 200.72,
         "centroid": [
           52.432517,
@@ -5646,7 +5646,7 @@
         ]
       },
       "properties": {
-        "name": "129",
+        "name": "921",
         "area_m2": 200.72,
         "centroid": [
           52.432609,
@@ -5692,7 +5692,7 @@
         ]
       },
       "properties": {
-        "name": "130",
+        "name": "031",
         "area_m2": 200.72,
         "centroid": [
           52.432702,
@@ -5768,7 +5768,7 @@
         ]
       },
       "properties": {
-        "name": "110",
+        "name": "011",
         "area_m2": 214.35,
         "centroid": [
           52.432902,
@@ -5844,7 +5844,7 @@
         ]
       },
       "properties": {
-        "name": "112",
+        "name": "211",
         "area_m2": 200.82,
         "centroid": [
           52.432714,
@@ -5882,7 +5882,7 @@
         ]
       },
       "properties": {
-        "name": "113",
+        "name": "311",
         "area_m2": 200.8,
         "centroid": [
           52.432622,
@@ -5920,7 +5920,7 @@
         ]
       },
       "properties": {
-        "name": "114",
+        "name": "411",
         "area_m2": 200.8,
         "centroid": [
           52.432529,
@@ -5958,7 +5958,7 @@
         ]
       },
       "properties": {
-        "name": "115",
+        "name": "511",
         "area_m2": 200.79,
         "centroid": [
           52.432436,
@@ -6004,7 +6004,7 @@
         ]
       },
       "properties": {
-        "name": "C23",
+        "name": "32C",
         "area_m2": 345.25,
         "centroid": [
           52.432309,
@@ -6054,7 +6054,7 @@
         ]
       },
       "properties": {
-        "name": "RG50",
+        "name": "05GR",
         "area_m2": 1412.66,
         "centroid": [
           52.429137,
@@ -6092,7 +6092,7 @@
         ]
       },
       "properties": {
-        "name": "RG51",
+        "name": "15GR",
         "area_m2": 909.99,
         "centroid": [
           52.429385,
@@ -6130,7 +6130,7 @@
         ]
       },
       "properties": {
-        "name": "RG52",
+        "name": "25GR",
         "area_m2": 909.99,
         "centroid": [
           52.429581,
@@ -6168,7 +6168,7 @@
         ]
       },
       "properties": {
-        "name": "RG53",
+        "name": "35GR",
         "area_m2": 909.99,
         "centroid": [
           52.429778,
@@ -6206,7 +6206,7 @@
         ]
       },
       "properties": {
-        "name": "RG54",
+        "name": "45GR",
         "area_m2": 909.99,
         "centroid": [
           52.429975,
@@ -6244,7 +6244,7 @@
         ]
       },
       "properties": {
-        "name": "RG55",
+        "name": "55GR",
         "area_m2": 909.99,
         "centroid": [
           52.430172,
@@ -6282,7 +6282,7 @@
         ]
       },
       "properties": {
-        "name": "RG56",
+        "name": "65GR",
         "area_m2": 909.99,
         "centroid": [
           52.430368,
@@ -6320,7 +6320,7 @@
         ]
       },
       "properties": {
-        "name": "RG57",
+        "name": "75GR",
         "area_m2": 909.99,
         "centroid": [
           52.430565,
@@ -6358,7 +6358,7 @@
         ]
       },
       "properties": {
-        "name": "RG58",
+        "name": "85GR",
         "area_m2": 910.02,
         "centroid": [
           52.430762,
@@ -6396,7 +6396,7 @@
         ]
       },
       "properties": {
-        "name": "RG59",
+        "name": "95GR",
         "area_m2": 910.02,
         "centroid": [
           52.430958,
@@ -6434,7 +6434,7 @@
         ]
       },
       "properties": {
-        "name": "RG60",
+        "name": "06GR",
         "area_m2": 909.99,
         "centroid": [
           52.431155,
@@ -6472,7 +6472,7 @@
         ]
       },
       "properties": {
-        "name": "RG61",
+        "name": "16GR",
         "area_m2": 909.99,
         "centroid": [
           52.431352,
@@ -6510,7 +6510,7 @@
         ]
       },
       "properties": {
-        "name": "RG62",
+        "name": "26GR",
         "area_m2": 909.99,
         "centroid": [
           52.431548,
@@ -6564,7 +6564,7 @@
         ]
       },
       "properties": {
-        "name": "RG63",
+        "name": "36GR",
         "area_m2": 909.99,
         "centroid": [
           52.431745,
@@ -6602,7 +6602,7 @@
         ]
       },
       "properties": {
-        "name": "80",
+        "name": "08",
         "area_m2": 212.79,
         "centroid": [
           52.431833,
@@ -6640,7 +6640,7 @@
         ]
       },
       "properties": {
-        "name": "81",
+        "name": "18",
         "area_m2": 212.78,
         "centroid": [
           52.431938,
@@ -6678,7 +6678,7 @@
         ]
       },
       "properties": {
-        "name": "82",
+        "name": "28",
         "area_m2": 212.78,
         "centroid": [
           52.432043,
@@ -6716,7 +6716,7 @@
         ]
       },
       "properties": {
-        "name": "83",
+        "name": "38",
         "area_m2": 212.77,
         "centroid": [
           52.432148,
@@ -6754,7 +6754,7 @@
         ]
       },
       "properties": {
-        "name": "84",
+        "name": "48",
         "area_m2": 212.76,
         "centroid": [
           52.432252,
@@ -6796,7 +6796,7 @@
         ]
       },
       "properties": {
-        "name": "C18",
+        "name": "81C",
         "area_m2": 304.67,
         "centroid": [
           52.432384,
@@ -6838,7 +6838,7 @@
         ]
       },
       "properties": {
-        "name": "C16",
+        "name": "61C",
         "area_m2": 328.17,
         "centroid": [
           52.432484,
@@ -6876,7 +6876,7 @@
         ]
       },
       "properties": {
-        "name": "75",
+        "name": "57",
         "area_m2": 212.78,
         "centroid": [
           52.432351,
@@ -6914,7 +6914,7 @@
         ]
       },
       "properties": {
-        "name": "76",
+        "name": "67",
         "area_m2": 212.78,
         "centroid": [
           52.432246,
@@ -6990,7 +6990,7 @@
         ]
       },
       "properties": {
-        "name": "78",
+        "name": "87",
         "area_m2": 212.78,
         "centroid": [
           52.432036,
@@ -7028,7 +7028,7 @@
         ]
       },
       "properties": {
-        "name": "79",
+        "name": "97",
         "area_m2": 200.8,
         "centroid": [
           52.431929,
@@ -7074,7 +7074,7 @@
         ]
       },
       "properties": {
-        "name": "RG35",
+        "name": "53GR",
         "area_m2": 909.9,
         "centroid": [
           52.431969,
@@ -7112,7 +7112,7 @@
         ]
       },
       "properties": {
-        "name": "RG36",
+        "name": "63GR",
         "area_m2": 909.9,
         "centroid": [
           52.431773,
@@ -7150,7 +7150,7 @@
         ]
       },
       "properties": {
-        "name": "59",
+        "name": "95",
         "area_m2": 212.48,
         "centroid": [
           52.432183,
@@ -7188,7 +7188,7 @@
         ]
       },
       "properties": {
-        "name": "58",
+        "name": "85",
         "area_m2": 212.88,
         "centroid": [
           52.432288,
@@ -7226,7 +7226,7 @@
         ]
       },
       "properties": {
-        "name": "57",
+        "name": "75",
         "area_m2": 213.24,
         "centroid": [
           52.432393,
@@ -7264,7 +7264,7 @@
         ]
       },
       "properties": {
-        "name": "56",
+        "name": "65",
         "area_m2": 213.62,
         "centroid": [
           52.432497,
@@ -7348,7 +7348,7 @@
         ]
       },
       "properties": {
-        "name": "C12",
+        "name": "21C",
         "area_m2": 311.57,
         "centroid": [
           52.432729,
@@ -7390,7 +7390,7 @@
         ]
       },
       "properties": {
-        "name": "C14",
+        "name": "41C",
         "area_m2": 322.21,
         "centroid": [
           52.432637,
@@ -7428,7 +7428,7 @@
         ]
       },
       "properties": {
-        "name": "64",
+        "name": "46",
         "area_m2": 209.94,
         "centroid": [
           52.432504,
@@ -7466,7 +7466,7 @@
         ]
       },
       "properties": {
-        "name": "63",
+        "name": "36",
         "area_m2": 210.33,
         "centroid": [
           52.432399,
@@ -7504,7 +7504,7 @@
         ]
       },
       "properties": {
-        "name": "62",
+        "name": "26",
         "area_m2": 210.71,
         "centroid": [
           52.432294,
@@ -7570,7 +7570,7 @@
         ]
       },
       "properties": {
-        "name": "61",
+        "name": "16",
         "area_m2": 211.09,
         "centroid": [
           52.43219,
@@ -7616,7 +7616,7 @@
         ]
       },
       "properties": {
-        "name": "60",
+        "name": "06",
         "area_m2": 199.46,
         "centroid": [
           52.432088,
@@ -7654,7 +7654,7 @@
         ]
       },
       "properties": {
-        "name": "RG37",
+        "name": "73GR",
         "area_m2": 909.91,
         "centroid": [
           52.431576,
@@ -7692,7 +7692,7 @@
         ]
       },
       "properties": {
-        "name": "RG38",
+        "name": "83GR",
         "area_m2": 909.92,
         "centroid": [
           52.431379,
@@ -7730,7 +7730,7 @@
         ]
       },
       "properties": {
-        "name": "RG39",
+        "name": "93GR",
         "area_m2": 909.92,
         "centroid": [
           52.431183,
@@ -7768,7 +7768,7 @@
         ]
       },
       "properties": {
-        "name": "RG40",
+        "name": "04GR",
         "area_m2": 909.93,
         "centroid": [
           52.430986,
@@ -7806,7 +7806,7 @@
         ]
       },
       "properties": {
-        "name": "RG41",
+        "name": "14GR",
         "area_m2": 909.94,
         "centroid": [
           52.430789,
@@ -7848,7 +7848,7 @@
         ]
       },
       "properties": {
-        "name": "RG42",
+        "name": "24GR",
         "area_m2": 909.94,
         "centroid": [
           52.430593,
@@ -7886,7 +7886,7 @@
         ]
       },
       "properties": {
-        "name": "RG43",
+        "name": "34GR",
         "area_m2": 909.95,
         "centroid": [
           52.430396,
@@ -7924,7 +7924,7 @@
         ]
       },
       "properties": {
-        "name": "RG44",
+        "name": "44GR",
         "area_m2": 909.96,
         "centroid": [
           52.430199,
@@ -7962,7 +7962,7 @@
         ]
       },
       "properties": {
-        "name": "RG45",
+        "name": "54GR",
         "area_m2": 909.96,
         "centroid": [
           52.430002,
@@ -8000,7 +8000,7 @@
         ]
       },
       "properties": {
-        "name": "RG46",
+        "name": "64GR",
         "area_m2": 909.97,
         "centroid": [
           52.429806,
@@ -8038,7 +8038,7 @@
         ]
       },
       "properties": {
-        "name": "RG47",
+        "name": "74GR",
         "area_m2": 909.98,
         "centroid": [
           52.429609,
@@ -8076,7 +8076,7 @@
         ]
       },
       "properties": {
-        "name": "RG48",
+        "name": "84GR",
         "area_m2": 909.98,
         "centroid": [
           52.429412,
@@ -8114,7 +8114,7 @@
         ]
       },
       "properties": {
-        "name": "RG49",
+        "name": "94GR",
         "area_m2": 806.76,
         "centroid": [
           52.429234,
@@ -8160,7 +8160,7 @@
         ]
       },
       "properties": {
-        "name": "C27",
+        "name": "72C",
         "area_m2": 387.24,
         "centroid": [
           52.431999,
@@ -8198,7 +8198,7 @@
         ]
       },
       "properties": {
-        "name": "138",
+        "name": "831",
         "area_m2": 199.4,
         "centroid": [
           52.432129,
@@ -8236,7 +8236,7 @@
         ]
       },
       "properties": {
-        "name": "137",
+        "name": "731",
         "area_m2": 199.4,
         "centroid": [
           52.432216,
@@ -8274,7 +8274,7 @@
         ]
       },
       "properties": {
-        "name": "136",
+        "name": "631",
         "area_m2": 199.4,
         "centroid": [
           52.432304,
@@ -8312,7 +8312,7 @@
         ]
       },
       "properties": {
-        "name": "135",
+        "name": "531",
         "area_m2": 199.4,
         "centroid": [
           52.432391,
@@ -8350,7 +8350,7 @@
         ]
       },
       "properties": {
-        "name": "134",
+        "name": "431",
         "area_m2": 199.4,
         "centroid": [
           52.432478,
@@ -8400,7 +8400,7 @@
         ]
       },
       "properties": {
-        "name": "133",
+        "name": "331",
         "area_m2": 199.4,
         "centroid": [
           52.432566,
@@ -8438,7 +8438,7 @@
         ]
       },
       "properties": {
-        "name": "132",
+        "name": "231",
         "area_m2": 216.22,
         "centroid": [
           52.432667,
@@ -8476,7 +8476,7 @@
         ]
       },
       "properties": {
-        "name": "C29",
+        "name": "92C",
         "area_m2": 272.08,
         "centroid": [
           52.431884,
@@ -8526,7 +8526,7 @@
         ]
       },
       "properties": {
-        "name": "144",
+        "name": "441",
         "area_m2": 170.41,
         "centroid": [
           52.432003,
@@ -8564,7 +8564,7 @@
         ]
       },
       "properties": {
-        "name": "145",
+        "name": "541",
         "area_m2": 199.11,
         "centroid": [
           52.432083,
@@ -8602,7 +8602,7 @@
         ]
       },
       "properties": {
-        "name": "146",
+        "name": "641",
         "area_m2": 227.8,
         "centroid": [
           52.432162,
@@ -8644,7 +8644,7 @@
         ]
       },
       "properties": {
-        "name": "147",
+        "name": "741",
         "area_m2": 256.39,
         "centroid": [
           52.432241,
@@ -8714,7 +8714,7 @@
         ]
       },
       "properties": {
-        "name": "148",
+        "name": "841",
         "area_m2": 280.82,
         "centroid": [
           52.432322,
@@ -8760,7 +8760,7 @@
         ]
       },
       "properties": {
-        "name": "149",
+        "name": "941",
         "area_m2": 303.71,
         "centroid": [
           52.432403,
@@ -8798,11 +8798,1603 @@
         ]
       },
       "properties": {
-        "name": "150",
+        "name": "051",
         "area_m2": 370.31,
         "centroid": [
           52.432486,
           29.823615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431257742661835,
+              29.82545875603812
+            ],
+            [
+              52.43146807014041,
+              29.825748235328142
+            ],
+            [
+              52.43166457362618,
+              29.82563968592882
+            ],
+            [
+              52.43155940962835,
+              29.82549494649148
+            ],
+            [
+              52.431454245732226,
+              29.825350206959527
+            ],
+            [
+              52.431257742661835,
+              29.82545875603812
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "46GR",
+        "area_m2": 853.79,
+        "centroid": [
+          52.431461,
+          29.825549
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43155933286624,
+              29.825292189897027
+            ],
+            [
+              52.43166442401225,
+              29.825436829160907
+            ],
+            [
+              52.43176914376287,
+              29.8253789811334
+            ],
+            [
+              52.43166404873173,
+              29.825234336581765
+            ],
+            [
+              52.43155933286624,
+              29.825292189897027
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "101",
+        "area_m2": 227.35,
+        "centroid": [
+          52.431664,
+          29.825336
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43166422359042,
+              29.825234239940702
+            ],
+            [
+              52.4317693186217,
+              29.82537888449219
+            ],
+            [
+              52.431874038354024,
+              29.82532103647411
+            ],
+            [
+              52.43176893933286,
+              29.825176386545785
+            ],
+            [
+              52.43166422359042,
+              29.825234239940702
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "201",
+        "area_m2": 227.36,
+        "centroid": [
+          52.431769,
+          29.825278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43176911408916,
+              29.825176289995927
+            ],
+            [
+              52.43187421321265,
+              29.82532093983276
+            ],
+            [
+              52.431978932821934,
+              29.825263091735
+            ],
+            [
+              52.43187382960379,
+              29.825118436432245
+            ],
+            [
+              52.43176911408916,
+              29.825176289995927
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "301",
+        "area_m2": 227.36,
+        "centroid": [
+          52.431874,
+          29.82522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431874004565536,
+              29.8251183397898
+            ],
+            [
+              52.43197910768035,
+              29.825262995093528
+            ],
+            [
+              52.43208382716659,
+              29.825205146916105
+            ],
+            [
+              52.4319787199584,
+              29.825060486236676
+            ],
+            [
+              52.431874004565536,
+              29.8251183397898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "401",
+        "area_m2": 227.37,
+        "centroid": [
+          52.431979,
+          29.825162
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.432096785401875,
+              29.82499526047133
+            ],
+            [
+              52.43197889692317,
+              29.82506039218917
+            ],
+            [
+              52.43208400222917,
+              29.825205050091814
+            ],
+            [
+              52.43223015580079,
+              29.825124313062236
+            ],
+            [
+              52.43212644923985,
+              29.825000123265536
+            ],
+            [
+              52.432096785401875,
+              29.82499526047133
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "22C",
+        "area_m2": 303.69,
+        "centroid": [
+          52.432102,
+          29.825095
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.4319792185145,
+              29.825263147560758
+            ],
+            [
+              52.43208436057216,
+              29.82540785594787
+            ],
+            [
+              52.43218908309535,
+              29.82535001162348
+            ],
+            [
+              52.43208393799954,
+              29.82520529929303
+            ],
+            [
+              52.432083937896074,
+              29.82520529929415
+            ],
+            [
+              52.4319792185145,
+              29.825263147560758
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "59",
+        "area_m2": 227.46,
+        "centroid": [
+          52.432084,
+          29.825307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.432302135662916,
+              29.825212696829258
+            ],
+            [
+              52.43223027900519,
+              29.825124462146697
+            ],
+            [
+              52.432084114654046,
+              29.825205205248736
+            ],
+            [
+              52.43218925795498,
+              29.825349915071957
+            ],
+            [
+              52.43228376820078,
+              29.8252977114002
+            ],
+            [
+              52.432302135662916,
+              29.825212696829258
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "02C",
+        "area_m2": 302.77,
+        "centroid": [
+          52.432205,
+          29.825235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.432084185713606,
+              29.825407952589476
+            ],
+            [
+              52.43197904365608,
+              29.825263244202237
+            ],
+            [
+              52.4318743240467,
+              29.82532109230008
+            ],
+            [
+              52.43197946306609,
+              29.825465796743963
+            ],
+            [
+              52.432084185713606,
+              29.825407952589476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "69",
+        "area_m2": 227.45,
+        "centroid": [
+          52.431979,
+          29.825365
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43197928820733,
+              29.825465893385452
+            ],
+            [
+              52.43187414918808,
+              29.825321188941423
+            ],
+            [
+              52.43176942945567,
+              29.825379036959603
+            ],
+            [
+              52.43187456543678,
+              29.82552373746027
+            ],
+            [
+              52.43197928820733,
+              29.825465893385452
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "79",
+        "area_m2": 227.44,
+        "centroid": [
+          52.431874,
+          29.825422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43187439057782,
+              29.825523834101613
+            ],
+            [
+              52.431769254596844,
+              29.82537913360081
+            ],
+            [
+              52.43166453474138,
+              29.825436981539315
+            ],
+            [
+              52.43176966778898,
+              29.82558167818585
+            ],
+            [
+              52.43187439057782,
+              29.825523834101613
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "89",
+        "area_m2": 227.44,
+        "centroid": [
+          52.431769,
+          29.82548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431769492928524,
+              29.825581774736854
+            ],
+            [
+              52.43166435977888,
+              29.825437078181512
+            ],
+            [
+              52.431559639905124,
+              29.825494926129448
+            ],
+            [
+              52.431664769914455,
+              29.825639618832756
+            ],
+            [
+              52.431769492928524,
+              29.825581774736854
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "99",
+        "area_m2": 227.43,
+        "centroid": [
+          52.431665,
+          29.825538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43166424904975,
+              29.825436925803103
+            ],
+            [
+              52.43155915800735,
+              29.825292286537966
+            ],
+            [
+              52.43145444201882,
+              29.82535013977355
+            ],
+            [
+              52.4314544420201,
+              29.825350139863772
+            ],
+            [
+              52.43155952907133,
+              29.825494773661852
+            ],
+            [
+              52.43166424904975,
+              29.825436925803103
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "001",
+        "area_m2": 227.34,
+        "centroid": [
+          52.431559,
+          29.825394
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43004956882293,
+              29.82565045746791
+            ],
+            [
+              52.430235207630034,
+              29.825905895334284
+            ],
+            [
+              52.43040982494443,
+              29.825809438538787
+            ],
+            [
+              52.43020408467346,
+              29.82552626717678
+            ],
+            [
+              52.43004956882293,
+              29.82565045746791
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "08GR",
+        "area_m2": 705.91,
+        "centroid": [
+          52.430226,
+          29.825722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43020423937431,
+              29.825526142873503
+            ],
+            [
+              52.43041005501146,
+              29.8258094179103
+            ],
+            [
+              52.43041005522225,
+              29.825809418178707
+            ],
+            [
+              52.43041005543304,
+              29.82580941844714
+            ],
+            [
+              52.430415537578604,
+              29.825816963836623
+            ],
+            [
+              52.430612042401826,
+              29.825708415962485
+            ],
+            [
+              52.43037790731735,
+              29.825386164278818
+            ],
+            [
+              52.43037790234376,
+              29.825386156572538
+            ],
+            [
+              52.430377898192766,
+              29.82538614849641
+            ],
+            [
+              52.430377895071345,
+              29.825386140048195
+            ],
+            [
+              52.43037789277512,
+              29.82538613141057
+            ],
+            [
+              52.4303778915123,
+              29.825386122671535
+            ],
+            [
+              52.4303778912829,
+              29.82538611383107
+            ],
+            [
+              52.4303778920882,
+              29.825386104979405
+            ],
+            [
+              52.43037789382602,
+              29.82538609620786
+            ],
+            [
+              52.43037789649892,
+              29.82538608769691
+            ],
+            [
+              52.430377900106905,
+              29.825386079446538
+            ],
+            [
+              52.43037790475473,
+              29.82538607154583
+            ],
+            [
+              52.430377910133274,
+              29.825386064088377
+            ],
+            [
+              52.430377916346,
+              29.82538605707308
+            ],
+            [
+              52.43037792339549,
+              29.825386050680347
+            ],
+            [
+              52.43037793107479,
+              29.82538604491243
+            ],
+            [
+              52.4303779393839,
+              29.825386039769338
+            ],
+            [
+              52.43037794822193,
+              29.825386035432622
+            ],
+            [
+              52.43037795748412,
+              29.82538603181319
+            ],
+            [
+              52.43037796717176,
+              29.825386029001265
+            ],
+            [
+              52.43037797707918,
+              29.8253860270893
+            ],
+            [
+              52.43037798710164,
+              29.825386025988195
+            ],
+            [
+              52.43037799724043,
+              29.82538602578817
+            ],
+            [
+              52.43037800739077,
+              29.82538602640012
+            ],
+            [
+              52.430378017450494,
+              29.825386027915414
+            ],
+            [
+              52.43037802721266,
+              29.82538603033624
+            ],
+            [
+              52.430378036674696,
+              29.825386033482218
+            ],
+            [
+              52.43037804573442,
+              29.82538603744465
+            ],
+            [
+              52.430378054288354,
+              29.82538604222467
+            ],
+            [
+              52.43037806233393,
+              29.825386047641825
+            ],
+            [
+              52.430378069665494,
+              29.825386053788602
+            ],
+            [
+              52.43037807628049,
+              29.825386060484533
+            ],
+            [
+              52.4303780821789,
+              29.82538606772962
+            ],
+            [
+              52.4306122171602,
+              29.8257083194141
+            ],
+            [
+              52.430808721553085,
+              29.825599771440082
+            ],
+            [
+              52.43054782835979,
+              29.825240691799635
+            ],
+            [
+              52.43034387622497,
+              29.82541391110415
+            ],
+            [
+              52.430343875610575,
+              29.825413911561984
+            ],
+            [
+              52.43034387530273,
+              29.825413911745784
+            ],
+            [
+              52.43020423937431,
+              29.825526142873503
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "18GR",
+        "area_m2": 1909.86,
+        "centroid": [
+          52.430501,
+          29.825542
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43054797809645,
+              29.825240560511457
+            ],
+            [
+              52.430808896516744,
+              29.82559967479898
+            ],
+            [
+              52.43100540037196,
+              29.82549112645555
+            ],
+            [
+              52.43071287720758,
+              29.82508851370218
+            ],
+            [
+              52.43054797809645,
+              29.825240560511457
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "38GR",
+        "area_m2": 1123.31,
+        "centroid": [
+          52.430771,
+          29.825354
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43071302367711,
+              29.825088378298442
+            ],
+            [
+              52.43100557523175,
+              29.825491029815318
+            ],
+            [
+              52.431202078756236,
+              29.825382481100227
+            ],
+            [
+              52.43087753521692,
+              29.82493579850555
+            ],
+            [
+              52.43071302367711,
+              29.825088378298442
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "48GR",
+        "area_m2": 1252.51,
+        "centroid": [
+          52.430951,
+          29.825223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43087768157739,
+              29.82493566274188
+            ],
+            [
+              52.43120225351346,
+              29.825382384551087
+            ],
+            [
+              52.43139875660633,
+              29.82527383564591
+            ],
+            [
+              52.43129359338866,
+              29.825129095963725
+            ],
+            [
+              52.43118837495921,
+              29.824984279906726
+            ],
+            [
+              52.431121921428414,
+              29.82489281711657
+            ],
+            [
+              52.431042192619216,
+              29.824783082847226
+            ],
+            [
+              52.43087768157739,
+              29.82493566274188
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "58GR",
+        "area_m2": 1382.49,
+        "centroid": [
+          52.431132,
+          29.825093
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43104233897924,
+              29.824782947083378
+            ],
+            [
+              52.43112204087149,
+              29.824892644287317
+            ],
+            [
+              52.43124424292509,
+              29.824825139447494
+            ],
+            [
+              52.43114464584084,
+              29.824688059658143
+            ],
+            [
+              52.43104233897924,
+              29.824782947083378
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "341",
+        "area_m2": 226.32,
+        "centroid": [
+          52.43114,
+          29.824796
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43114479220059,
+              29.824687923894203
+            ],
+            [
+              52.43124447309567,
+              29.82482511899695
+            ],
+            [
+              52.43125549344284,
+              29.824840286611824
+            ],
+            [
+              52.431342730435425,
+              29.824792096356692
+            ],
+            [
+              52.43121782660921,
+              29.824620185867303
+            ],
+            [
+              52.43114479220059,
+              29.824687923894203
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "241",
+        "area_m2": 212.3,
+        "centroid": [
+          52.431241,
+          29.824735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43121797296877,
+              29.82462005010326
+            ],
+            [
+              52.43134290539715,
+              29.824791999714947
+            ],
+            [
+              52.431430142406505,
+              29.824743809313166
+            ],
+            [
+              52.43129100727888,
+              29.82455231203848
+            ],
+            [
+              52.43121797296877,
+              29.82462005010326
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "141",
+        "area_m2": 237.95,
+        "centroid": [
+          52.431321,
+          29.824677
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43129115363823,
+              29.824552176274388
+            ],
+            [
+              52.431430317162416,
+              29.824743712763752
+            ],
+            [
+              52.43151755418982,
+              29.82469552230555
+            ],
+            [
+              52.431364187851116,
+              29.82448443826194
+            ],
+            [
+              52.43129115363823,
+              29.824552176274388
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "041",
+        "area_m2": 263.59,
+        "centroid": [
+          52.431401,
+          29.824618
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43136433421027,
+              29.824484302497762
+            ],
+            [
+              52.43151772894555,
+              29.82469542575604
+            ],
+            [
+              52.43160496588883,
+              29.824647235332744
+            ],
+            [
+              52.4314373682186,
+              29.82441656426813
+            ],
+            [
+              52.43136433421027,
+              29.824484302497762
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "931",
+        "area_m2": 289.24,
+        "centroid": [
+          52.431482,
+          29.82456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43143751468103,
+              29.824416428502758
+            ],
+            [
+              52.431605140746576,
+              29.82464713869177
+            ],
+            [
+              52.43172514324219,
+              29.824580848077105
+            ],
+            [
+              52.431729491062285,
+              29.824557313719495
+            ],
+            [
+              52.43158825997615,
+              29.824411031008204
+            ],
+            [
+              52.43145200965586,
+              29.82440298471439
+            ],
+            [
+              52.43143751468103,
+              29.824416428502758
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "82C",
+        "area_m2": 380.47,
+        "centroid": [
+          52.43159,
+          29.824513
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431281262096384,
+              29.824933075467875
+            ],
+            [
+              52.431386369663194,
+              29.825077738982653
+            ],
+            [
+              52.431478851745645,
+              29.82502665131707
+            ],
+            [
+              52.43137374400459,
+              29.824881988059023
+            ],
+            [
+              52.431281262096384,
+              29.824933075467875
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "221",
+        "area_m2": 200.81,
+        "centroid": [
+          52.43138,
+          29.82498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431373918862974,
+              29.824881891418336
+            ],
+            [
+              52.43147902650199,
+              29.825026554767593
+            ],
+            [
+              52.43157150859321,
+              29.824975467128954
+            ],
+            [
+              52.431466400673905,
+              29.824830803857115
+            ],
+            [
+              52.431373918862974,
+              29.824881891418336
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "321",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431473,
+          29.824929
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431466575532106,
+              29.824830707216318
+            ],
+            [
+              52.431571683349375,
+              29.824975370579356
+            ],
+            [
+              52.43166416513639,
+              29.82492428279059
+            ],
+            [
+              52.43155905724705,
+              29.824779619592935
+            ],
+            [
+              52.431466575532106,
+              29.824830707216318
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "421",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431565,
+          29.824877
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43155923210507,
+              29.824779522952028
+            ],
+            [
+              52.43166433999583,
+              29.82492418623976
+            ],
+            [
+              52.43175682168686,
+              29.82487309838884
+            ],
+            [
+              52.43165171372403,
+              29.824728435266493
+            ],
+            [
+              52.43155923210507,
+              29.824779522952028
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "521",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431658,
+          29.824826
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43165188858187,
+              29.824728338625473
+            ],
+            [
+              52.43175699644265,
+              29.82487300183902
+            ],
+            [
+              52.431931515580466,
+              29.824776595496232
+            ],
+            [
+              52.43182159485736,
+              29.824655759580743
+            ],
+            [
+              52.43179134209304,
+              29.824651303016562
+            ],
+            [
+              52.43165188858187,
+              29.824728338625473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "62C",
+        "area_m2": 357.82,
+        "centroid": [
+          52.431788,
+          29.824757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431931643765225,
+              29.824776738300855
+            ],
+            [
+              52.43175710727601,
+              29.82487315430646
+            ],
+            [
+              52.43186221554763,
+              29.82501781733179
+            ],
+            [
+              52.43203445396415,
+              29.82492267087992
+            ],
+            [
+              52.432039359683024,
+              29.824898742278908
+            ],
+            [
+              52.431931643765225,
+              29.824776738300855
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "42C",
+        "area_m2": 393.49,
+        "centroid": [
+          52.431901,
+          29.824896
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43166445072564,
+              29.824924338708406
+            ],
+            [
+              52.43176955892377,
+              29.82506900180905
+            ],
+            [
+              52.431862040689516,
+              29.82501791397311
+            ],
+            [
+              52.43175693252022,
+              29.8248732508563
+            ],
+            [
+              52.43166445072564,
+              29.824924338708406
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "611",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431763,
+          29.824971
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43176938406547,
+              29.82506909845025
+            ],
+            [
+              52.4316642758662,
+              29.824924435259252
+            ],
+            [
+              52.43157179407911,
+              29.82497552304809
+            ],
+            [
+              52.43167690220373,
+              29.825120186224048
+            ],
+            [
+              52.43176938406547,
+              29.82506909845025
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "711",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431671,
+          29.825022
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.431676727345256,
+              29.825120282865125
+            ],
+            [
+              52.43157161932295,
+              29.824975619597687
+            ],
+            [
+              52.4314791373364,
+              29.82502670732549
+            ],
+            [
+              52.43158424549101,
+              29.825171370575646
+            ],
+            [
+              52.431676727345256,
+              29.825120282865125
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "811",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431578,
+          29.825073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43158407052888,
+              29.825171467217725
+            ],
+            [
+              52.431478962580066,
+              29.825026803874984
+            ],
+            [
+              52.43138648049753,
+              29.82507789154064
+            ],
+            [
+              52.431491588578645,
+              29.825222554866098
+            ],
+            [
+              52.43158407052888,
+              29.825171467217725
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "911",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431485,
+          29.825125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43149141361633,
+              29.82522265150806
+            ],
+            [
+              52.43138630574101,
+              29.825077988090005
+            ],
+            [
+              52.431293823561205,
+              29.825129075603304
+            ],
+            [
+              52.43129382356249,
+              29.825129075693514
+            ],
+            [
+              52.43139893146535,
+              29.825273739005176
+            ],
+            [
+              52.43149141361633,
+              29.82522265150806
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "021",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431393,
+          29.825176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              52.43138619490667,
+              29.825077835532028
+            ],
+            [
+              52.43128108713435,
+              29.824933172109564
+            ],
+            [
+              52.43118860523492,
+              29.82498425954537
+            ],
+            [
+              52.431201809444765,
+              29.8250024332051
+            ],
+            [
+              52.43129371283299,
+              29.82512892322455
+            ],
+            [
+              52.43138619490667,
+              29.825077835532028
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "121",
+        "area_m2": 200.81,
+        "centroid": [
+          52.431287,
+          29.825031
         ]
       }
     },
@@ -8836,7 +10428,7 @@
         ]
       },
       "properties": {
-        "name": "RG79",
+        "name": "97GR",
         "area_m2": 1220.8,
         "centroid": [
           52.428821,
@@ -8874,7 +10466,7 @@
         ]
       },
       "properties": {
-        "name": "RG78",
+        "name": "87GR",
         "area_m2": 1060.31,
         "centroid": [
           52.428973,
@@ -8912,7 +10504,7 @@
         ]
       },
       "properties": {
-        "name": "RG77",
+        "name": "77GR",
         "area_m2": 1094.1,
         "centroid": [
           52.429121,
@@ -8950,7 +10542,7 @@
         ]
       },
       "properties": {
-        "name": "RG76",
+        "name": "67GR",
         "area_m2": 1127.88,
         "centroid": [
           52.429268,
@@ -8988,7 +10580,7 @@
         ]
       },
       "properties": {
-        "name": "RG75",
+        "name": "57GR",
         "area_m2": 1161.67,
         "centroid": [
           52.429416,
@@ -9194,7 +10786,7 @@
         ]
       },
       "properties": {
-        "name": "RG74",
+        "name": "47GR",
         "area_m2": 2428.99,
         "centroid": [
           52.429638,
@@ -9232,7 +10824,7 @@
         ]
       },
       "properties": {
-        "name": "RG72",
+        "name": "27GR",
         "area_m2": 1299.81,
         "centroid": [
           52.429857,
@@ -9270,7 +10862,7 @@
         ]
       },
       "properties": {
-        "name": "RG71",
+        "name": "17GR",
         "area_m2": 1521.73,
         "centroid": [
           52.430012,
@@ -9336,7 +10928,7 @@
         ]
       },
       "properties": {
-        "name": "RG70",
+        "name": "07GR",
         "area_m2": 1593.74,
         "centroid": [
           52.430176,
@@ -9378,7 +10970,7 @@
         ]
       },
       "properties": {
-        "name": "RG68",
+        "name": "86GR",
         "area_m2": 853.79,
         "centroid": [
           52.430674,
@@ -9416,7 +11008,7 @@
         ]
       },
       "properties": {
-        "name": "RG67",
+        "name": "76GR",
         "area_m2": 853.79,
         "centroid": [
           52.430871,
@@ -9454,563 +11046,11 @@
         ]
       },
       "properties": {
-        "name": "RG66",
+        "name": "66GR",
         "area_m2": 853.79,
         "centroid": [
           52.431068,
           29.825767
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43106106429647,
-              29.825567401296524
-            ],
-            [
-              52.43127139146286,
-              29.82585688090642
-            ],
-            [
-              52.43146789538284,
-              29.825748331877634
-            ],
-            [
-              52.43125756790454,
-              29.82545885258734
-            ],
-            [
-              52.43106106429647,
-              29.825567401296524
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "RG65",
-        "area_m2": 853.79,
-        "centroid": [
-          52.431264,
-          29.825658
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431257742661835,
-              29.82545875603812
-            ],
-            [
-              52.43146807014041,
-              29.825748235328142
-            ],
-            [
-              52.43166457362618,
-              29.82563968592882
-            ],
-            [
-              52.43155940962835,
-              29.82549494649148
-            ],
-            [
-              52.431454245732226,
-              29.825350206959527
-            ],
-            [
-              52.431257742661835,
-              29.82545875603812
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "RG64",
-        "area_m2": 853.79,
-        "centroid": [
-          52.431461,
-          29.825549
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43155933286624,
-              29.825292189897027
-            ],
-            [
-              52.43166442401225,
-              29.825436829160907
-            ],
-            [
-              52.43176914376287,
-              29.8253789811334
-            ],
-            [
-              52.43166404873173,
-              29.825234336581765
-            ],
-            [
-              52.43155933286624,
-              29.825292189897027
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "101",
-        "area_m2": 227.35,
-        "centroid": [
-          52.431664,
-          29.825336
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43166422359042,
-              29.825234239940702
-            ],
-            [
-              52.4317693186217,
-              29.82537888449219
-            ],
-            [
-              52.431874038354024,
-              29.82532103647411
-            ],
-            [
-              52.43176893933286,
-              29.825176386545785
-            ],
-            [
-              52.43166422359042,
-              29.825234239940702
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "102",
-        "area_m2": 227.36,
-        "centroid": [
-          52.431769,
-          29.825278
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43176911408916,
-              29.825176289995927
-            ],
-            [
-              52.43187421321265,
-              29.82532093983276
-            ],
-            [
-              52.431978932821934,
-              29.825263091735
-            ],
-            [
-              52.43187382960379,
-              29.825118436432245
-            ],
-            [
-              52.43176911408916,
-              29.825176289995927
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "103",
-        "area_m2": 227.36,
-        "centroid": [
-          52.431874,
-          29.82522
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431874004565536,
-              29.8251183397898
-            ],
-            [
-              52.43197910768035,
-              29.825262995093528
-            ],
-            [
-              52.43208382716659,
-              29.825205146916105
-            ],
-            [
-              52.4319787199584,
-              29.825060486236676
-            ],
-            [
-              52.431874004565536,
-              29.8251183397898
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "104",
-        "area_m2": 227.37,
-        "centroid": [
-          52.431979,
-          29.825162
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.432096785401875,
-              29.82499526047133
-            ],
-            [
-              52.43197889692317,
-              29.82506039218917
-            ],
-            [
-              52.43208400222917,
-              29.825205050091814
-            ],
-            [
-              52.43223015580079,
-              29.825124313062236
-            ],
-            [
-              52.43212644923985,
-              29.825000123265536
-            ],
-            [
-              52.432096785401875,
-              29.82499526047133
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "C22",
-        "area_m2": 303.69,
-        "centroid": [
-          52.432102,
-          29.825095
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.4319792185145,
-              29.825263147560758
-            ],
-            [
-              52.43208436057216,
-              29.82540785594787
-            ],
-            [
-              52.43218908309535,
-              29.82535001162348
-            ],
-            [
-              52.43208393799954,
-              29.82520529929303
-            ],
-            [
-              52.432083937896074,
-              29.82520529929415
-            ],
-            [
-              52.4319792185145,
-              29.825263147560758
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "95",
-        "area_m2": 227.46,
-        "centroid": [
-          52.432084,
-          29.825307
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.432302135662916,
-              29.825212696829258
-            ],
-            [
-              52.43223027900519,
-              29.825124462146697
-            ],
-            [
-              52.432084114654046,
-              29.825205205248736
-            ],
-            [
-              52.43218925795498,
-              29.825349915071957
-            ],
-            [
-              52.43228376820078,
-              29.8252977114002
-            ],
-            [
-              52.432302135662916,
-              29.825212696829258
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "C20",
-        "area_m2": 302.77,
-        "centroid": [
-          52.432205,
-          29.825235
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.432084185713606,
-              29.825407952589476
-            ],
-            [
-              52.43197904365608,
-              29.825263244202237
-            ],
-            [
-              52.4318743240467,
-              29.82532109230008
-            ],
-            [
-              52.43197946306609,
-              29.825465796743963
-            ],
-            [
-              52.432084185713606,
-              29.825407952589476
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "96",
-        "area_m2": 227.45,
-        "centroid": [
-          52.431979,
-          29.825365
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43197928820733,
-              29.825465893385452
-            ],
-            [
-              52.43187414918808,
-              29.825321188941423
-            ],
-            [
-              52.43176942945567,
-              29.825379036959603
-            ],
-            [
-              52.43187456543678,
-              29.82552373746027
-            ],
-            [
-              52.43197928820733,
-              29.825465893385452
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "97",
-        "area_m2": 227.44,
-        "centroid": [
-          52.431874,
-          29.825422
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43187439057782,
-              29.825523834101613
-            ],
-            [
-              52.431769254596844,
-              29.82537913360081
-            ],
-            [
-              52.43166453474138,
-              29.825436981539315
-            ],
-            [
-              52.43176966778898,
-              29.82558167818585
-            ],
-            [
-              52.43187439057782,
-              29.825523834101613
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "98",
-        "area_m2": 227.44,
-        "centroid": [
-          52.431769,
-          29.82548
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431769492928524,
-              29.825581774736854
-            ],
-            [
-              52.43166435977888,
-              29.825437078181512
-            ],
-            [
-              52.431559639905124,
-              29.825494926129448
-            ],
-            [
-              52.431664769914455,
-              29.825639618832756
-            ],
-            [
-              52.431769492928524,
-              29.825581774736854
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "99",
-        "area_m2": 227.43,
-        "centroid": [
-          52.431665,
-          29.825538
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43166424904975,
-              29.825436925803103
-            ],
-            [
-              52.43155915800735,
-              29.825292286537966
-            ],
-            [
-              52.43145444201882,
-              29.82535013977355
-            ],
-            [
-              52.4314544420201,
-              29.825350139863772
-            ],
-            [
-              52.43155952907133,
-              29.825494773661852
-            ],
-            [
-              52.43166424904975,
-              29.825436925803103
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "100",
-        "area_m2": 227.34,
-        "centroid": [
-          52.431559,
-          29.825394
         ]
       }
     },
@@ -10052,1089 +11092,11 @@
         ]
       },
       "properties": {
-        "name": "RG69",
+        "name": "96GR",
         "area_m2": 831.31,
         "centroid": [
           52.430481,
           29.826096
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43004956882293,
-              29.82565045746791
-            ],
-            [
-              52.430235207630034,
-              29.825905895334284
-            ],
-            [
-              52.43040982494443,
-              29.825809438538787
-            ],
-            [
-              52.43020408467346,
-              29.82552626717678
-            ],
-            [
-              52.43004956882293,
-              29.82565045746791
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "RG80",
-        "area_m2": 705.91,
-        "centroid": [
-          52.430226,
-          29.825722
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43020423937431,
-              29.825526142873503
-            ],
-            [
-              52.43041005501146,
-              29.8258094179103
-            ],
-            [
-              52.43041005522225,
-              29.825809418178707
-            ],
-            [
-              52.43041005543304,
-              29.82580941844714
-            ],
-            [
-              52.430415537578604,
-              29.825816963836623
-            ],
-            [
-              52.430612042401826,
-              29.825708415962485
-            ],
-            [
-              52.43037790731735,
-              29.825386164278818
-            ],
-            [
-              52.43037790234376,
-              29.825386156572538
-            ],
-            [
-              52.430377898192766,
-              29.82538614849641
-            ],
-            [
-              52.430377895071345,
-              29.825386140048195
-            ],
-            [
-              52.43037789277512,
-              29.82538613141057
-            ],
-            [
-              52.4303778915123,
-              29.825386122671535
-            ],
-            [
-              52.4303778912829,
-              29.82538611383107
-            ],
-            [
-              52.4303778920882,
-              29.825386104979405
-            ],
-            [
-              52.43037789382602,
-              29.82538609620786
-            ],
-            [
-              52.43037789649892,
-              29.82538608769691
-            ],
-            [
-              52.430377900106905,
-              29.825386079446538
-            ],
-            [
-              52.43037790475473,
-              29.82538607154583
-            ],
-            [
-              52.430377910133274,
-              29.825386064088377
-            ],
-            [
-              52.430377916346,
-              29.82538605707308
-            ],
-            [
-              52.43037792339549,
-              29.825386050680347
-            ],
-            [
-              52.43037793107479,
-              29.82538604491243
-            ],
-            [
-              52.4303779393839,
-              29.825386039769338
-            ],
-            [
-              52.43037794822193,
-              29.825386035432622
-            ],
-            [
-              52.43037795748412,
-              29.82538603181319
-            ],
-            [
-              52.43037796717176,
-              29.825386029001265
-            ],
-            [
-              52.43037797707918,
-              29.8253860270893
-            ],
-            [
-              52.43037798710164,
-              29.825386025988195
-            ],
-            [
-              52.43037799724043,
-              29.82538602578817
-            ],
-            [
-              52.43037800739077,
-              29.82538602640012
-            ],
-            [
-              52.430378017450494,
-              29.825386027915414
-            ],
-            [
-              52.43037802721266,
-              29.82538603033624
-            ],
-            [
-              52.430378036674696,
-              29.825386033482218
-            ],
-            [
-              52.43037804573442,
-              29.82538603744465
-            ],
-            [
-              52.430378054288354,
-              29.82538604222467
-            ],
-            [
-              52.43037806233393,
-              29.825386047641825
-            ],
-            [
-              52.430378069665494,
-              29.825386053788602
-            ],
-            [
-              52.43037807628049,
-              29.825386060484533
-            ],
-            [
-              52.4303780821789,
-              29.82538606772962
-            ],
-            [
-              52.4306122171602,
-              29.8257083194141
-            ],
-            [
-              52.430808721553085,
-              29.825599771440082
-            ],
-            [
-              52.43054782835979,
-              29.825240691799635
-            ],
-            [
-              52.43034387622497,
-              29.82541391110415
-            ],
-            [
-              52.430343875610575,
-              29.825413911561984
-            ],
-            [
-              52.43034387530273,
-              29.825413911745784
-            ],
-            [
-              52.43020423937431,
-              29.825526142873503
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "RG81",
-        "area_m2": 1909.86,
-        "centroid": [
-          52.430501,
-          29.825542
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43054797809645,
-              29.825240560511457
-            ],
-            [
-              52.430808896516744,
-              29.82559967479898
-            ],
-            [
-              52.43100540037196,
-              29.82549112645555
-            ],
-            [
-              52.43071287720758,
-              29.82508851370218
-            ],
-            [
-              52.43054797809645,
-              29.825240560511457
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "RG83",
-        "area_m2": 1123.31,
-        "centroid": [
-          52.430771,
-          29.825354
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43071302367711,
-              29.825088378298442
-            ],
-            [
-              52.43100557523175,
-              29.825491029815318
-            ],
-            [
-              52.431202078756236,
-              29.825382481100227
-            ],
-            [
-              52.43087753521692,
-              29.82493579850555
-            ],
-            [
-              52.43071302367711,
-              29.825088378298442
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "RG84",
-        "area_m2": 1252.51,
-        "centroid": [
-          52.430951,
-          29.825223
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43087768157739,
-              29.82493566274188
-            ],
-            [
-              52.43120225351346,
-              29.825382384551087
-            ],
-            [
-              52.43139875660633,
-              29.82527383564591
-            ],
-            [
-              52.43129359338866,
-              29.825129095963725
-            ],
-            [
-              52.43118837495921,
-              29.824984279906726
-            ],
-            [
-              52.431121921428414,
-              29.82489281711657
-            ],
-            [
-              52.431042192619216,
-              29.824783082847226
-            ],
-            [
-              52.43087768157739,
-              29.82493566274188
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "RG85",
-        "area_m2": 1382.49,
-        "centroid": [
-          52.431132,
-          29.825093
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43104233897924,
-              29.824782947083378
-            ],
-            [
-              52.43112204087149,
-              29.824892644287317
-            ],
-            [
-              52.43124424292509,
-              29.824825139447494
-            ],
-            [
-              52.43114464584084,
-              29.824688059658143
-            ],
-            [
-              52.43104233897924,
-              29.824782947083378
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "143",
-        "area_m2": 226.32,
-        "centroid": [
-          52.43114,
-          29.824796
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43114479220059,
-              29.824687923894203
-            ],
-            [
-              52.43124447309567,
-              29.82482511899695
-            ],
-            [
-              52.43125549344284,
-              29.824840286611824
-            ],
-            [
-              52.431342730435425,
-              29.824792096356692
-            ],
-            [
-              52.43121782660921,
-              29.824620185867303
-            ],
-            [
-              52.43114479220059,
-              29.824687923894203
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "142",
-        "area_m2": 212.3,
-        "centroid": [
-          52.431241,
-          29.824735
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43121797296877,
-              29.82462005010326
-            ],
-            [
-              52.43134290539715,
-              29.824791999714947
-            ],
-            [
-              52.431430142406505,
-              29.824743809313166
-            ],
-            [
-              52.43129100727888,
-              29.82455231203848
-            ],
-            [
-              52.43121797296877,
-              29.82462005010326
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "141",
-        "area_m2": 237.95,
-        "centroid": [
-          52.431321,
-          29.824677
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43129115363823,
-              29.824552176274388
-            ],
-            [
-              52.431430317162416,
-              29.824743712763752
-            ],
-            [
-              52.43151755418982,
-              29.82469552230555
-            ],
-            [
-              52.431364187851116,
-              29.82448443826194
-            ],
-            [
-              52.43129115363823,
-              29.824552176274388
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "140",
-        "area_m2": 263.59,
-        "centroid": [
-          52.431401,
-          29.824618
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43136433421027,
-              29.824484302497762
-            ],
-            [
-              52.43151772894555,
-              29.82469542575604
-            ],
-            [
-              52.43160496588883,
-              29.824647235332744
-            ],
-            [
-              52.4314373682186,
-              29.82441656426813
-            ],
-            [
-              52.43136433421027,
-              29.824484302497762
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "139",
-        "area_m2": 289.24,
-        "centroid": [
-          52.431482,
-          29.82456
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43143751468103,
-              29.824416428502758
-            ],
-            [
-              52.431605140746576,
-              29.82464713869177
-            ],
-            [
-              52.43172514324219,
-              29.824580848077105
-            ],
-            [
-              52.431729491062285,
-              29.824557313719495
-            ],
-            [
-              52.43158825997615,
-              29.824411031008204
-            ],
-            [
-              52.43145200965586,
-              29.82440298471439
-            ],
-            [
-              52.43143751468103,
-              29.824416428502758
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "C28",
-        "area_m2": 380.47,
-        "centroid": [
-          52.43159,
-          29.824513
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431281262096384,
-              29.824933075467875
-            ],
-            [
-              52.431386369663194,
-              29.825077738982653
-            ],
-            [
-              52.431478851745645,
-              29.82502665131707
-            ],
-            [
-              52.43137374400459,
-              29.824881988059023
-            ],
-            [
-              52.431281262096384,
-              29.824933075467875
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "122",
-        "area_m2": 200.81,
-        "centroid": [
-          52.43138,
-          29.82498
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431373918862974,
-              29.824881891418336
-            ],
-            [
-              52.43147902650199,
-              29.825026554767593
-            ],
-            [
-              52.43157150859321,
-              29.824975467128954
-            ],
-            [
-              52.431466400673905,
-              29.824830803857115
-            ],
-            [
-              52.431373918862974,
-              29.824881891418336
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "123",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431473,
-          29.824929
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431466575532106,
-              29.824830707216318
-            ],
-            [
-              52.431571683349375,
-              29.824975370579356
-            ],
-            [
-              52.43166416513639,
-              29.82492428279059
-            ],
-            [
-              52.43155905724705,
-              29.824779619592935
-            ],
-            [
-              52.431466575532106,
-              29.824830707216318
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "124",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431565,
-          29.824877
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43155923210507,
-              29.824779522952028
-            ],
-            [
-              52.43166433999583,
-              29.82492418623976
-            ],
-            [
-              52.43175682168686,
-              29.82487309838884
-            ],
-            [
-              52.43165171372403,
-              29.824728435266493
-            ],
-            [
-              52.43155923210507,
-              29.824779522952028
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "125",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431658,
-          29.824826
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43165188858187,
-              29.824728338625473
-            ],
-            [
-              52.43175699644265,
-              29.82487300183902
-            ],
-            [
-              52.431931515580466,
-              29.824776595496232
-            ],
-            [
-              52.43182159485736,
-              29.824655759580743
-            ],
-            [
-              52.43179134209304,
-              29.824651303016562
-            ],
-            [
-              52.43165188858187,
-              29.824728338625473
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "C26",
-        "area_m2": 357.82,
-        "centroid": [
-          52.431788,
-          29.824757
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431931643765225,
-              29.824776738300855
-            ],
-            [
-              52.43175710727601,
-              29.82487315430646
-            ],
-            [
-              52.43186221554763,
-              29.82501781733179
-            ],
-            [
-              52.43203445396415,
-              29.82492267087992
-            ],
-            [
-              52.432039359683024,
-              29.824898742278908
-            ],
-            [
-              52.431931643765225,
-              29.824776738300855
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "C24",
-        "area_m2": 393.49,
-        "centroid": [
-          52.431901,
-          29.824896
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43166445072564,
-              29.824924338708406
-            ],
-            [
-              52.43176955892377,
-              29.82506900180905
-            ],
-            [
-              52.431862040689516,
-              29.82501791397311
-            ],
-            [
-              52.43175693252022,
-              29.8248732508563
-            ],
-            [
-              52.43166445072564,
-              29.824924338708406
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "116",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431763,
-          29.824971
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43176938406547,
-              29.82506909845025
-            ],
-            [
-              52.4316642758662,
-              29.824924435259252
-            ],
-            [
-              52.43157179407911,
-              29.82497552304809
-            ],
-            [
-              52.43167690220373,
-              29.825120186224048
-            ],
-            [
-              52.43176938406547,
-              29.82506909845025
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "117",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431671,
-          29.825022
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.431676727345256,
-              29.825120282865125
-            ],
-            [
-              52.43157161932295,
-              29.824975619597687
-            ],
-            [
-              52.4314791373364,
-              29.82502670732549
-            ],
-            [
-              52.43158424549101,
-              29.825171370575646
-            ],
-            [
-              52.431676727345256,
-              29.825120282865125
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "118",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431578,
-          29.825073
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43158407052888,
-              29.825171467217725
-            ],
-            [
-              52.431478962580066,
-              29.825026803874984
-            ],
-            [
-              52.43138648049753,
-              29.82507789154064
-            ],
-            [
-              52.431491588578645,
-              29.825222554866098
-            ],
-            [
-              52.43158407052888,
-              29.825171467217725
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "119",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431485,
-          29.825125
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43149141361633,
-              29.82522265150806
-            ],
-            [
-              52.43138630574101,
-              29.825077988090005
-            ],
-            [
-              52.431293823561205,
-              29.825129075603304
-            ],
-            [
-              52.43129382356249,
-              29.825129075693514
-            ],
-            [
-              52.43139893146535,
-              29.825273739005176
-            ],
-            [
-              52.43149141361633,
-              29.82522265150806
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "120",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431393,
-          29.825176
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              52.43138619490667,
-              29.825077835532028
-            ],
-            [
-              52.43128108713435,
-              29.824933172109564
-            ],
-            [
-              52.43118860523492,
-              29.82498425954537
-            ],
-            [
-              52.431201809444765,
-              29.8250024332051
-            ],
-            [
-              52.43129371283299,
-              29.82512892322455
-            ],
-            [
-              52.43138619490667,
-              29.825077835532028
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "name": "121",
-        "area_m2": 200.81,
-        "centroid": [
-          52.431287,
-          29.825031
         ]
       }
     },
@@ -11172,7 +11134,7 @@
         ]
       },
       "properties": {
-        "name": "RG16",
+        "name": "61GR",
         "area_m2": 865.96,
         "centroid": [
           52.429497,
@@ -11214,7 +11176,7 @@
         ]
       },
       "properties": {
-        "name": "RG17",
+        "name": "71GR",
         "area_m2": 963.9,
         "centroid": [
           52.429668,
@@ -11256,7 +11218,7 @@
         ]
       },
       "properties": {
-        "name": "RG18",
+        "name": "81GR",
         "area_m2": 992.18,
         "centroid": [
           52.429886,
@@ -11294,7 +11256,7 @@
         ]
       },
       "properties": {
-        "name": "RG19",
+        "name": "91GR",
         "area_m2": 992.18,
         "centroid": [
           52.430096,
@@ -11332,7 +11294,7 @@
         ]
       },
       "properties": {
-        "name": "RG20",
+        "name": "02GR",
         "area_m2": 992.18,
         "centroid": [
           52.430305,
@@ -11370,7 +11332,7 @@
         ]
       },
       "properties": {
-        "name": "RG21",
+        "name": "12GR",
         "area_m2": 992.18,
         "centroid": [
           52.430515,
@@ -11416,7 +11378,7 @@
         ]
       },
       "properties": {
-        "name": "RG22",
+        "name": "22GR",
         "area_m2": 988.2,
         "centroid": [
           52.430725,
