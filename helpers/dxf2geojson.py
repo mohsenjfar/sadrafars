@@ -25,19 +25,19 @@ def extract_all_lines(msp, segment_length=0.5):
     lines = []
     for entity in msp:
         if entity.dxftype() == 'LINE':
-            start = entity.dxf.start[:2]
-            end = entity.dxf.end[:2]
-            lines.append(LineString([start, end]))
+            start = entity.dxf.start
+            end = entity.dxf.end
+            lines.append(LineString([(start.x, start.y), (end.x, end.y)]))
         elif entity.dxftype() == 'ARC':
-            center = entity.dxf.center[:2]
+            center = entity.dxf.center
             radius = entity.dxf.radius
             start_angle = entity.dxf.start_angle
             end_angle = entity.dxf.end_angle
             points = []
             for i in range(20):
                 angle = (start_angle + (end_angle - start_angle) * i / 20)
-                x = center[0] + radius * cos(angle)
-                y = center[1] + radius * sin(angle)
+                x = center.x + radius * cos(angle)
+                y = center.y + radius * sin(angle)
                 points.append((x, y))
             lines.append(LineString(points))
         elif entity.dxftype() == 'LWPOLYLINE':
@@ -45,9 +45,9 @@ def extract_all_lines(msp, segment_length=0.5):
             if entity.closed and len(points) > 1:
                 points.append(points[0])
             for i in range(len(points)-1):
-                start = points[i][:2]
-                end = points[i+1][:2]
-                lines.append(LineString([start, end]))
+                start = points[i]
+                end = points[i+1]
+                lines.append(LineString([(start[0], start[1]), (end[0], end[1])]))
     return lines
 
 # =============================================
@@ -80,15 +80,20 @@ def extract_texts(msp):
     for entity in msp.query('TEXT MTEXT'):
         try:
             if entity.dxftype() == 'TEXT':
-                x = entity.dxf.insert[0]
-                y = entity.dxf.insert[1]
+                insert = entity.dxf.insert
+                x = insert.x
+                y = insert.y
             else:
-                x = entity.dxf.insert[0] if entity.dxf.hasattr('insert') else entity.dxf.location[0]
-                y = entity.dxf.insert[1] if entity.dxf.hasattr('insert') else entity.dxf.location[1]
+                if entity.dxf.hasattr('insert'):
+                    insert = entity.dxf.insert
+                else:
+                    insert = entity.dxf.location
+                x = insert.x
+                y = insert.y
             text_value = entity.dxf.text.strip()
             if text_value:
                 texts.append({
-                    'text': text_value[::-1],  # Reversed text
+                    'text': text_value[::-1],
                     'geometry': Point(float(x), float(y))
                 })
         except:
