@@ -153,10 +153,13 @@ async function loadAllDistricts() {
         allDistrictsLayer = featureGroup;
         map.addLayer(allDistrictsLayer);
         
-        // زوم روی محدوده همه نواحی
+        // زوم روی محدوده همه نواحی با حرکت آرام
         const bounds = getDistrictsBounds(allDistrictsData);
         if (bounds) {
-            map.fitBounds(bounds, { padding: [50, 50] });
+            map.flyToBounds(bounds, { 
+                padding: [50, 50],
+                duration: 1.5
+            });
         }
         
         console.log(`✅ ${allDistrictsData.length} ناحیه روی نقشه نمایش داده شد`);
@@ -200,6 +203,16 @@ function zoomToDistrict(districtId) {
     if (!district) {
         showError("ناحیه یافت نشد");
         return;
+    }
+    
+    // ============================================================
+    // NEW: به‌روزرسانی dropdown با نام ناحیه
+    // ============================================================
+    const input = $("#districtInput");
+    const clearBtn = $("#districtClearBtn");
+    if (input.length) {
+        input.val(district.name);
+        clearBtn.removeClass("hidden").addClass("visible");
     }
     
     // محاسبه محدوده ناحیه برای زوم مناسب
@@ -845,6 +858,7 @@ function selectPieceFromMap(pieceNumber) {
 // پاک کردن ناحیه از نقشه (برگشت به حالت اولیه)
 // ============================================================
 function clearDistrictFromMap() {
+    // حذف لایه قطعات
     if (currentDistrictLayer) {
         map.removeLayer(currentDistrictLayer);
         currentDistrictLayer = null;
@@ -857,9 +871,33 @@ function clearDistrictFromMap() {
     currentPiecesData = [];
     currentDistrictId = null;
 
+    // پاک کردن dropdown قطعه
     hidePiecesDropdown();
 
-    loadAllDistricts();
+    // ============================================================
+    // CLEAR: پاک کردن dropdown ناحیه
+    // ============================================================
+    const input = $("#districtInput");
+    const clearBtn = $("#districtClearBtn");
+    if (input.length) {
+        input.val("");
+        clearBtn.addClass("hidden").removeClass("visible");
+    }
+
+    // ============================================================
+    // NEW: حرکت آرام به نمای اولیه با flyToBounds و duration بیشتر
+    // ============================================================
+    // ابتدا لایه همه نواحی را بارگذاری می‌کنیم
+    loadAllDistricts().then(() => {
+        // بعد از بارگذاری، با حرکت آرام به نمای اولیه می‌رویم
+        const bounds = getDistrictsBounds(allDistrictsData);
+        if (bounds) {
+            map.flyToBounds(bounds, { 
+                padding: [50, 50],
+                duration: 2.5  // ← حرکت آرام‌تر
+            });
+        }
+    });
 
     console.log("↩️ برگشت به حالت نمایش همه نواحی");
 }
