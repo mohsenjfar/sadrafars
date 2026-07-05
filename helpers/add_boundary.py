@@ -10,7 +10,7 @@ from shapely.ops import unary_union
 # ============================================================
 
 IMAGE_WIDTH = 800
-KERNEL_SIZE = 15
+KERNEL_SIZE = 18
 MORPH_ITERATIONS = 3
 EPSILON_FACTOR = 0.001
 COORDINATE_PRECISION = 6
