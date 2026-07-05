@@ -10,6 +10,17 @@ let allDistrictsData = [];
 let districtsData = [];
 let isLoadingAllDistricts = false;
 
+// ============================================================
+// Cache for district data
+// ============================================================
+let districtsCache = {
+    list: null,
+    all: null,
+    timestamp: null
+};
+
+const CACHE_TTL = 3600000; // 1 hour in milliseconds
+
 const COLORS = [
     '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
     '#DDA0DD', '#FF8A5C', '#A29BFE', '#FD79A8', '#00B894',
@@ -19,6 +30,11 @@ const COLORS = [
 
 function getDistrictColor(index) {
     return COLORS[index % COLORS.length];
+}
+
+function isCacheValid() {
+    if (!districtsCache.timestamp) return false;
+    return (Date.now() - districtsCache.timestamp) < CACHE_TTL;
 }
 
 async function initializeMap() {
@@ -76,9 +92,22 @@ function showLoading(show, message = "در حال بارگذاری...") {
 
 async function loadDistrictsList() {
     try {
+        // Check cache first
+        if (districtsCache.list && isCacheValid()) {
+            console.log("📦 Using cached district list");
+            districtsData = districtsCache.list;
+            populateDistrictDropdown(districtsData);
+            return;
+        }
+
         const response = await fetch("/api/districts");
         const data = await response.json();
         districtsData = data.districts;
+        
+        // Update cache
+        districtsCache.list = districtsData;
+        districtsCache.timestamp = Date.now();
+        
         populateDistrictDropdown(districtsData);
     } catch (error) {
         showError("خطا در بارگذاری لیست نواحی");
@@ -97,6 +126,15 @@ async function loadAllDistricts() {
     allDistrictsData = [];
     
     try {
+        // Check cache first
+        if (districtsCache.all && isCacheValid()) {
+            console.log("📦 Using cached all districts data");
+            allDistrictsData = districtsCache.all;
+            renderDistrictsOnMap(allDistrictsData);
+            isLoadingAllDistricts = false;
+            return;
+        }
+
         showLoading(true, "در حال بارگذاری نواحی...");
         
         const response = await fetch("/api/districts/all");
@@ -115,62 +153,11 @@ async function loadAllDistricts() {
         
         allDistrictsData = districts;
         
-        const featureGroup = L.featureGroup();
+        // Update cache
+        districtsCache.all = districts;
+        districtsCache.timestamp = Date.now();
         
-        districts.forEach((district, index) => {
-            const color = getDistrictColor(index);
-            const boundary = district.boundary || [];
-            const centroid = district.centroid || [0, 0];
-            const name = district.name || district.id;
-            
-            if (boundary.length >= 3) {
-                const latLngs = boundary.map(p => [p[1], p[0]]);
-                
-                const polygon = L.polygon(latLngs, {
-                    color: color,
-                    weight: 4,
-                    opacity: 0.9,
-                    fillColor: color,
-                    fillOpacity: 0.15,
-                    smoothFactor: 1,
-                    className: 'district-boundary'
-                });
-                
-                polygon.on('click', function(e) {
-                    zoomToDistrict(district.id);
-                });
-                
-                const centerLat = centroid[1] || latLngs.reduce((sum, p) => sum + p[0], 0) / latLngs.length;
-                const centerLng = centroid[0] || latLngs.reduce((sum, p) => sum + p[1], 0) / latLngs.length;
-                
-                const label = L.marker([centerLat, centerLng], {
-                    icon: L.divIcon({
-                        className: 'district-label',
-                        html: `<div class="text-xs font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-md shadow-sm border border-gray-200" style="color: ${color};">${name}</div>`,
-                        iconSize: [0, 0],
-                        iconAnchor: [0, 0]
-                    }),
-                    interactive: false,
-                    zIndexOffset: 1000
-                });
-                
-                featureGroup.addLayer(polygon);
-                featureGroup.addLayer(label);
-            }
-        });
-        
-        allDistrictsLayer = featureGroup;
-        map.addLayer(allDistrictsLayer);
-        
-        const bounds = getDistrictsBounds(allDistrictsData);
-        if (bounds) {
-            map.flyToBounds(bounds, { 
-                padding: [50, 50],
-                duration: 1.5
-            });
-        }
-        
-        console.log(`✅ ${allDistrictsData.length} ناحیه روی نقشه نمایش داده شد`);
+        renderDistrictsOnMap(districts);
         
     } catch (error) {
         console.error("❌ خطا در بارگذاری همه نواحی:", error);
@@ -179,6 +166,65 @@ async function loadAllDistricts() {
         isLoadingAllDistricts = false;
         showLoading(false);
     }
+}
+
+function renderDistrictsOnMap(districts) {
+    const featureGroup = L.featureGroup();
+    
+    districts.forEach((district, index) => {
+        const color = getDistrictColor(index);
+        const boundary = district.boundary || [];
+        const centroid = district.centroid || [0, 0];
+        const name = district.name || district.id;
+        
+        if (boundary.length >= 3) {
+            const latLngs = boundary.map(p => [p[1], p[0]]);
+            
+            const polygon = L.polygon(latLngs, {
+                color: color,
+                weight: 4,
+                opacity: 0.9,
+                fillColor: color,
+                fillOpacity: 0.15,
+                smoothFactor: 1,
+                className: 'district-boundary'
+            });
+            
+            polygon.on('click', function(e) {
+                zoomToDistrict(district.id);
+            });
+            
+            const centerLat = centroid[1] || latLngs.reduce((sum, p) => sum + p[0], 0) / latLngs.length;
+            const centerLng = centroid[0] || latLngs.reduce((sum, p) => sum + p[1], 0) / latLngs.length;
+            
+            const label = L.marker([centerLat, centerLng], {
+                icon: L.divIcon({
+                    className: 'district-label',
+                    html: `<div class="text-xs font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-md shadow-sm border border-gray-200" style="color: ${color};">${name}</div>`,
+                    iconSize: [0, 0],
+                    iconAnchor: [0, 0]
+                }),
+                interactive: false,
+                zIndexOffset: 1000
+            });
+            
+            featureGroup.addLayer(polygon);
+            featureGroup.addLayer(label);
+        }
+    });
+    
+    allDistrictsLayer = featureGroup;
+    map.addLayer(allDistrictsLayer);
+    
+    const bounds = getDistrictsBounds(districts);
+    if (bounds) {
+        map.flyToBounds(bounds, { 
+            padding: [50, 50],
+            duration: 1.5
+        });
+    }
+    
+    console.log(`✅ ${districts.length} ناحیه روی نقشه نمایش داده شد`);
 }
 
 function getDistrictsBounds(districts) {
@@ -249,17 +295,26 @@ function showDistrictPieces(district) {
     window.currentPiecesData = currentPiecesData;
     
     populatePiecesDropdown(currentPiecesData);
-    
-    const geojson = {
-        "type": "FeatureCollection",
-        "features": []
-    };
-    
     fetchDistrictGeoJSON(district.id);
 }
 
 async function fetchDistrictGeoJSON(districtId) {
     try {
+        // Check if we already have the full data in cache
+        const cachedDistrict = districtsCache.all?.find(d => d.id === districtId);
+        if (cachedDistrict && cachedDistrict.fullGeoJSON) {
+            console.log("📦 Using cached GeoJSON for district:", districtId);
+            displayDistrictOnMap(cachedDistrict.fullGeoJSON);
+            
+            if (cachedDistrict.centroid && cachedDistrict.centroid.length === 2) {
+                map.flyTo([cachedDistrict.centroid[1], cachedDistrict.centroid[0]], 15, {
+                    animate: true,
+                    duration: 1.5,
+                });
+            }
+            return;
+        }
+
         showLoading(true, "در حال بارگذاری قطعات...");
         
         const response = await fetch(`/api/districts/${districtId}/load`);
@@ -267,6 +322,12 @@ async function fetchDistrictGeoJSON(districtId) {
         
         if (!response.ok) {
             throw new Error(data.detail || "خطا در بارگذاری");
+        }
+        
+        // Cache the full GeoJSON
+        const district = districtsCache.all?.find(d => d.id === districtId);
+        if (district) {
+            district.fullGeoJSON = data.geojson;
         }
         
         displayDistrictOnMap(data.geojson);
@@ -847,7 +908,12 @@ function clearDistrictFromMap() {
 
     showLoading(true, "در حال بازگشت به نمای اصلی...");
     
-    loadAllDistricts().then(() => {
+    // Use cached data if available
+    if (districtsCache.all && isCacheValid()) {
+        console.log("📦 Using cached data for return to main view");
+        allDistrictsData = districtsCache.all;
+        renderDistrictsOnMap(allDistrictsData);
+        
         const bounds = getDistrictsBounds(allDistrictsData);
         if (bounds) {
             map.flyToBounds(bounds, { 
@@ -857,8 +923,21 @@ function clearDistrictFromMap() {
         }
         setTimeout(() => {
             showLoading(false);
-        }, 1000);
-    });
+        }, 500);
+    } else {
+        loadAllDistricts().then(() => {
+            const bounds = getDistrictsBounds(allDistrictsData);
+            if (bounds) {
+                map.flyToBounds(bounds, { 
+                    padding: [50, 50],
+                    duration: 2.5
+                });
+            }
+            setTimeout(() => {
+                showLoading(false);
+            }, 1000);
+        });
+    }
 
     console.log("↩️ برگشت به حالت نمایش همه نواحی");
 }
@@ -890,18 +969,6 @@ function showToast(message, type = "success") {
 
 function showError(message) {
     showToast(message, "error");
-}
-
-function showLoading(show, message = "در حال بارگذاری...") {
-    const loading = $("#loading");
-    if (loading.length) {
-        if (show) {
-            loading.find("span").text(message);
-            loading.removeClass("hidden").addClass("show");
-        } else {
-            loading.addClass("hidden").removeClass("show");
-        }
-    }
 }
 
 $(document).ready(function () {
