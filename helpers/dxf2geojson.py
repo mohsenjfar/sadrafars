@@ -6,7 +6,23 @@ import pandas as pd
 from pyproj import Transformer
 import json
 import os
+import cv2
+import numpy as np
 from math import sin, cos
+
+# ============================================================
+# CONFIGURATION - Edit these variables
+# ============================================================
+
+IMAGE_WIDTH = 800
+KERNEL_SIZE = 15
+MORPH_ITERATIONS = 3
+EPSILON_FACTOR = 0.001
+COORDINATE_PRECISION = 6
+
+# ============================================================
+# DO NOT EDIT BELOW THIS LINE
+# ============================================================
 
 # =============================================
 # 0. Get district name from user
@@ -16,10 +32,10 @@ if not district_name:
     district_name = "Unknown_District"
     print(f"⚠️ No name entered. Using default: {district_name}")
 
-dxf_path = f"{district_name}.dxf"  # Input file
+dxf_path = f"{district_name}.dxf"
 
 # =============================================
-# 1. Function: Extract all lines (including curves)
+# 1. Extract all lines (including curves)
 # =============================================
 def extract_all_lines(msp, segment_length=0.5):
     lines = []
@@ -51,7 +67,7 @@ def extract_all_lines(msp, segment_length=0.5):
     return lines
 
 # =============================================
-# 2. Function: Merge lines with buffer
+# 2. Merge lines with buffer
 # =============================================
 def merge_lines_with_buffer(lines, buffer_distance=0.01):
     multi_line = MultiLineString(lines)
@@ -67,13 +83,14 @@ def merge_lines_with_buffer(lines, buffer_distance=0.01):
     return []
 
 # =============================================
-# 3. Function: Convert lines to polygons
+# 3. Convert lines to polygons
 # =============================================
 def lines_to_polygons(lines):
+    # unary_union still needed here to connect lines into polygons
     return list(polygonize(unary_union(lines)))
 
 # =============================================
-# 4. Function: Extract texts with reversal
+# 4. Extract texts with reversal
 # =============================================
 def extract_texts(msp):
     texts = []
@@ -101,7 +118,7 @@ def extract_texts(msp):
     return gpd.GeoDataFrame(texts, crs="EPSG:32639")
 
 # =============================================
-# 5. Function: Keep only the highest text per polygon
+# 5. Keep only the highest text per polygon
 # =============================================
 def keep_highest_text(poly_gdf, text_gdf):
     for idx, row in poly_gdf.iterrows():
@@ -114,7 +131,7 @@ def keep_highest_text(poly_gdf, text_gdf):
     return poly_gdf
 
 # =============================================
-# 6. Function: Calculate area and centroid (in meters)
+# 6. Calculate area and centroid (for each piece)
 # =============================================
 def calculate_area_and_centroid(poly_gdf):
     poly_gdf['area_m2'] = poly_gdf.geometry.area
@@ -122,7 +139,7 @@ def calculate_area_and_centroid(poly_gdf):
     return poly_gdf
 
 # =============================================
-# 7. Function: Convert UTM to degrees (WGS84)
+# 7. Convert UTM to degrees (WGS84)
 # =============================================
 def convert_to_wgs84(poly_gdf):
     transformer = Transformer.from_crs("EPSG:32639", "EPSG:4326", always_xy=True)
@@ -144,68 +161,142 @@ def convert_to_wgs84(poly_gdf):
     return poly_gdf
 
 # =============================================
-# 8. NEW: Extract region boundary points
+# 8. Detect boundary and centroid using image processing
 # =============================================
-def extract_region_boundary(poly_gdf):
+def detect_boundary_and_centroid_image(poly_gdf):
     """
-    Extract boundary points of the entire region (union of all pieces).
+    Detect boundary and calculate centroid using OpenCV image processing.
+    Returns boundary points and region centroid.
     """
-    # Combine all polygons
-    from shapely.ops import unary_union as union_all
-    all_polygons = union_all(poly_gdf.geometry.tolist())
+    print("🖼️ Detecting boundary and centroid using image processing...")
     
-    if all_polygons.is_empty:
-        return []
+    # Extract polygons for rendering
+    polygons = []
+    for geom in poly_gdf.geometry:
+        if geom.geom_type == 'Polygon':
+            polygons.append(geom)
+        elif geom.geom_type == 'MultiPolygon':
+            for poly in geom.geoms:
+                polygons.append(poly)
     
-    # Get outer boundary
-    if all_polygons.geom_type == 'Polygon':
-        boundary = all_polygons.exterior
-    elif all_polygons.geom_type == 'MultiPolygon':
-        # If multiple islands, take convex hull or union boundary
-        boundary = all_polygons.convex_hull.exterior
-    else:
-        return []
+    if not polygons:
+        print("❌ No polygons to render!")
+        return [], None
     
-    # Extract boundary points
+    # Calculate bounds
+    all_coords = []
+    for poly in polygons:
+        if poly.geom_type == 'Polygon':
+            all_coords.extend(list(poly.exterior.coords))
+    
+    if not all_coords:
+        return [], None
+    
+    coords_array = np.array(all_coords)
+    min_lon, min_lat = coords_array.min(axis=0)
+    max_lon, max_lat = coords_array.max(axis=0)
+    
+    pad_lon = (max_lon - min_lon) * 0.05
+    pad_lat = (max_lat - min_lat) * 0.05
+    min_lon -= pad_lon
+    max_lon += pad_lon
+    min_lat -= pad_lat
+    max_lat += pad_lat
+    
+    # Image size
+    width = IMAGE_WIDTH
+    height = int(width * 0.8)
+    
+    scale_x = width / (max_lon - min_lon)
+    scale_y = height / (max_lat - min_lat)
+    
+    def to_image_coords(lon, lat):
+        x = int((lon - min_lon) * scale_x)
+        y = int((max_lat - lat) * scale_y)
+        return x, y
+    
+    def to_geo_coords(x, y):
+        lon = min_lon + x / scale_x
+        lat = max_lat - y / scale_y
+        return lon, lat
+    
+    # Create image
+    img = np.ones((height, width, 3), dtype=np.uint8) * 255
+    
+    # Draw pieces
+    for poly in polygons:
+        if poly.geom_type == 'Polygon':
+            coords = list(poly.exterior.coords)
+            points = [to_image_coords(lon, lat) for lon, lat in coords]
+            points = np.array(points, dtype=np.int32)
+            cv2.fillPoly(img, [points], (200, 200, 200))
+            cv2.polylines(img, [points], True, (0, 0, 0), 1)
+    
+    # Boundary detection
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, binary = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY_INV)
+    
+    kernel = np.ones((KERNEL_SIZE, KERNEL_SIZE), np.uint8)
+    connected = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations=MORPH_ITERATIONS)
+    
+    contours, hierarchy = cv2.findContours(connected, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    mask = np.zeros_like(connected)
+    
+    if hierarchy is not None:
+        for i, cnt in enumerate(contours):
+            if hierarchy[0][i][3] == -1:
+                cv2.drawContours(mask, [cnt], -1, 255, -1)
+    
+    contours_final, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours_final:
+        print("❌ No boundary detected!")
+        return [], None
+    
+    main_contour = max(contours_final, key=cv2.contourArea)
+    
+    epsilon = EPSILON_FACTOR * cv2.arcLength(main_contour, True)
+    simplified = cv2.approxPolyDP(main_contour, epsilon, True)
+    
+    # Convert boundary points back to GeoJSON coordinates
     boundary_points = []
-    for coord in list(boundary.coords):
-        # Round to 6 decimal places
-        boundary_points.append([round(coord[0], 6), round(coord[1], 6)])
+    for point in simplified:
+        x, y = point[0]
+        lon, lat = to_geo_coords(x, y)
+        boundary_points.append([round(lon, COORDINATE_PRECISION), round(lat, COORDINATE_PRECISION)])
     
-    return boundary_points
+    if boundary_points[0] != boundary_points[-1]:
+        boundary_points.append(boundary_points[0])
+    
+    # ============================================================
+    # CALCULATE CENTROID FROM IMAGE (boundary points)
+    # ============================================================
+    # Convert boundary points to numpy array
+    boundary_np = np.array(boundary_points)
+    
+    # Calculate centroid (average of all boundary points)
+    centroid_lon = np.mean(boundary_np[:, 0])
+    centroid_lat = np.mean(boundary_np[:, 1])
+    region_centroid = [round(centroid_lon, 6), round(centroid_lat, 6)]
+    
+    print(f"✅ Boundary points detected: {len(boundary_points)}")
+    print(f"✅ Region centroid from image: {region_centroid}")
+    
+    return boundary_points, region_centroid
 
 # =============================================
-# 9. Function: Save to GeoJSON with district name (STANDARDIZED)
+# 9. Save to GeoJSON with boundary and centroid
 # =============================================
-def save_as_geojson(poly_gdf, district_name, dxf_path):
+def save_as_geojson(poly_gdf, district_name, dxf_path, boundary_points, region_centroid):
     output_gdf = poly_gdf[['name', 'area_m2', 'centroid', 'geometry']].copy()
     output_gdf = output_gdf.dropna(subset=['name', 'geometry'])
     
-    # =============================================
-    # Calculate region-level centroid
-    # =============================================
-    region_centroid = None
-    if not output_gdf.empty:
-        from shapely.ops import unary_union as union_all
-        all_polygons = union_all(output_gdf.geometry.tolist())
-        if not all_polygons.is_empty:
-            centroid_point = all_polygons.centroid
-            region_centroid = [round(centroid_point.x, 6), round(centroid_point.y, 6)]
-    
-    # =============================================
-    # NEW: Extract region boundary points
-    # =============================================
-    boundary_points = extract_region_boundary(output_gdf)
-    
-    # =============================================
-    # Build STANDARDIZED GeoJSON structure
-    # =============================================
+    # Build GeoJSON with boundary
     geojson_data = {
         "type": "FeatureCollection",
         "name": district_name,
-        "centroid": region_centroid,
-        "boundary": boundary_points,  # ← NEW: List of boundary points
-        "boundary_count": len(boundary_points),  # ← NEW: Number of boundary points
+        "centroid": region_centroid,  # ← From image processing
+        "boundary": boundary_points,
+        "boundary_count": len(boundary_points),
         "crs": {
             "type": "name",
             "properties": {
@@ -241,7 +332,7 @@ def save_as_geojson(poly_gdf, district_name, dxf_path):
     print(f"✅ GeoJSON file saved at:")
     print(output_path)
     print(f"   - Features: {len(geojson_data['features'])}")
-    print(f"   - Region centroid: {region_centroid}")
+    print(f"   - Region centroid (from image): {region_centroid}")
     print(f"   - Boundary points: {len(boundary_points)}")
     return output_path
 
@@ -262,7 +353,7 @@ def run_pipeline(dxf_path, district_name):
     merged = merge_lines_with_buffer(lines, buffer_distance=0.01)
     print(f"✅ Lines merged with buffer: {len(merged)}")
     
-    # 4. Convert to polygons
+    # 4. Convert to polygons (unary_union used here)
     polygons = lines_to_polygons(merged)
     print(f"✅ Polygons created: {len(polygons)}")
     
@@ -277,16 +368,19 @@ def run_pipeline(dxf_path, district_name):
     poly_gdf = keep_highest_text(poly_gdf, text_gdf)
     print(f"✅ Lower texts removed, only the highest text per polygon kept")
     
-    # 8. Calculate area and centroid
+    # 8. Calculate area and centroid (for each piece)
     poly_gdf = calculate_area_and_centroid(poly_gdf)
-    print(f"✅ Area and centroid calculated")
+    print(f"✅ Area and centroid calculated for each piece")
     
     # 9. Convert to WGS84
     poly_gdf = convert_to_wgs84(poly_gdf)
     print(f"✅ Coordinates converted to WGS84 (degrees)")
     
-    # 10. Save final GeoJSON (STANDARDIZED)
-    output_path = save_as_geojson(poly_gdf, district_name, dxf_path)
+    # 10. Detect boundary AND centroid using image processing
+    boundary_points, region_centroid = detect_boundary_and_centroid_image(poly_gdf)
+    
+    # 11. Save final GeoJSON with boundary and centroid
+    output_path = save_as_geojson(poly_gdf, district_name, dxf_path, boundary_points, region_centroid)
     return output_path
 
 # =============================================
