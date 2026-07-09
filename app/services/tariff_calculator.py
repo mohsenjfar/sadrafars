@@ -3,6 +3,37 @@
 from app.models.tariff_models import TariffResponse
 
 
+SUPERVISION_COEFFICIENTS = {
+    "A": {
+        "عمران": 0.38,
+        "معماری": 0.33,
+        "تاسیسات مکانیکی": 0.15,
+        "تاسیسات برقی": 0.14,
+        "هماهنگ کننده": 0.04,
+    },
+    "B": {
+        "عمران": 0.37,
+        "معماری": 0.32,
+        "تاسیسات مکانیکی": 0.16,
+        "تاسیسات برقی": 0.15,
+        "هماهنگ کننده": 0.05,
+    },
+    "C": {
+        "عمران": 0.36,
+        "معماری": 0.31,
+        "تاسیسات مکانیکی": 0.17,
+        "تاسیسات برقی": 0.16,
+        "هماهنگ کننده": 0.06,
+    },
+    "D": {
+        "عمران": 0.35,
+        "معماری": 0.30,
+        "تاسیسات مکانیکی": 0.18,
+        "تاسیسات برقی": 0.17,
+        "هماهنگ کننده": 0.07,
+    },
+}
+
 class TariffCalculator:
     """محاسبه‌گر تعرفه‌های نقشه‌برداری و مهندسی ساختمان - سال ۱۴۰۵"""
 
@@ -11,8 +42,8 @@ class TariffCalculator:
     # ============================================================
 
     def _add_vat(self, base_amount: float) -> tuple:
-        """محاسبه مالیات ۱۰% برای نقشه‌برداری"""
-        vat = int(base_amount * 0.10)
+        """محاسبه مالیات 0% برای نقشه‌برداری"""
+        vat = int(base_amount * 0)
         return vat, base_amount + vat
 
     def calculate_land_survey(self, area_m2: float) -> TariffResponse:
@@ -784,18 +815,30 @@ class TariffCalculator:
 
     def calculate_delay_penalty(self, area_m2: float, ceilings: int, license_date: str) -> TariffResponse:
         """
-        محاسبه هزینه تمدید نظارت (ماهانه)
-        فرمول: هزینه تمدید = ماه‌های تمدید شده × (0.6 × مبلغ قرارداد نظارت پایه ÷ 18)
+        محاسبه هزینه تمدید نظارت (ماهانه) با تفکیک رشته‌ها
+        فرمول: هزینه تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد نظارت پایه ÷ 18)
         
-        قرارداد نظارت پایه برای 18 ماه است
-        اگر ماه‌های گذشته > 18 باشد، مازاد تمدید محسوب می‌شود
+        اضافه شده:
+        - تفکیک سهم هر رشته بر اساس جدول ضرایب
+        - محاسبه خودکار تاریخ پایان (شروع + ۱۸ ماه)
         """
-        from datetime import datetime
-        import jdatetime
         
-        # ابتدا هزینه نظارت پایه را محاسبه می‌کنیم (بدون تمدید)
+        # تعیین گروه نهایی
+        base_group_key = self._get_base_group(ceilings)[1]
+        final_group_key, upgraded, original_key = self._apply_area_upgrade(base_group_key, area_m2)
+        group_name = self._get_group_name(final_group_key)
+        
+        # محاسبه هزینه نظارت پایه (برای ۱۸ ماه)
         base_supervision = self.calculate_supervision(area_m2, ceilings)
-        base_contract_amount = base_supervision.total_amount  # مبلغ کل قرارداد نظارت برای 18 ماه
+        base_contract_amount = base_supervision.total_amount
+        
+        # دریافت ضرایب تفکیک رشته‌ها
+        coefficients = self.SUPERVISION_COEFFICIENTS.get(final_group_key, self.SUPERVISION_COEFFICIENTS["A"])
+        
+        # محاسبه سهم هر رشته در قرارداد پایه
+        discipline_base_costs = {}
+        for discipline, coeff in coefficients.items():
+            discipline_base_costs[discipline] = int(base_contract_amount * coeff)
         
         # تبدیل تاریخ شمسی به میلادی
         try:
@@ -812,42 +855,76 @@ class TariffCalculator:
                 base_amount=0,
                 vat=0,
                 total_amount=0,
-                details={"error": f"فرمت تاریخ نامعتبر: {str(e)}", "راهنما": "فرمت صحیح: 1403/01/15"}
+                details={
+                    "error": f"فرمت تاریخ نامعتبر: {str(e)}",
+                    "راهنما": "فرمت صحیح: 1403/01/15"
+                }
             )
         
-        # محاسبه تعداد ماه‌های گذشته
+        # محاسبه تاریخ پایان (۱۸ ماه بعد)
+        end_datetime = license_datetime + timedelta(days=18*30)
+        end_jalali = jdatetime.date.fromgregorian(date=end_datetime.date())
+        end_date_str = f"{end_jalali.year}/{end_jalali.month:02d}/{end_jalali.day:02d}"
+        
+        # محاسبه ماه‌های گذشته و تمدید
         today = datetime.now()
         months_passed = (today.year - license_datetime.year) * 12 + (today.month - license_datetime.month)
-        
-        # محاسبه مازاد بر 18 ماه
         excess_months = max(0, months_passed - 18)
         
         # محاسبه نرخ ماهانه تمدید
         monthly_rate = (0.6 * base_contract_amount) / 18
-        
-        # محاسبه مبلغ کل تمدید
         penalty_amount = int(excess_months * monthly_rate)
         
-        # محاسبه تاریخ امروز شمسی برای نمایش
+        # محاسبه تفکیک هزینه تمدید هر رشته
+        discipline_penalty_costs = {}
+        for discipline, base_cost in discipline_base_costs.items():
+            discipline_penalty = int(penalty_amount * (base_cost / base_contract_amount))
+            discipline_penalty_costs[discipline] = discipline_penalty
+        
+        # تاریخ امروز شمسی
         today_jalali = jdatetime.date.today()
         today_str = f"{today_jalali.year}/{today_jalali.month:02d}/{today_jalali.day:02d}"
         
+        # ساخت خروجی
         return TariffResponse(
             base_amount=penalty_amount,
             vat=0,
             total_amount=penalty_amount,
             details={
-                "تاریخ صدور پروانه (شمسی)": license_date,
-                "تاریخ امروز (شمسی)": today_str,
-                "ماه‌های گذشته از صدور پروانه": months_passed,
-                "مدت قرارداد پایه (ماه)": 18,
-                "ماه‌های تمدید شده": excess_months,
-                "مبلغ کل قرارداد نظارت پایه": base_contract_amount,
-                "نرخ ماهانه تمدید": int(monthly_rate),
-                "فرمول محاسبه": "تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد ÷ 18)",
-                "گروه ساختمانی": base_supervision.details.get("گروه ساختمانی"),
+                "گروه ساختمانی": group_name,
+                "گروه پایه": self._get_group_name(base_group_key),
+                "ارتقا یافته": upgraded,
+                "تعداد سقف": ceilings,
                 "متراژ": area_m2,
-                "تعداد سقف": ceilings
+                
+                "📅 تاریخ‌ها": {
+                    "تاریخ صدور پروانه (شمسی)": license_date,
+                    "تاریخ پایان (۱۸ ماه بعد)": end_date_str,
+                    "تاریخ امروز (شمسی)": today_str,
+                },
+                
+                "📊 محاسبه پایه": {
+                    "مدت قرارداد پایه (ماه)": 18,
+                    "مبلغ کل قرارداد نظارت پایه": base_contract_amount,
+                    "نرخ ماهانه تمدید": int(monthly_rate),
+                    "فرمول": "تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد ÷ 18)",
+                },
+                
+                "⏰ وضعیت تمدید": {
+                    "ماه‌های گذشته از صدور پروانه": months_passed,
+                    "ماه‌های تمدید شده": excess_months,
+                },
+                
+                "📋 تفکیک هزینه تمدید به تفکیک رشته": {
+                    "ضرایب اعمال شده": coefficients,
+                    "هزینه پایه هر رشته (برای ۱۸ ماه)": discipline_base_costs,
+                    "هزینه تمدید هر رشته": discipline_penalty_costs,
+                    "جمع کل هزینه تمدید": penalty_amount,
+                },
+                
+                "💰 جمع نهایی": {
+                    "هزینه کل تمدید نظارت": penalty_amount,
+                }
             }
         )
 

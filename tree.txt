@@ -1,0 +1,146 @@
+.
+├── app
+│   ├── api
+│   │   ├── .ipynb_checkpoints
+│   │   │   └── routes_districts-checkpoint.py
+│   │   ├── routes_districts.py
+│   │   └── routes_tariff.py
+│   ├── models
+│   │   └── tariff_models.py
+│   ├── services
+│   │   └── tariff_calculator.py
+│   └── main.py
+├── .gitea
+│   └── workflows
+│       └── deploy.yml
+├── helpers
+│   ├── Done
+│   │   ├── آموزش و پرورش.dxf
+│   │   ├── بهارستان.dxf
+│   │   └── هوابرد.dxf
+│   ├── .ipynb_checkpoints
+│   │   ├── add_boundary-checkpoint.py
+│   │   ├── amoozesh_parvaresh-checkpoint.geojson
+│   │   ├── dxf2geojson-checkpoint.py
+│   │   ├── plot-checkpoint.ipynb
+│   │   ├── process_district-checkpoint.sh
+│   │   ├── register_kernel-checkpoint.sh
+│   │   ├── untitled-checkpoint.txt
+│   │   └── هوابرد-checkpoint.geojson
+│   ├── 14hectari.geojson
+│   ├── add_boundary.py
+│   ├── dxf2geojson.py
+│   ├── plot.ipynb
+│   ├── process_district.sh
+│   ├── register_kernel.sh
+│   └── untitled.txt
+├── .ipynb_checkpoints
+│   ├── requirements-checkpoint.txt
+│   └── requirements_helper-checkpoint.txt
+├── static
+│   ├── css
+│   │   ├── images
+│   │   │   └── layers.png
+│   │   ├── leaflet.css
+│   │   ├── tailwind.css
+│   │   └── tailwind-input.css
+│   ├── data
+│   │   └── districts
+│   │       ├── .ipynb_checkpoints
+│   │       │   ├── 100hectari-checkpoint.geojson
+│   │       │   ├── 86hectari-checkpoint.geojson
+│   │       │   ├── amoozesh_parvaresh-checkpoint.geojson
+│   │       │   └── standardize-checkpoint.py
+│   │       ├── 100hectari.geojson
+│   │       ├── 115hectari.geojson
+│   │       ├── 128hectari.geojson
+│   │       ├── 14hectari.geojson
+│   │       ├── 180hectari.geojson
+│   │       ├── 200hectari.geojson
+│   │       ├── 25hectari.geojson
+│   │       ├── 26hectari.geojson
+│   │       ├── 28hectari.geojson
+│   │       ├── 30hectari.geojson
+│   │       ├── 33hectari.geojson
+│   │       ├── 40hectari.geojson
+│   │       ├── 45hectari.geojson
+│   │       ├── 50hectari.geojson
+│   │       ├── 50hectariwest.geojson
+│   │       ├── 55hectari.geojson
+│   │       ├── 58hectari.geojson
+│   │       ├── 60hectari.geojson
+│   │       ├── 80hectari.geojson
+│   │       ├── 90hectarijonob.geojson
+│   │       ├── 90hectarishomal.geojson
+│   │       ├── agricultural_engineering.geojson
+│   │       ├── agriculture_jihad.geojson
+│   │       ├── ahlul_bayt.geojson
+│   │       ├── amoozesh_parvaresh.geojson
+│   │       ├── army.geojson
+│   │       ├── baghshahri_phase3.geojson
+│   │       ├── baghshahri_phase4.geojson
+│   │       ├── baharan_garden.geojson
+│   │       ├── baharestan.geojson
+│   │       ├── dadgahen.geojson
+│   │       ├── fars_bushehr_development.geojson
+│   │       ├── golbahar.geojson
+│   │       ├── green_palace.geojson
+│   │       ├── hafez_tile.geojson
+│   │       ├── havabord.geojson
+│   │       ├── helalahmar.geojson
+│   │       ├── industrial.geojson
+│   │       ├── jihad.geojson
+│   │       ├── nadermohamadi.geojson
+│   │       ├── nomadic_affairs.geojson
+│   │       ├── parseh.geojson
+│   │       ├── police.geojson
+│   │       ├── shiraz_art_schools.geojson
+│   │       ├── shiraz_university.geojson
+│   │       ├── siemens_2.geojson
+│   │       ├── siemens.geojson
+│   │       ├── sports.geojson
+│   │       ├── urban_land_series2.geojson
+│   │       └── zamzam.geojson
+│   ├── images
+│   │   ├── bg.png
+│   │   ├── favicon.png
+│   │   ├── layers-2x.png
+│   │   ├── logo.png
+│   │   ├── logo_.png
+│   │   ├── marker-icon-2x.png
+│   │   ├── marker-icon.png
+│   │   └── marker-shadow.png
+│   └── js
+│       ├── .ipynb_checkpoints
+│       │   └── map_viewer-checkpoint.js
+│       ├── jquery.min.js
+│       ├── leaflet.js
+│       ├── map_viewer.js
+│       ├── modal.js
+│       └── tools.js
+├── templates
+│   ├── .ipynb_checkpoints
+│   │   ├── index-checkpoint.html
+│   │   └── map_viewer-checkpoint.html
+│   ├── layouts
+│   │   └── base.html
+│   ├── partials
+│   │   ├── _map_header.html
+│   │   ├── _map_info_panel.html
+│   │   └── _map_legend.html
+│   ├── index.html
+│   └── map_viewer.html
+├── docker-compose.yml
+├── Dockerfile
+├── .gitignore
+├── .npmrc
+├── package.json
+├── package-lock.json
+├── postcss.config.js
+├── requirements_helper.txt
+├── requirements.txt
+├── tailwind.config.js
+├── tree.sh
+└── tree.txt
+
+25 directories, 119 files

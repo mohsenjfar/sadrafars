@@ -581,7 +581,6 @@ function displayResult(resultElement, data) {
     ) {
       html += `<div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">`;
       html += `<strong style="font-size: 16px;">💰 مبلغ پایه:</strong> ${data.base_amount.toLocaleString()} ریال<br>`;
-      html += `<strong>📊 مالیات (۱۰٪):</strong> ${data.vat.toLocaleString()} ریال<br>`;
       html += `<hr style="margin: 8px 0;">`;
       html += `<strong style="font-size: 18px; color: #2e7d32;">💰 مبلغ نهایی: ${data.total_amount.toLocaleString()} ریال</strong>`;
       html += `</div>`;
