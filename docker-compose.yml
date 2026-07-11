@@ -1,4 +1,5 @@
 services:
+  # سرویس اصلی صدرافارس (موجود)
   sadrafars:
     build:
       context: .
@@ -11,6 +12,29 @@ services:
     dns:
       - 217.218.127.127
       - 1.1.1.1
+    ports:
+      - "8000:8000"
+    environment:
+      - PB_URL=http://pocketbase:8090
+      - PB_ADMIN_EMAIL=admin@example.com
+      - PB_ADMIN_PASSWORD=password123
+    depends_on:
+      - pocketbase
+
+  # سرویس PocketBase (جدید)
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: pocketbase
+    restart: unless-stopped
+    ports:
+      - "8090:8090"  # پورت مدیریت PocketBase
+    volumes:
+      - ./pb_data:/pb_data      # داده‌های دیتابیس
+      - ./pb_public:/pb_public  # فایل‌های عمومی
+      - ./pb_hooks:/pb_hooks    # هوک‌های سفارشی (اختیاری)
+    networks:
+      - external-net
+    command: serve --http=0.0.0.0:8090
 
 networks:
   external-net:

@@ -9,18 +9,166 @@
     <link rel="icon" type="image/png" href="/static/images/favicon.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"/>
     <link rel="stylesheet" href="/static/css/tailwind.css?v={{ timestamp }}">
+    
+    <style>
+        /* استایل دکمه‌های احراز هویت */
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-login {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #1e293b;
+            text-decoration: none;
+        }
+        .btn-login:hover {
+            background: #f8fafc;
+            border-color: #14b8a6;
+            transform: translateY(-1px);
+        }
+        .btn-logout {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-logout:hover {
+            background: #fecaca;
+        }
+        .user-avatar-small {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            min-width: 180px;
+            z-index: 1000;
+            margin-top: 8px;
+        }
+        .user-dropdown.show {
+            display: block;
+        }
+        .user-dropdown a {
+            display: block;
+            padding: 10px 14px;
+            color: #1e293b;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .user-dropdown a:hover {
+            background: #f1f5f9;
+        }
+        .user-dropdown .divider {
+            border-top: 1px solid #e2e8f0;
+            margin: 6px 0;
+        }
+        .user-dropdown .logout-item {
+            color: #dc2626;
+        }
+        .user-dropdown .logout-item:hover {
+            background: #fee2e2;
+        }
+        .user-menu-container {
+            position: relative;
+            cursor: pointer;
+        }
+        .navbar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+            height: 70px;
+        }
+        .navbar-center {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .navbar-center a {
+            padding: 0.5rem 1rem;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+        .navbar-center a:hover {
+            color: #2563eb;
+            background: rgba(37,99,235,0.05);
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .navbar-center {
+                display: none;
+            }
+            .navbar-container {
+                height: 60px;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <!-- ============================================================
-     هدر با Tailwind
+     هدر با Tailwind + دکمه‌های احراز هویت
      ============================================================ -->
 <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
-    <nav class="flex items-center justify-center gap-2 h-[70px] max-w-7xl mx-auto px-4">
-        <a href="#" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">صفحه اصلی</a>
-        <a href="#tools" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">ابزارها</a>
-        <!-- <a href="#news" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">اخبار ساختمان</a> -->
-        <a href="#" class="px-4 py-2.5 text-[15px] font-medium text-gray-800 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-all duration-300 no-underline">درباره ما</a>
+    <nav class="navbar-container">
+        <!-- منوی وسط -->
+        <div class="navbar-center">
+            <a href="#">صفحه اصلی</a>
+            <a href="#tools">ابزارها</a>
+            <a href="#">درباره ما</a>
+        </div>
+        
+        <!-- سمت چپ (دکمه‌های احراز هویت) -->
+        <div class="navbar-left">
+            <div class="auth-buttons" id="authButtons">
+                <!-- این بخش توسط JavaScript کنترل می‌شود -->
+            </div>
+        </div>
     </nav>
 </header>
 
@@ -52,6 +200,9 @@
     </div>
 </section>
 
+<!-- ============================================================
+     بخش ابزارها
+     ============================================================ -->
 <section id="tools" class="py-16 px-[5%] bg-white">
     <div class="text-center mb-10">
         <h2 class="text-[28px] md:text-[32px] font-bold text-gray-900">پنل ابزارهای محاسباتی</h2>
@@ -99,38 +250,16 @@
     </div>
 </section>
 
-<!-- <section id="news" class="py-16 px-[5%] bg-gray-50">
-    <div class="text-center mb-10">
-        <h2 class="text-[28px] md:text-[32px] font-bold text-gray-900">مجله اطلاع‌رسانی صدرا فارس</h2>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
-        
-        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div class="w-full h-[200px] bg-gray-200"></div>
-            <div class="p-5">
-                <span class="text-blue-600 text-xs font-bold">۱۷ خرداد ۱۴۰۵</span>
-                <h3 class="text-lg font-bold text-gray-900 mt-2.5 mb-2">تغییرات جدید در قانون نظام مهندسی ساختمان</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">بررسی ابعاد اصلاحیه جدید مجلس در خصوص مسئولیت مهندسین ناظر...</p>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div class="w-full h-[200px] bg-gray-200"></div>
-            <div class="p-5">
-                <span class="text-blue-600 text-xs font-bold">۱۵ خرداد ۱۴۰۵</span>
-                <h3 class="text-lg font-bold text-gray-900 mt-2.5 mb-2">گزارش بازار مسکن در بهار امسال</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">تحلیل روند قیمت‌ها در پروژه‌های نهضت ملی مسکن و پیش‌بینی فصل تابستان...</p>
-            </div>
-        </div>
-        
-    </div>
-</section> -->
-
+<!-- ============================================================
+     فوتر
+     ============================================================ -->
 <footer class="bg-gray-900 text-white py-10 text-center">
     <p class="text-sm opacity-80">© تمام حقوق برای صدرا فارس محفوظ است</p>
 </footer>
 
+<!-- ============================================================
+     مودال ابزارها
+     ============================================================ -->
 <div id="toolModal" class="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm z-[2000] hidden">
     <div class="bg-white rounded-2xl shadow-2xl w-[650px] max-w-[92%] overflow-hidden animate-[modalOpen_0.3s_ease]">
         <div class="flex justify-between items-center px-6 py-5 border-b border-gray-100">
@@ -141,8 +270,136 @@
     </div>
 </div>
 
+<!-- ============================================================
+     اسکریپت‌ها
+     ============================================================ -->
+<script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/tools.js?v={{ timestamp }}"></script>
 <script src="/static/js/modal.js?v={{ timestamp }}"></script>
+
+<script>
+// ============================================================
+// مدیریت احراز هویت در صفحه لندینگ
+// ============================================================
+
+const AUTH_TOKEN_KEY = 'auth_token';
+const USER_KEY = 'user';
+
+function getAuthToken() {
+    return localStorage.getItem(AUTH_TOKEN_KEY);
+}
+
+function getUser() {
+    try {
+        const userData = localStorage.getItem(USER_KEY);
+        return userData ? JSON.parse(userData) : null;
+    } catch {
+        return null;
+    }
+}
+
+function isLoggedIn() {
+    return !!getAuthToken() && !!getUser();
+}
+
+function logout() {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    updateAuthUI();
+    // اگر در صفحه داشبورد هستیم، به صفحه اصلی برویم
+    if (window.location.pathname === '/dashboard') {
+        window.location.href = '/';
+    }
+}
+
+function updateAuthUI() {
+    const container = document.getElementById('authButtons');
+    if (!container) return;
+    
+    if (isLoggedIn()) {
+        const user = getUser();
+        const userName = user?.profile?.full_name || user?.username || 'کاربر';
+        const firstChar = userName.charAt(0) || '👤';
+        
+        container.innerHTML = `
+            <div class="user-menu-container" onclick="toggleUserMenu(event)">
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <div class="user-avatar-small">${firstChar}</div>
+                    <span class="text-sm font-medium text-gray-700 hidden sm:inline">${userName}</span>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="/dashboard">📊 داشبورد</a>
+                    <a href="/map">🗺️ نقشه</a>
+                    <div class="divider"></div>
+                    <a href="#" class="logout-item" onclick="logout(); return false;">🚪 خروج</a>
+                </div>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <a href="/login" class="btn-login">🔐 ورود</a>
+        `;
+    }
+}
+
+function toggleUserMenu(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+}
+
+// بستن منو با کلیک خارج از آن
+document.addEventListener('click', function() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) {
+        dropdown.classList.remove('show');
+    }
+});
+
+// ============================================================
+// تابع openTool (برای ابزارها)
+// ============================================================
+
+// این تابع قبلاً در tools.js تعریف شده، ولی اگر نیاز به override دارید:
+window.openTool = function(tool) {
+    if (tool === 'map') {
+        window.location.href = '/map';
+        return;
+    }
+    
+    const modal = document.getElementById('toolModal');
+    const modalBody = document.getElementById('modalBody');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    if (!modal || !modalBody || !modalTitle) return;
+    
+    modal.style.display = 'flex';
+    modalTitle.innerText = tools[tool]?.title || tool;
+    modalBody.innerHTML = tools[tool]?.html || '<p>ابزار در حال توسعه...</p>';
+    
+    setTimeout(() => {
+        if (window.initToolLogic) {
+            window.initToolLogic(tool);
+        }
+    }, 50);
+};
+
+// ============================================================
+// بارگذاری اولیه
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateAuthUI();
+});
+
+// اگر کاربر وارد شده باشد و در صفحه اصلی باشد، دکمه‌ها به‌روز می‌شوند
+console.log('✅ Landing page with auth loaded');
+</script>
 
 </body>
 </html>
