@@ -37,6 +37,10 @@ services:
     working_dir: /pb_data
     environment:
       - PB_DATA_DIR=/pb_data
+      - PB_ENCRYPTION_KEY=${PB_ENCRYPTION_KEY}
+      - PB_ADMIN_EMAIL=${PB_ADMIN_EMAIL}
+      - PB_ADMIN_PASSWORD=${PB_ADMIN_PASSWORD}
+      - PB_HTTP=${PB_HTTP}
     command: serve --http=0.0.0.0:8090
 
 networks:
