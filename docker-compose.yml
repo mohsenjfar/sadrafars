@@ -23,7 +23,7 @@ services:
 
   # سرویس PocketBase (جدید)
   pocketbase:
-    image: ghcr.io/muchobien/pocketbase:latest
+    image: adrianmusante/pocketbase:latest
     container_name: pocketbase
     restart: unless-stopped
     ports:
