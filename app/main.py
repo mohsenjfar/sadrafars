@@ -8,11 +8,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.api.routes_tariff import router as tariff_router
 from app.api.routes_districts import router as districts_router
-from app.api.routes_auth import router as auth_router      # ← جدید
-
-# ============================================================
-# تنظیمات اولیه
-# ============================================================
+from app.api.routes_auth import router as auth_router
 
 app = FastAPI(
     title="SadraFars",
@@ -25,16 +21,9 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# ============================================================
-# توابع کمکی
-# ============================================================
-
 def get_timestamp():
     return int(datetime.now().timestamp())
 
-# ============================================================
-# روت‌های اصلی
-# ============================================================
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
@@ -71,10 +60,6 @@ def dashboard(request: Request):
         {"request": request, "timestamp": get_timestamp()}
     )
 
-# ============================================================
-# اضافه کردن APIها
-# ============================================================
-
 app.include_router(tariff_router)
 app.include_router(districts_router)
-app.include_router(auth_router)      # ← جدید
+app.include_router(auth_router)

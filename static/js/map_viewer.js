@@ -94,7 +94,7 @@ async function loadDistrictsList() {
             return;
         }
 
-        const response = await fetch("/api/districts");
+        const response = await fetch("/districts");
         const data = await response.json();
         districtsData = data.districts;
         
@@ -128,7 +128,7 @@ async function loadAllDistricts() {
 
         showLoading(true, "در حال بارگذاری نواحی...");
         
-        const response = await fetch("/api/districts/all");
+        const response = await fetch("/districts/all");
         const data = await response.json();
         
         if (!response.ok) {
@@ -322,7 +322,7 @@ async function fetchDistrictGeoJSON(districtId) {
 
         showLoading(true, "در حال بارگذاری قطعات...");
         
-        const response = await fetch(`/api/districts/${districtId}/load`);
+        const response = await fetch(`/districts/${districtId}/load`);
         const data = await response.json();
         
         if (!response.ok) {
@@ -502,7 +502,7 @@ async function onDistrictChange(districtId) {
     currentDistrictId = districtId;
 
     try {
-        const response = await fetch(`/api/districts/${districtId}/load`);
+        const response = await fetch(`/districts/${districtId}/load`);
         const data = await response.json();
 
         if (!response.ok) {

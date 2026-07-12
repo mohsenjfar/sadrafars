@@ -8,11 +8,6 @@ router = APIRouter(prefix="/tariff", tags=["Tariff 1405"])
 
 calc = TariffCalculator()
 
-
-# ============================================================
-# مسیرهای موجود نقشه‌برداری
-# ============================================================
-
 @router.post("/land_survey", response_model=TariffResponse)
 def calculate_land_survey(data: AreaRequest):
     return calc.calculate_land_survey(data.area_m2)
@@ -72,11 +67,6 @@ def calculate_column_vertical_control(payload: ColumnControlRequest):
         payload.columns
     )
 
-
-# ============================================================
-# مسیرهای جدید برای خدمات مهندسی ساختمان
-# ============================================================
-
 @router.post("/engineering/design", response_model=TariffResponse)
 def calculate_engineering_design(payload: EngineeringRequest):
     """محاسبه هزینه طراحی ساختمان (4 رشته اصلی + شهرسازی در صورت نیاز)"""
@@ -103,7 +93,6 @@ def calculate_all_engineering_fees(payload: EngineeringRequest):
         payload.ceilings,
         payload.include_surveying
     )
-
 
 @router.post("/engineering/delay_penalty", response_model=TariffResponse)
 def calculate_delay_penalty(payload: DelayPenaltyRequest):

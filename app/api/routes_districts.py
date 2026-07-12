@@ -4,7 +4,7 @@ from pathlib import Path
 import json
 from typing import List, Dict
 
-router = APIRouter(prefix="/api/districts", tags=["Districts"])
+router = APIRouter(prefix="/districts", tags=["Districts"])
 
 # مسیر پوشه نواحی
 DISTRICTS_DIR = Path("static/data/districts")
