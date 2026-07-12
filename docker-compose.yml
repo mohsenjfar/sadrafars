@@ -1,5 +1,4 @@
 services:
-  # سرویس اصلی صدرافارس (موجود)
   sadrafars:
     build:
       context: .
@@ -20,28 +19,22 @@ services:
       - PB_ADMIN_PASSWORD=password123
     depends_on:
       - pocketbase
-
-  # سرویس PocketBase (جدید)
   pocketbase:
     image: adrianmusante/pocketbase:latest
     container_name: pocketbase
     restart: unless-stopped
-    ports:
-      - "8090:8090"  # پورت مدیریت PocketBase
     volumes:
-      - ./pb_data:/pb_data      # داده‌های دیتابیس
-      - ./pb_public:/pb_public  # فایل‌های عمومی
-      - ./pb_hooks:/pb_hooks    # هوک‌های سفارشی (اختیاری)
+      - ./pb_data:/pb_data
+      - ./pb_public:/pb_public
+      - ./pb_hooks:/pb_hooks
     networks:
       - external-net
     working_dir: /pb_data
     environment:
-      - PB_DATA_DIR=/pb_data
-      - PB_ENCRYPTION_KEY=${PB_ENCRYPTION_KEY}
-      - PB_ADMIN_EMAIL=${PB_ADMIN_EMAIL}
-      - PB_ADMIN_PASSWORD=${PB_ADMIN_PASSWORD}
-      - PB_HTTP=${PB_HTTP}
-    command: serve --http=0.0.0.0:8090
+      - PB_ENCRYPTION_KEY=xK9mP2vL5nQ8rT3yW6zA1bC4dE7fG0hJ
+      - PB_ADMIN_EMAIL=ceo@aracom.ir
+      - PB_ADMIN_PASSWORD=Mjf10505
+      - PB_HTTP=0.0.0.0:8090
 
 networks:
   external-net:
