@@ -34,6 +34,9 @@ services:
       - ./pb_hooks:/pb_hooks    # هوک‌های سفارشی (اختیاری)
     networks:
       - external-net
+    working_dir: /pb_data
+    environment:
+      - PB_DATA_DIR=/pb_data
     command: serve --http=0.0.0.0:8090
 
 networks:

@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: sadrafars
+    runs-on: changed
 
     steps:
       - name: Checkout repository
