@@ -36,9 +36,11 @@ class TariffResponse(BaseModel):
 
 
 class DelayPenaltyRequest(BaseModel):
-    area_m2: float = Field(..., gt=0)
-    ceilings: int = Field(..., gt=0)
-    license_date: str = Field(..., description="تاریخ صدور پروانه به شمسی (فرمت: YYYY/MM/DD)")
+    area_m2: float = Field(..., gt=0, description="مساحت زیربنا")
+    ceilings: int = Field(..., gt=0, description="تعداد سقف")
+    start_date: str = Field(..., description="تاریخ شروع (صدور پروانه یا پایان تمدید قبلی) - فرمت: YYYY/MM/DD")
+    end_date: str = Field(..., description="تاریخ پایان مورد نظر برای محاسبه تمدید - فرمت: YYYY/MM/DD")
+    is_renewal: bool = Field(False, description="آیا تمدید مجدد است؟ (اگر True باشد، کسر ۱۸ یا ۲۴ ماه انجام نمی‌شود)")
 
 class StakingPlusUtmRequest(BaseModel):
     num_points: int = Field(..., gt=0, description="تعداد نقاط میخکوبی")

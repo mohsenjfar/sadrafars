@@ -96,11 +96,22 @@ def calculate_all_engineering_fees(payload: EngineeringRequest):
 
 @router.post("/engineering/delay_penalty", response_model=TariffResponse)
 def calculate_delay_penalty(payload: DelayPenaltyRequest):
-    """محاسبه هزینه تمدید نظارت (ماهانه بر اساس تاریخ پروانه)"""
+    """
+    محاسبه هزینه تمدید نظارت
+    
+    پارامترها:
+    - area_m2: مساحت زیربنا
+    - ceilings: تعداد سقف
+    - start_date: تاریخ شروع (صدور پروانه یا اتمام آخرین تمدید)
+    - end_date: تاریخ پایان مورد نظر
+    - is_renewal: آیا تمدید مجدد است؟ (اگر True باشد، کسر ۱۸/۲۴ ماه اعمال نمی‌شود)
+    """
     return calc.calculate_delay_penalty(
-        payload.area_m2,
-        payload.ceilings,
-        payload.license_date
+        area_m2=payload.area_m2,
+        ceilings=payload.ceilings,
+        start_date=payload.start_date,
+        end_date=payload.end_date,
+        is_renewal=payload.is_renewal
     )
 
 @router.post("/staking_plus_utm", response_model=TariffResponse)

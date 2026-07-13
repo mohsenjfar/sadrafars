@@ -727,14 +727,19 @@ class TariffCalculator:
     # محاسبه تمدید نظارت
     # ============================================================
 
-    def calculate_delay_penalty(self, area_m2: float, ceilings: int, license_date: str) -> TariffResponse:
+    def calculate_delay_penalty(self, area_m2: float, ceilings: int, 
+                                start_date: str, end_date: str,
+                                is_renewal: bool = False) -> TariffResponse:
         """
-        محاسبه هزینه تمدید نظارت (ماهانه) با تفکیک رشته‌ها
-        فرمول: هزینه تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد نظارت پایه ÷ 18)
+        محاسبه هزینه تمدید نظارت
         
-        اضافه شده:
-        - تفکیک سهم هر رشته بر اساس جدول ضرایب
-        - محاسبه خودکار تاریخ پایان (شروع + ۱۸ ماه)
+        منطق:
+        - اگر is_renewal = False: تاریخ شروع = تاریخ صدور پروانه
+        - گروه A, B, C: 18 ماه پایه کسر می‌شود
+        - گروه D: 24 ماه پایه کسر می‌شود
+        
+        - اگر is_renewal = True: تاریخ شروع = تاریخ اتمام آخرین تمدید
+        - هیچ کسری اعمال نمی‌شود
         """
         
         # تعیین گروه نهایی
@@ -742,7 +747,16 @@ class TariffCalculator:
         final_group_key, upgraded, original_key = self._apply_area_upgrade(base_group_key, area_m2)
         group_name = self._get_group_name(final_group_key)
         
-        # محاسبه هزینه نظارت پایه (برای ۱۸ ماه)
+        # تعیین مدت پایه قرارداد (فقط در صورت تمدید اولیه)
+        if not is_renewal:
+            if final_group_key in ["A", "B", "C"]:
+                base_months = 18
+            else:  # گروه D
+                base_months = 24
+        else:
+            base_months = 0  # در تمدید مجدد هیچ کسری نداریم
+        
+        # محاسبه هزینه نظارت پایه
         base_supervision = self.calculate_supervision(area_m2, ceilings)
         base_contract_amount = base_supervision.total_amount
         
@@ -754,15 +768,20 @@ class TariffCalculator:
         for discipline, coeff in coefficients.items():
             discipline_base_costs[discipline] = int(base_contract_amount * coeff)
         
-        # تبدیل تاریخ شمسی به میلادی
-        try:
-            parts = license_date.split('/')
+        # ============================================================
+        # تبدیل تاریخ‌ها
+        # ============================================================
+        def jalali_to_gregorian(date_str: str) -> datetime:
+            parts = date_str.split('/')
             if len(parts) != 3:
                 raise ValueError("فرمت تاریخ باید YYYY/MM/DD باشد")
-            
             year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
             gregorian = jdatetime.date(year, month, day).togregorian()
-            license_datetime = datetime(gregorian.year, gregorian.month, gregorian.day)
+            return datetime(gregorian.year, gregorian.month, gregorian.day)
+        
+        try:
+            start_datetime = jalali_to_gregorian(start_date)
+            end_datetime = jalali_to_gregorian(end_date)
             
         except Exception as e:
             return TariffResponse(
@@ -775,19 +794,25 @@ class TariffCalculator:
                 }
             )
         
-        # محاسبه تاریخ پایان (۱۸ ماه بعد)
-        end_datetime = license_datetime + timedelta(days=18*30)
-        end_jalali = jdatetime.date.fromgregorian(date=end_datetime.date())
-        end_date_str = f"{end_jalali.year}/{end_jalali.month:02d}/{end_jalali.day:02d}"
+        # ============================================================
+        # محاسبه ماه‌های تمدید
+        # ============================================================
+        # محاسبه کل ماه‌های گذشته از تاریخ شروع تا تاریخ پایان
+        total_months = (end_datetime.year - start_datetime.year) * 12 + (end_datetime.month - start_datetime.month)
         
-        # محاسبه ماه‌های گذشته و تمدید
-        today = datetime.now()
-        months_passed = (today.year - license_datetime.year) * 12 + (today.month - license_datetime.month)
-        excess_months = max(0, months_passed - 18)
+        # محاسبه ماه‌های تمدید شده
+        # اگر تمدید اولیه باشد: ماه‌های تمدید = کل ماه‌های گذشته - مدت پایه
+        # اگر تمدید مجدد باشد: ماه‌های تمدید = کل ماه‌های گذشته (بدون کسر)
+        if not is_renewal:
+            penalty_months = max(0, total_months - base_months)
+        else:
+            penalty_months = max(0, total_months)
         
+        # ============================================================
         # محاسبه نرخ ماهانه تمدید
+        # ============================================================
         monthly_rate = (0.6 * base_contract_amount) / 18
-        penalty_amount = int(excess_months * monthly_rate)
+        penalty_amount = int(penalty_months * monthly_rate)
         
         # محاسبه تفکیک هزینه تمدید هر رشته
         discipline_penalty_costs = {}
@@ -799,7 +824,9 @@ class TariffCalculator:
         today_jalali = jdatetime.date.today()
         today_str = f"{today_jalali.year}/{today_jalali.month:02d}/{today_jalali.day:02d}"
         
+        # ============================================================
         # ساخت خروجی
+        # ============================================================
         return TariffResponse(
             base_amount=penalty_amount,
             vat=0,
@@ -810,23 +837,24 @@ class TariffCalculator:
                 "ارتقا یافته": upgraded,
                 "تعداد سقف": ceilings,
                 "متراژ": area_m2,
+                "نوع تمدید": "تمدید مجدد" if is_renewal else "تمدید اولیه",
                 
                 "📅 تاریخ‌ها": {
-                    "تاریخ صدور پروانه (شمسی)": license_date,
-                    "تاریخ پایان (۱۸ ماه بعد)": end_date_str,
+                    "تاریخ شروع (شمسی)": start_date,
+                    "تاریخ پایان مورد نظر (شمسی)": end_date,
                     "تاریخ امروز (شمسی)": today_str,
                 },
                 
                 "📊 محاسبه پایه": {
-                    "مدت قرارداد پایه (ماه)": 18,
+                    "مدت قرارداد پایه (ماه)": base_months if not is_renewal else "بدون کسر (تمدید مجدد)",
                     "مبلغ کل قرارداد نظارت پایه": base_contract_amount,
                     "نرخ ماهانه تمدید": int(monthly_rate),
                     "فرمول": "تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد ÷ 18)",
                 },
                 
                 "⏰ وضعیت تمدید": {
-                    "ماه‌های گذشته از صدور پروانه": months_passed,
-                    "ماه‌های تمدید شده": excess_months,
+                    "کل ماه‌های گذشته از تاریخ شروع": total_months,
+                    "ماه‌های تمدید شده": penalty_months,
                 },
                 
                 "📋 تفکیک هزینه تمدید به تفکیک رشته": {

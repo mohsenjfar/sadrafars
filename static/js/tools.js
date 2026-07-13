@@ -290,20 +290,20 @@ const tools = {
             <div id="engineeringResult" class="mt-5"></div>
         `,
   },
-  delay_penalty: {
-    title: "محاسبه هزینه تمدید نظارت",
-    type: "delay_penalty",
-    html: `
+    delay_penalty: {
+        title: "محاسبه هزینه تمدید نظارت",
+        type: "delay_penalty",
+        html: `
             <form id="delayPenaltyForm" class="tool-form space-y-5">
                 <div class="info-box bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200/60 rounded-2xl p-5 text-sm text-gray-700 shadow-sm">
                     <ul class="list-disc pr-5 space-y-1.5 leading-relaxed">
-                        <li>قرارداد نظارت پایه برای <strong class="text-teal-700">۱۸ ماه</strong> می‌باشد</li>
-                        <li>پس از اتمام ۱۸ ماه، هر ماه تمدید محاسبه می‌شود</li>
+                        <li>قرارداد نظارت پایه برای گروه‌های <strong class="text-teal-700">الف، ب و ج</strong> به مدت <strong>۱۸ ماه</strong> و گروه <strong class="text-teal-700">د</strong> به مدت <strong>۲۴ ماه</strong> می‌باشد</li>
                         <li><strong class="text-teal-700">فرمول:</strong> هزینه تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد ÷ 18)</li>
-                        <li><strong class="text-amber-600">🔹 هزینه هر رشته به تفکیک محاسبه می‌شود</strong></li>
-                        <li><strong class="text-amber-600">🔹 تاریخ پایان (۱۸ ماه بعد) به صورت خودکار محاسبه می‌شود</strong></li>
+                        <li><strong class="text-amber-600">🔹 در صورت تمدید مجدد، کلید را فعال کنید تا کسر ۱۸/۲۴ ماه انجام نشود</strong></li>
+                        <li><strong class="text-amber-600">🔹 تاریخ پایان مورد نظر را می‌توانید تغییر دهید</strong></li>
                     </ul>
                 </div>
+                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="form-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
@@ -322,21 +322,54 @@ const tools = {
                             class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-teal-400 focus:ring-2 focus:ring-teal-200/50 outline-none transition-all duration-200 shadow-sm hover:shadow-md bg-white/95 text-gray-800 placeholder:text-gray-400">
                     </div>
                 </div>
+                
+                <!-- ============================================ -->
+                <!-- کلید دکمه‌ای (Toggle Switch) برای حالت تمدید -->
+                <!-- ============================================ -->
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border-2 border-gray-200">
+                    <div>
+                        <span class="text-sm font-medium text-gray-700">نوع تمدید:</span>
+                        <span class="text-sm text-gray-500 mr-2" id="delay_toggle_label">تمدید اولیه</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="delay_renewal_toggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                        <span class="ms-3 text-sm font-medium text-gray-700" id="delay_toggle_status">تمدید مجدد</span>
+                    </label>
+                </div>
+                
+                <!-- ============================================ -->
+                <!-- فیلد تاریخ شروع (با برچسب داینامیک) -->
+                <!-- ============================================ -->
                 <div class="form-group">
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5" id="delay_start_date_label">
                         تاریخ صدور پروانه (شمسی)
                         <span class="text-teal-500 text-xs font-normal mr-1">*</span>
                     </label>
-                    <input type="text" id="delay_license_date" placeholder="مثال: 1403/01/15" 
+                    <input type="text" id="delay_start_date" placeholder="مثال: 1403/01/15" 
                         class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-teal-400 focus:ring-2 focus:ring-teal-200/50 outline-none transition-all duration-200 shadow-sm hover:shadow-md bg-white/95 text-gray-800 placeholder:text-gray-400 font-mono" dir="ltr">
+                    <small id="delay_start_date_help" class="text-gray-500 text-xs block mt-1">
+                        تاریخ صدور پروانه ساختمانی (مبدا شروع قرارداد)
+                    </small>
                 </div>
+                
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                        تاریخ پایان مورد نظر (شمسی)
+                        <span class="text-teal-500 text-xs font-normal mr-1">*</span>
+                    </label>
+                    <input type="text" id="delay_end_date" placeholder="مثال: 1404/07/15" 
+                        class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-teal-400 focus:ring-2 focus:ring-teal-200/50 outline-none transition-all duration-200 shadow-sm hover:shadow-md bg-white/95 text-gray-800 placeholder:text-gray-400 font-mono" dir="ltr">
+                    <small class="text-gray-500 text-xs block mt-1">پیش‌فرض: امروز (قابل تغییر)</small>
+                </div>
+                
                 <button type="submit" class="w-full bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] text-base tracking-wide">
                     🚀 محاسبه
                 </button>
             </form>
             <div id="delayPenaltyResult" class="mt-5"></div>
         `,
-  },
+    },
   map: {
     title: "مشاهده قطعه و ناحیه",
     type: "map",
@@ -788,56 +821,126 @@ function initToolLogic(tool) {
     // ============================================================
     // ابزار تمدید نظارت (delay_penalty)
     // ============================================================
-    if (tool === "delay_penalty") {
-        const form = document.getElementById("delayPenaltyForm");
-        const result = document.getElementById("delayPenaltyResult");
-        
-        if (!form || !result) return;
-        
-        form.addEventListener("submit", async function(e) {
-            e.preventDefault();
-            
-            const area_m2 = Number(document.getElementById("delay_area_m2")?.value || 0);
-            const ceilings = Number(document.getElementById("delay_ceilings")?.value || 0);
-            const license_date = document.getElementById("delay_license_date")?.value || "";
-            
-            if (area_m2 <= 0) {
-                displayError(result, "لطفاً متراژ را وارد کنید");
-                return;
-            }
-            if (ceilings <= 0) {
-                displayError(result, "لطفاً تعداد سقف را وارد کنید");
-                return;
-            }
-            if (!license_date) {
-                displayError(result, "لطفاً تاریخ صدور پروانه را وارد کنید");
-                return;
-            }
-            
-            // اعتبارسنجی ساده تاریخ
-            if (!/^\d{4}\/\d{2}\/\d{2}$/.test(license_date)) {
-                displayError(result, "فرمت تاریخ نامعتبر است. فرمت صحیح: 1403/01/15");
-                return;
-            }
-            
-            result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>";
-            
-            try {
-                const response = await fetch("/tariff/engineering/delay_penalty", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ area_m2, ceilings, license_date })
-                });
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                displayResult(result, data);
-            } catch (err) {
-                console.error(err);
-                displayError(result, "خطا در محاسبه. لطفاً دوباره تلاش کنید.");
+    // ============================================================
+// ابزار تمدید نظارت (delay_penalty)
+// ============================================================
+if (tool === "delay_penalty") {
+    const form = document.getElementById("delayPenaltyForm");
+    const result = document.getElementById("delayPenaltyResult");
+    
+    if (!form || !result) return;
+    
+    // تنظیم تاریخ امروز به عنوان پیش‌فرض
+    const today = new Date();
+    const todayJalali = jalaliDate(today);
+    const endDateInput = document.getElementById("delay_end_date");
+    if (endDateInput) {
+        endDateInput.value = todayJalali;
+    }
+    
+    // ============================================================
+    // کلید دکمه‌ای (Toggle) برای تغییر حالت تمدید
+    // ============================================================
+    const renewalToggle = document.getElementById("delay_renewal_toggle");
+    const startDateLabel = document.getElementById("delay_start_date_label");
+    const startDateInput = document.getElementById("delay_start_date");
+    const startDateHelp = document.getElementById("delay_start_date_help");
+    
+    if (renewalToggle) {
+        renewalToggle.addEventListener("change", function() {
+            if (this.checked) {
+                // ✅ حالت تمدید مجدد
+                startDateLabel.textContent = "تاریخ اتمام آخرین تمدید قرارداد (شمسی)";
+                startDateInput.placeholder = "مثال: 1404/07/15";
+                startDateHelp.textContent = "تاریخی که آخرین تمدید قرارداد به پایان رسیده است";
+                startDateHelp.className = "text-gray-500 text-xs block mt-1";
+            } else {
+                // ✅ حالت تمدید اولیه
+                startDateLabel.textContent = "تاریخ صدور پروانه (شمسی)";
+                startDateInput.placeholder = "مثال: 1403/01/15";
+                startDateHelp.textContent = "تاریخ صدور پروانه ساختمانی (مبدا شروع قرارداد)";
+                startDateHelp.className = "text-gray-500 text-xs block mt-1";
             }
         });
     }
+    
+    // ============================================================
+    // ارسال فرم
+    // ============================================================
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        
+        const area_m2 = Number(document.getElementById("delay_area_m2")?.value || 0);
+        const ceilings = Number(document.getElementById("delay_ceilings")?.value || 0);
+        const start_date = document.getElementById("delay_start_date")?.value || "";
+        const end_date = document.getElementById("delay_end_date")?.value || "";
+        const is_renewal = document.getElementById("delay_renewal_toggle")?.checked || false;
+        
+        // اعتبارسنجی
+        if (area_m2 <= 0) {
+            displayError(result, "لطفاً متراژ را وارد کنید");
+            return;
+        }
+        if (ceilings <= 0) {
+            displayError(result, "لطفاً تعداد سقف را وارد کنید");
+            return;
+        }
+        if (!start_date) {
+            displayError(result, "لطفاً تاریخ شروع را وارد کنید");
+            return;
+        }
+        if (!end_date) {
+            displayError(result, "لطفاً تاریخ پایان را وارد کنید");
+            return;
+        }
+        
+        // اعتبارسنجی ساده تاریخ
+        const dateRegex = /^\d{4}\/\d{2}\/\d{2}$/;
+        if (!dateRegex.test(start_date)) {
+            displayError(result, "فرمت تاریخ شروع نامعتبر است. فرمت صحیح: 1403/01/15");
+            return;
+        }
+        if (!dateRegex.test(end_date)) {
+            displayError(result, "فرمت تاریخ پایان نامعتبر است. فرمت صحیح: 1403/01/15");
+            return;
+        }
+        
+        result.innerHTML = "<div style='text-align: center; padding: 20px;'>در حال محاسبه... ⏳</div>";
+        
+        try {
+            const payload = { 
+                area_m2, 
+                ceilings, 
+                start_date, 
+                end_date,
+                is_renewal
+            };
+            
+            const response = await fetch("/tariff/engineering/delay_penalty", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            displayResult(result, data);
+        } catch (err) {
+            console.error(err);
+            displayError(result, "خطا در محاسبه. لطفاً دوباره تلاش کنید.");
+        }
+    });
+}
+
+// تابع تبدیل تاریخ میلادی به شمسی (نمونه - در پروژه از کتابخانه استفاده کنید)
+function jalaliDate(date) {
+    // اینجا باید از کتابخانه jdatetime استفاده کنید
+    // به صورت نمونه:
+    const year = date.getFullYear() - 621;
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+}
     
     // ============================================================
     // ابزار نقشه (map)
