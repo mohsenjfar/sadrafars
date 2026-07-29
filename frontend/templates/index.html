@@ -1,0 +1,26 @@
+<!-- file_path: frontend/templates/index.html -->
+
+{% extends "layouts/base.html" %}
+
+{% block title %}صدرافارس | پورتال تخصصی مهندسی و ساختمان{% endblock %}
+
+{% block content %}
+<section class="flex flex-col md:flex-row items-center justify-between gap-16 px-[5%] pt-24 pb-28 bg-gradient-to-br from-blue-50 via-white to-teal-50/30 min-h-[88vh]">
+    <div class="flex-1 text-center md:text-right max-w-2xl">
+        <h1 class="font-bold text-blue-600 leading-[1.2] mb-8 text-[clamp(2.5rem,2.5vw,2.5rem)]">
+            پورتال جامع<br>
+            خدمات مهندسی شهر صدرا
+        </h1>
+        <p class="text-lg md:text-xl text-gray-500 mb-10 max-w-xl mx-auto md:mx-0 leading-relaxed">
+            دسترسی سریع به محاسبات تعرفه ۱۴۰۵، نقشه‌های ثبتی و آخرین اخبار شهر صدرا در یک قاب.
+        </p>
+    </div>
+    <div class="flex-1 text-center">
+        <img src="/static/images/bg.png" alt="Banner" class="w-[90%] max-w-[550px] rounded-3xl shadow-2xl mx-auto hover:scale-[1.02] transition-all duration-500">
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/pages/index.js?v={{ timestamp }}"></script>
+{% endblock %}

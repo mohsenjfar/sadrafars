@@ -1,0 +1,54 @@
+<!-- file_path: frontend/templates/map_viewer.html -->
+
+{% extends "layouts/base.html" %}
+
+{% block title %}نقشه قطعات - صدرافارس{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<header class="map-header">
+    <nav class="flex flex-col sm:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-2 sm:py-0 sm:h-[70px] gap-2 sm:gap-4">
+        
+        <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto order-1">
+            <!-- جستجوی ناحیه -->
+            <div class="relative w-full sm:w-56" id="districtDropdown">
+                <input type="text" id="districtInput" class="map-search-input" placeholder="جستجوی ناحیه..." autocomplete="off">
+                <button type="button" class="map-search-clear" id="districtClearBtn" title="پاک کردن">✕</button>
+                <span class="map-search-icon">▼</span>
+                <div class="map-dropdown-list" id="districtList"></div>
+            </div>
+            
+            <!-- جستجوی قطعه -->
+            <div id="pieceSelectContainer" class="relative w-full sm:w-56 hidden">
+                <input type="text" id="pieceInput" class="map-search-input" placeholder="جستجوی قطعه..." autocomplete="off">
+                <button type="button" class="map-search-clear" id="pieceClearBtn" title="پاک کردن">✕</button>
+                <span class="map-search-icon">▼</span>
+                <div class="map-dropdown-list" id="pieceList"></div>
+            </div>
+        </div>
+        
+        <a href="/" class="map-back-btn order-2">
+            <span>←</span> بازگشت
+        </a>
+        
+    </nav>
+</header>
+
+<div id="map" class="fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-slate-100"></div>
+
+<div id="loading" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white py-3 px-6 rounded-xl z-[2000] text-sm font-vazir hidden items-center gap-3 shadow-lg">
+    <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <span>⏳ در حال بارگذاری...</span>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/leaflet.js"></script>
+<script src="/static/js/pages/map_viewer.js?v={{ timestamp }}"></script>
+{% endblock %}

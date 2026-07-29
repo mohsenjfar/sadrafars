@@ -1,0 +1,42 @@
+<!-- file_path: frontend/templates/tools/engineering.html -->
+
+{% extends "layouts/base.html" %}
+
+{% block title %}محاسبه طراحی و نظارت | صدرافارس{% endblock %}
+
+{% block content %}
+<div class="container-tool-narrow">
+    <div class="text-center mb-5">
+        <h1 class="text-2xl font-bold text-gray-900">🏗️ طراحی و نظارت</h1>
+        <p class="text-gray-500 text-sm">بر اساس گروه ساختمانی</p>
+    </div>
+    
+    <div id="engineeringApp">
+        <form id="engineeringForm" class="space-y-4">
+            <div class="service-selector grid grid-cols-3 gap-1.5" id="engineeringServiceSelector">
+                <div class="service-card active" data-service="design">
+                    <div class="label">طراحی</div>
+                    <span class="badge">۲ فیلد</span>
+                </div>
+                <div class="service-card" data-service="supervision">
+                    <div class="label">نظارت</div>
+                    <span class="badge">۲ فیلد</span>
+                </div>
+                <div class="service-card" data-service="all">
+                    <div class="label">مجموع</div>
+                    <span class="badge">۲ فیلد</span>
+                </div>
+            </div>
+            
+            <div id="engineeringFields" class="space-y-3"></div>
+            
+            <button type="submit" class="btn-calculate">🚀 محاسبه</button>
+        </form>
+        <div id="engineeringResult" class="mt-4"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/pages/engineering.js?v={{ timestamp }}"></script>
+{% endblock %}

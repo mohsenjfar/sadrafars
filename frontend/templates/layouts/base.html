@@ -1,0 +1,134 @@
+<!-- file_path: frontend/templates/layouts/base.html -->
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}صدرافارس | پورتال تخصصی مهندسی و ساختمان{% endblock %}</title>
+    
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"/>
+    <link rel="stylesheet" href="/static/css/tailwind.css?v={{ timestamp }}">
+    
+    <script src="/static/js/jquery.min.js"></script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ============================================================
+     هدر مشترک
+     ============================================================ -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+    <nav class="navbar-container">
+        <div class="navbar-links">
+            <a href="/" {% if request.path == '/' %}class="active"{% endif %}>🏠 صفحه اصلی</a>
+            <a href="/tools/tariff" {% if request.path == '/tools/tariff' %}class="active"{% endif %}>📐 تعرفه نقشه‌برداری</a>
+            <a href="/tools/engineering" {% if request.path == '/tools/engineering' %}class="active"{% endif %}>🏗️ طراحی و نظارت</a>
+            <a href="/tools/delay_penalty" {% if request.path == '/tools/delay_penalty' %}class="active"{% endif %}>⏰ تمدید نظارت</a>
+            <a href="/tools/map" {% if request.path == '/tools/map' %}class="active"{% endif %}>🗺️ نقشه قطعات</a>
+        </div>
+        
+        <div class="navbar-left">
+            <div class="auth-buttons flex items-center gap-2" id="authButtons"></div>
+            <button class="hamburger" id="hamburgerBtn" aria-label="منو">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/" {% if request.path == '/' %}class="active"{% endif %}>🏠 صفحه اصلی</a>
+        <a href="/tools/tariff" {% if request.path == '/tools/tariff' %}class="active"{% endif %}>📐 تعرفه نقشه‌برداری</a>
+        <a href="/tools/engineering" {% if request.path == '/tools/engineering' %}class="active"{% endif %}>🏗️ طراحی و نظارت</a>
+        <a href="/tools/delay_penalty" {% if request.path == '/tools/delay_penalty' %}class="active"{% endif %}>⏰ تمدید نظارت</a>
+        <a href="/tools/map" {% if request.path == '/tools/map' %}class="active"{% endif %}>🗺️ نقشه قطعات</a>
+    </div>
+</header>
+
+<main style="padding-top: 70px">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ============================================================
+     فوتر مشترک
+     ============================================================ -->
+<footer class="bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-10">
+        <div class="flex flex-wrap gap-8 md:gap-12">
+            
+            <div class="flex-1 min-w-[200px]">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    🏗️ صدرا<span class="text-teal-400">فارس</span>
+                </h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    سامانه جامع مهندسی ساختمان صدرافارس با هدف ارائه خدمات تخصصی و دقیق به مهندسان، 
+                    نقشه‌برداران و فعالان حوزه ساخت‌وساز در شهر صدرا راه‌اندازی شده است.
+                </p>
+                <p class="text-gray-400 text-sm leading-relaxed mt-3">
+                    محاسبات تعرفه‌ها بر اساس آخرین بخشنامه‌های رسمی و به‌روز انجام می‌شود.
+                </p>
+            </div>
+            
+            <div class="flex-1 min-w-[150px]">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🔗 لینک‌های سریع</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/" class="text-gray-400 hover:text-teal-400 transition-colors">← صفحه اصلی</a></li>
+                    <li><a href="/tools/tariff" class="text-gray-400 hover:text-teal-400 transition-colors">← تعرفه نقشه‌برداری</a></li>
+                    <li><a href="/tools/engineering" class="text-gray-400 hover:text-teal-400 transition-colors">← طراحی و نظارت</a></li>
+                    <li><a href="/tools/delay_penalty" class="text-gray-400 hover:text-teal-400 transition-colors">← تمدید نظارت</a></li>
+                    <li><a href="/tools/map" class="text-gray-400 hover:text-teal-400 transition-colors">← نقشه قطعات</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex-1 min-w-[180px]">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">📞 ارتباط با ما</h3>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    <li class="flex items-center gap-3"><span class="text-teal-400">📱</span> ۰۹۱۷۵۴۹۱۹۷۰</li>
+                    <li class="flex items-center gap-3"><span class="text-teal-400">✉️</span> info@sadrafars.ir</li>
+                    <li class="flex items-center gap-3"><span class="text-teal-400">📍</span> شهر صدرا، استان فارس</li>
+                </ul>
+            </div>
+            
+        </div>
+        
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+            <p class="text-gray-500 text-sm">© ۱۴۰۵ - تمام حقوق مادی و معنوی این سامانه برای <span class="text-teal-400">صدرا فارس</span> محفوظ است</p>
+            <p class="text-gray-600 text-xs mt-1">سامانه جامع مهندسی ساختمان شهر صدرا</p>
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+     اسکریپت‌های اصلی (همیشه لود می‌شوند)
+     ============================================================ -->
+<script src="/static/js/utils/auth.js?v={{ timestamp }}"></script>
+<script src="/static/js/utils/helpers.js?v={{ timestamp }}"></script>
+
+<script>
+// مدیریت همبرگر
+document.getElementById('hamburgerBtn')?.addEventListener('click', function() {
+    document.getElementById('mobileMenu')?.classList.toggle('open');
+});
+
+document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', function() {
+        document.getElementById('mobileMenu')?.classList.remove('open');
+    });
+});
+
+// ============================================================
+// مدیریت احراز هویت (با استفاده از utils/auth.js)
+// ============================================================
+// توابع از auth.js لود می‌شوند
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof updateAuthUI === 'function') {
+        updateAuthUI();
+    }
+    console.log('✅ Base layout loaded');
+});
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!-- file_path: frontend/templates/tools/tariff.html -->
+
+{% extends "layouts/base.html" %}
+
+{% block title %}محاسبه تعرفه نقشه‌برداری | صدرافارس{% endblock %}
+
+{% block content %}
+<div class="container-tool">
+    <div class="text-center mb-5">
+        <h1 class="text-2xl font-bold text-gray-900">📐 محاسبه تعرفه نقشه‌برداری</h1>
+        <p class="text-gray-500 text-sm">بر اساس تعرفه سال ۱۴۰۵</p>
+    </div>
+    
+    <div id="tariffApp">
+        <form id="tariffForm" class="space-y-4">
+            <!-- سرویس‌ها -->
+            <div class="service-selector grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="tariffServiceSelector">
+                <div class="service-card active" data-service="single_line_receivable">
+                    <div class="label">تک خطی قابل دریافت</div>
+                    <span class="badge">۱ فیلد</span>
+                </div>
+                <div class="service-card" data-service="subdivision_with_history">
+                    <div class="label">تفکیکی دارای سابقه</div>
+                    <span class="badge">۱ فیلد</span>
+                </div>
+                <div class="service-card" data-service="subdivision_without_history">
+                    <div class="label">تفکیکی فاقد سابقه</div>
+                    <span class="badge">۱ فیلد</span>
+                </div>
+                <div class="service-card" data-service="staking">
+                    <div class="label">میخکوبی</div>
+                    <span class="badge">۱ فیلد</span>
+                </div>
+                <div class="service-card" data-service="topography">
+                    <div class="label">توپوگرافی</div>
+                    <span class="badge">۱ فیلد</span>
+                </div>
+                <div class="service-card" data-service="land_survey">
+                    <div class="label">مساحی عرصه</div>
+                    <span class="badge">۱ فیلد</span>
+                </div>
+                <div class="service-card" data-service="utm">
+                    <div class="label">جانمایی</div>
+                    <span class="badge">۱ فیلد</span>
+                </div>
+                <div class="service-card" data-service="staking_plus_utm">
+                    <div class="label">میخکوبی + جانمایی</div>
+                    <span class="badge">۲ فیلد</span>
+                </div>
+                <div class="service-card" data-service="staking_plus_topography">
+                    <div class="label">میخکوبی + توپوگرافی</div>
+                    <span class="badge">۲ فیلد</span>
+                </div>
+                <div class="service-card" data-service="single_line_plus_land_survey">
+                    <div class="label">تک خطی + مساحی</div>
+                    <span class="badge">۲ فیلد</span>
+                </div>
+            </div>
+            
+            <div id="tariffFields" class="space-y-3"></div>
+            
+            <button type="submit" class="btn-calculate">🚀 محاسبه</button>
+        </form>
+        <div id="tariffResult" class="mt-4"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/pages/tariff.js?v={{ timestamp }}"></script>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!-- file_path: frontend/templates/auth/login.html -->
+
+{% extends "layouts/base.html" %}
+
+{% block title %}ورود به حساب کاربری{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-auth p-5">
+    <div class="auth-card">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-2">🔐 ورود</h1>
+        <p class="text-center text-gray-500 text-sm mb-8">به سامانه جامع مهندسی ساختمان صدرافارس خوش آمدید</p>
+        
+        <div id="errorMessage" class="bg-red-100 text-red-700 p-3 rounded-xl text-sm mb-5 hidden"></div>
+        
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">ایمیل</label>
+                <input type="email" id="email" placeholder="example@email.com" required
+                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-400 focus:ring-4 focus:ring-teal-100 outline-none transition-all bg-gray-50 focus:bg-white">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">رمز عبور</label>
+                <input type="password" id="password" placeholder="••••••••" required
+                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-400 focus:ring-4 focus:ring-teal-100 outline-none transition-all bg-gray-50 focus:bg-white">
+            </div>
+            <button type="submit" class="btn-primary">🚀 ورود به حساب</button>
+        </form>
+        
+        <div class="text-center mt-5 text-sm text-gray-500">
+            حساب کاربری ندارید؟ <a href="/register" class="text-teal-600 font-semibold hover:underline">ثبت‌نام کنید</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/pages/login.js?v={{ timestamp }}"></script>
+{% endblock %}

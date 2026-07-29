@@ -1,0 +1,76 @@
+<!-- file_path: frontend/templates/tools/delay_penalty.html -->
+
+{% extends "layouts/base.html" %}
+
+{% block title %}محاسبه هزینه تمدید نظارت | صدرافارس{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/lib/persian-datepicker/persian-datepicker.min.css">
+<script src="/static/lib/persian-date/persian-date.min.js"></script>
+<script src="/static/lib/persian-datepicker/persian-datepicker.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-tool-narrow">
+    <div class="text-center mb-5">
+        <h1 class="text-2xl font-bold text-gray-900">⏰ تمدید نظارت</h1>
+        <p class="text-gray-500 text-sm">محاسبه هزینه تمدید بر اساس تاریخ</p>
+    </div>
+    
+    <div id="delayPenaltyApp">
+        <form id="delayPenaltyForm" class="space-y-4">
+            <div class="info-box">
+                <ul>
+                    <li>قرارداد نظارت پایه: <strong>۱۸ ماه</strong> (گروه‌های الف، ب، ج) و <strong>۲۴ ماه</strong> (گروه د)</li>
+                    <li>فرمول: هزینه تمدید = ماه‌های تمدید × (0.6 × مبلغ قرارداد ÷ 18)</li>
+                    <li>برای تمدید مجدد، کلید را فعال کنید</li>
+                </ul>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>متراژ (متر مربع) <span class="text-teal-500">*</span></label>
+                    <input type="number" id="delay_area_m2" placeholder="مثال: 750" min="1">
+                </div>
+                <div class="form-group">
+                    <label>تعداد سقف <span class="text-teal-500">*</span></label>
+                    <input type="number" id="delay_ceilings" placeholder="مثال: 4" min="1">
+                </div>
+            </div>
+            
+            <div class="toggle-container">
+                <div>
+                    <span class="label">نوع تمدید</span>
+                    <span class="status mr-2" id="delay_toggle_label">اولیه</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="status" id="delay_toggle_status">غیرفعال</span>
+                    <label class="switch">
+                        <input type="checkbox" id="delay_renewal_toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label id="delay_start_date_label">تاریخ صدور پروانه <span class="text-teal-500">*</span></label>
+                <input type="text" id="delay_start_date" placeholder="انتخاب تاریخ..." class="datepicker">
+                <small id="delay_start_date_help">تاریخ صدور پروانه ساختمانی</small>
+            </div>
+            
+            <div class="form-group">
+                <label>تاریخ پایان مورد نظر <span class="text-teal-500">*</span></label>
+                <input type="text" id="delay_end_date" placeholder="انتخاب تاریخ..." class="datepicker">
+                <small>پیش‌فرض: امروز (قابل تغییر)</small>
+            </div>
+            
+            <button type="submit" class="btn-calculate">🚀 محاسبه</button>
+        </form>
+        <div id="delayPenaltyResult" class="mt-4"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/pages/delay_penalty.js?v={{ timestamp }}"></script>
+{% endblock %}
