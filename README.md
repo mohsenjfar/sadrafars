@@ -10,12 +10,12 @@ Iran's construction-engineering tariff schedule is genuinely complex: rates chan
 
 ## The solution
 
-A FastAPI + server-rendered (Jinja) web app that encodes the full official tariff schedule as executable rules instead of static tables: land survey (stepped by area), engineering design and supervision fees, per-discipline coefficient splitting for renewals, and delay-penalty calculation — all with a Leaflet-based map for region/district selection, plus authenticated user accounts to save and revisit calculations.
+A FastAPI + server-rendered (Jinja) web app that encodes the full official tariff schedule as executable rules instead of static tables: land survey (stepped by area), engineering design and supervision fees, per-discipline coefficient splitting for renewals, and delay-penalty calculation — plus an interactive map of Sadra city for searching individual plots and zones, and authenticated user accounts to save and revisit calculations.
 
 ## Key features
 
 - Multiple tariff calculators: land survey, engineering design/supervision, supervision renewal (with per-discipline, per-grade coefficient splitting), and delay penalties
-- Region/district selection via an interactive map, feeding location-specific rates
+- Interactive Leaflet map of Sadra city with searchable plots/zones (قطعه و ناحیه), feeding location-specific rates
 - User accounts (register/login) with a personal dashboard for past calculations
 - Server-rendered pages (fast, SEO-friendly, no heavy client-side framework needed for a tool like this)
 
